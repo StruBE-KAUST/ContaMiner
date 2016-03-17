@@ -36,6 +36,9 @@ cd "$contam"
 . $2
 . $3
 
+# Delay the start of the job to avoid I/O overload
+sleep $(( $RANDOM % 120 ))
+
 # Core job
 morda_prep -s $fasta_file -f $struct_file -alt -n $nb_homo
 
