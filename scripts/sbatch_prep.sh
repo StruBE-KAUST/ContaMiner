@@ -19,10 +19,9 @@
 ## sbatch_init.sh version 1.0.0
 ## sbatch script to run morda_prep
 
-#SBATCH --time=05:00:00
-#SBATCH --ntasks=1
-#SBATCH --quiet
-#SBATCH --requeue
+## SBATCH options
+## START
+## END
 
 # Prepare environment
 base_dir=$(pwd)
@@ -31,11 +30,15 @@ struct_file="$5"
 nb_homo=$6
 fasta_file="$contam.fasta"
 cd "$contam"
+model_score=$7
 
 # Load MoRDa
 . $1
 . $2
 . $3
+
+# Delay the start of the job to avoid I/O overload
+sleep $(( $RANDOM % 120 ))
 
 # Core job
 morda_prep -s $fasta_file -f $struct_file -alt -n $nb_homo
@@ -44,7 +47,11 @@ morda_prep -s $fasta_file -f $struct_file -alt -n $nb_homo
 nbpacks=$(cat "out_prep/pack_info.xml" | \
 sed -n "s/.*<n_pack> *\([0-9]\+\) *<\/n_pack>/\1/p" | tail -n 1)
 
-printf "$nbpacks" > nbpacks
+printf "" > nbpacks
+for i in $(seq $nbpacks)
+do
+    printf "$i:$model_score\n" >> nbpacks
+done
 
 # Clean environment
 find . -mindepth 1 -maxdepth 1 \

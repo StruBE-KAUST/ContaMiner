@@ -19,9 +19,9 @@
 ## sbatch_run.sh version 1.0.1
 ## sbatch script to run MoRDa a parse the result
 
-#SBATCH --time=05:00:00
-#SBATCH --ntasks=1
-#SBATCH --quiet
+## SBATCH options
+## START
+## END
 
 # Define paths
 define_paths="$1"
@@ -43,6 +43,9 @@ scrdir="$output_dir/scr_solve"
 model_dir="$contam_path/$contaminant/models"
 cd "$output_dir"
 
+# Delay the start of the job to avoid I/O overload
+sleep $(( $RANDOM % 120 ))
+
 # Core job
 morda_solve -f "$input_file_name" -m "$model_dir" -p $ipack -sg "$alt_sg" \
 -r "$resdir" -po "$outdir" -ps "$scrdir"
@@ -53,9 +56,12 @@ log_file=$resdir"/morda_solve.log"
 err=$(grep "<err_level>" $xml_file | cut --delimiter=" " -f 8)
 elaps_time=$(grep "Elapsed: " $log_file | tail -n 1 | cut --delimiter=":" -f 3)
 elaps_time=$(printf "$elaps_time" | tr -d '\n' | sed 's/^\ *//g')
+lock_file="$res_file.lock"
 case $err in
     7)
+        lockfile -r-1 "$lock_file"
         sed -i "/$task_id:cancelled:/c\\$task_id:nosolution:$elaps_time" $res_file
+        rm -f "$lock_file"
         ;;
     0)
         # xmllpath outdated, no support of --xpath option...
@@ -80,10 +86,44 @@ case $err in
             sed 's/ seq //g' | tr -d '\n')
         mods=$(printf "$mods" | sed -r 's/((^\ *|\ *$))//g' | sed 's/ /,/g')
 
+        lockfile -r-1 "$lock_file"
         sed -i "/$task_id:cancelled:/c\\$task_id:$q_factor-$percent-$seqs-$strs-$mods:$elaps_time" $res_file
+        rm -f "$lock_file"
 
+        # Remove all jobs for other contaminants if positive result
+        if [ $percent -ge 99 ]
+        then
+            jobids=$(squeue -u $(whoami) -o %A:%o |\
+                grep "$input_file_name" |\
+                grep -v "$contaminant" |\
+                cut --delimiter=":" -f1)
+            if [ -n "$jobids" ]
+            then
+                scancel $jobids
+            fi
+
+            # Increase score for this model and space group
+            nbpacks_file="$contam_path/$contaminant/nbpacks"
+            old_score=$(grep "$ipack:" "$nbpacks_file" | \
+                cut --delimiter=':' -f 2)
+            new_score=$(( $old_score + 1 ))
+            sed -i "s/$ipack:.*/$ipack:$new_score/" "$nbpacks_file"
+
+            old_score=$(grep "$alt_sg" "$sg_scores_file" | cut -d':' -f 2)
+            new_score=$(( $old_score + 1 ))
+            sed -i "s/$alt_sg.*/$alt_sg:$new_score/" "$sg_scores_file"
+        fi
         ;;
     *)
+        lockfile -r-1 "$lock_file"
         sed -i "/$task_id:cancelled:/c\\$task_id:error:$elaps_time" $res_file
+        rm -f "$lock_file"
         ;;
 esac
+
+# == 1 because current job is still running
+if [ $(squeue -u $(whoami) -o %o | grep "$input_file_name" | wc -l) -eq 1 ]
+then
+    # job finished for this diffraction data file
+    sh $cm_path/finish.sh $(readlink -f $res_file)
+fi

@@ -77,7 +77,9 @@ printf "Submitting preparation jobs to SLURM... "
 cd "$contam_path"
 for line in `cat "$contam_init_file"`
 do
-    contam=$(printf $line)
+    contam=$(printf $line | cut --delimiter=':' -f 1)
+    nb_homo=$(printf $line | cut --delimiter=':' -f 2)
+    model_score=$(printf $line | cut --delimiter=':' -f 3)
 
     fasta_file=$contam".fasta"
     if [ ! -f "$contam/$fasta_file" ]
@@ -92,7 +94,10 @@ do
     else
         touch "$contam/nbpacks"
         sbatch $scripts_path"/sbatch_prep.sh" "$source1" "$source2" "$source3" \
-        "$contam" "$big_struct_cif" 1 > /dev/null
+        "$contam" "$big_struct_cif" "$nb_homo" "$model_score" > /dev/null
     fi
 done
 printf "[OK]\n"
+
+# Init space_groups scores
+cp "$init_path/sg_scores.txt" "$sg_scores_file"
