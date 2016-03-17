@@ -19,10 +19,9 @@
 ## sbatch_init.sh version 1.0.0
 ## sbatch script to run morda_prep
 
-#SBATCH --time=05:00:00
-#SBATCH --ntasks=1
-#SBATCH --quiet
-#SBATCH --requeue
+## SBATCH options
+## START
+## END
 
 # Prepare environment
 base_dir=$(pwd)

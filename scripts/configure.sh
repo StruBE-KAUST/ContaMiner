@@ -116,3 +116,18 @@ source3="$morda_path/morda_env_sh"
 sed -i "s,source1=.*,source1=\"$source1\"," $define_paths
 sed -i "s,source2=.*,source2=\"$source2\"," $define_paths
 sed -i "s,source3=.*,source3=\"$source3\"," $define_paths
+
+. "$define_paths"
+
+# Copy sbatch options in sbatch scripts
+run_options_file="$init_path/run_options.sh"
+cmd_line=':a;N;$!ba;s/## START.*## END/## START\n'
+cmd_line="$cmd_line$(cat ${run_options_file} | tr '\n' '\r' | sed 's/\r/\\n/g')"
+cmd_line="$cmd_line"'\n## END/g'
+sed -i "$cmd_line" "$scripts_path/sbatch_run.sh"
+
+prep_options_file="$init_path/prep_options.sh"
+cmd_line=':a;N;$!ba;s/## START.*## END/## START\n'
+cmd_line="$cmd_line$(cat ${prep_options_file} | tr '\n' '\r' |sed 's/\r/\\n/g')"
+cmd_line="$cmd_line"'\n## END/g'
+sed -i "$cmd_line" "$scripts_path/sbatch_prep.sh"
