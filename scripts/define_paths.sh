@@ -19,6 +19,17 @@
 ## define_dir.sh version 1.0.0
 ## Define the different directories for the project.
 
+# POSIX mode
+if [ -n "$BASH_VERSION" -o -n "$KSH_VERSION" ]
+then
+    set -o posix
+fi
+if [ -n "$ZSH_VERSION" ]
+then
+    emulate sh
+    NULLCMD=:
+fi
+
 # ContaMiner paths
 define_paths=""
 scripts_path=$(dirname $define_paths)
