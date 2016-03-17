@@ -109,3 +109,10 @@ case $err in
         rm -f "$lock_file"
         ;;
 esac
+
+# == 1 because current job is still running
+if [ $(squeue -u $(whoami) -o %o | grep "$input_file_name" | wc -l) -eq 1 ]
+then
+    # job finished for this diffraction data file
+    sh $cm_path/finish.sh $(readlink -f $res_file)
+fi
