@@ -53,6 +53,12 @@ work_dir=$(basename "$1" | sed -r 's/\.mtz|\.cif//')
 mkdir -p "$work_dir"
 cp "$1" "$work_dir"
 input_file_name=$(readlink -f "$work_dir/$(basename "$1")")
+list_file_name=""
+if [ $# -eq 2 ]
+then
+    cp "$2" "$work_dir"
+    list_file_name=$(readlink -f "$work_dir/$(basename "$2")")
+fi
 cd "$work_dir"
 result_file="results.txt"
 printf "" > "$result_file"
@@ -78,7 +84,10 @@ alt_space_groups=$(printf "$alt_space_groups" |
 printf "[OK]\n"
 
 # Evaluate list of contaminants
-list_file_name="$contam_init_file"
+if [ -z "$list_file_name" ]
+then
+    list_file_name="$contam_init_file"
+fi
 
 # Submit solving jobs
 printf "Creating list of jobs... "
