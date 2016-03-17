@@ -56,9 +56,12 @@ log_file=$resdir"/morda_solve.log"
 err=$(grep "<err_level>" $xml_file | cut --delimiter=" " -f 8)
 elaps_time=$(grep "Elapsed: " $log_file | tail -n 1 | cut --delimiter=":" -f 3)
 elaps_time=$(printf "$elaps_time" | tr -d '\n' | sed 's/^\ *//g')
+lock_file="$res_file.lock"
 case $err in
     7)
+        lockfile -r-1 "$lock_file"
         sed -i "/$task_id:cancelled:/c\\$task_id:nosolution:$elaps_time" $res_file
+        rm -f "$lock_file"
         ;;
     0)
         # xmllpath outdated, no support of --xpath option...
@@ -83,10 +86,14 @@ case $err in
             sed 's/ seq //g' | tr -d '\n')
         mods=$(printf "$mods" | sed -r 's/((^\ *|\ *$))//g' | sed 's/ /,/g')
 
+        lockfile -r-1 "$lock_file"
         sed -i "/$task_id:cancelled:/c\\$task_id:$q_factor-$percent-$seqs-$strs-$mods:$elaps_time" $res_file
+        rm -f "$lock_file"
 
         ;;
     *)
+        lockfile -r-1 "$lock_file"
         sed -i "/$task_id:cancelled:/c\\$task_id:error:$elaps_time" $res_file
+        rm -f "$lock_file"
         ;;
 esac
