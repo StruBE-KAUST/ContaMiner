@@ -30,6 +30,7 @@ struct_file="$5"
 nb_homo=$6
 fasta_file="$contam.fasta"
 cd "$contam"
+model_score=$7
 
 # Load MoRDa
 . $1
@@ -43,7 +44,11 @@ morda_prep -s $fasta_file -f $struct_file -alt -n $nb_homo
 nbpacks=$(cat "out_prep/pack_info.xml" | \
 sed -n "s/.*<n_pack> *\([0-9]\+\) *<\/n_pack>/\1/p" | tail -n 1)
 
-printf "$nbpacks" > nbpacks
+printf "" > nbpacks
+for i in $(seq $nbpacks)
+do
+    printf "$i:$model_score\n" >> nbpacks
+done
 
 # Clean environment
 find . -mindepth 1 -maxdepth 1 \
