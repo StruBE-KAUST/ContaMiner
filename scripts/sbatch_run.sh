@@ -19,9 +19,9 @@
 ## sbatch_run.sh version 1.0.1
 ## sbatch script to run MoRDa a parse the result
 
-#SBATCH --time=05:00:00
-#SBATCH --ntasks=1
-#SBATCH --quiet
+## SBATCH options
+## START
+## END
 
 # Define paths
 define_paths="$1"
