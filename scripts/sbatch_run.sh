@@ -43,6 +43,9 @@ scrdir="$output_dir/scr_solve"
 model_dir="$contam_path/$contaminant/models"
 cd "$output_dir"
 
+# Delay the start of the job to avoid I/O overload
+sleep $(( $RANDOM % 120 ))
+
 # Core job
 morda_solve -f "$input_file_name" -m "$model_dir" -p $ipack -sg "$alt_sg" \
 -r "$resdir" -po "$outdir" -ps "$scrdir"
