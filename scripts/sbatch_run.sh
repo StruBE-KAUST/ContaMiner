@@ -90,6 +90,18 @@ case $err in
         sed -i "/$task_id:cancelled:/c\\$task_id:$q_factor-$percent-$seqs-$strs-$mods:$elaps_time" $res_file
         rm -f "$lock_file"
 
+        # Remove all jobs for other contaminants if positive result
+        if [ $percent -ge 99 ]
+        then
+            jobids=$(squeue -u $(whoami) -o %A:%o |\
+                grep "$input_file_name" |\
+                grep -v "$contaminant" |\
+                cut --delimiter=":" -f1)
+            if [ -n "$jobids" ]
+            then
+                scancel $jobids
+            fi
+        fi
         ;;
     *)
         lockfile -r-1 "$lock_file"
