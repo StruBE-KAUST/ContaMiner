@@ -1,4 +1,4 @@
-# What it this ?
+# What is this ?
 
 This repository contains the source code of ContaMiner. You can find a quick
 description of ContaMiner on the [StruBE
@@ -19,7 +19,7 @@ determined...
 ContaMiner allows rapid screening of X-ray diffraction data against the most
 likely proteins contaminants.
 
-## How it works ?
+## How does it work ?
 Given an mtz or cif data file, ContaMiner uses an optimized molecular
 replacement procedure, based on MoRDa automatic molecular replacement pipeline.
 
@@ -32,8 +32,8 @@ trust me !
 
 ## What specifications do I need ?
 While ContaMiner can technically run on a Pentium III @600MHz with 256MB RAM,
-the mean case will take 226 days of intensive computation. 
-We recommand using as many CPUs as possible with a maximum of 5440. More CPUs
+the mean case will take 6.8 years of intensive computation.
+We recommand using as many CPUs as possible with a maximum of 15744. More CPUs
 are usefull only if you want to run parallel sessions of ContaMiner.
 Number of cores does not matter, as ContaMiner try to use one FPU per task. The
 basic configuration is done to use 1 CPU per task. If you have less than 1 FPU
@@ -81,7 +81,8 @@ to complete. Then you can use contaminer.
 
 ## How do I use ContaMiner ?
 When the installation is completed, you can move the script named `contaminer`
-wherever you want on your machine. You can, for example, copy it in
+wherever you want on your machine, or even create a symlink. You can, for
+example, copy it in
 `/usr/local/bin` to make ContaMiner accessible from PATH. Or you can copy it
 somewhere else, then add the directory in your PATH.
 However, we do not recommand to add the root directory of ContaMiner in your
@@ -102,11 +103,12 @@ second parameter.
 
 If no txt file is provided, all prepared contaminants are tested.
 
-ContaMiner will create a directory in your current directory, named as you cif
+ContaMiner will create a directory in your current directory (and not in the
+directory of your mtz or cif file), with the same name as your cif
 or mtz file. In this directory, you can find different files.
 
 - The data diffraction file you provided
-- The list of contaminants tested (the list you provided as second argument, if
+- The list of tested contaminants (the list you provided as second argument, if
   you did)
 - One directory per model, per alternative space group containing different
   files from morda\_solve. You basically do not need to explore this directory,
@@ -117,8 +119,8 @@ Each line of `results.txt` follows this pattern :
 > XXXXXX\_Y\_Z-Z-Z-Z:state:time
 
 where :
-- XXXXXX is the uniprot ID of the contaminant tested
-- Y is the number of the model (according to the directory created by
+- XXXXXX is the uniprot ID of the tested contaminant
+- Y is the number of the pack (according to the directory created by
   morda\_prep)
 - Z-Z-Z-Z is the tested space group
 - state is the state of the process. It can be :
@@ -164,7 +166,7 @@ where
 (proteins with high likelihood are submitted first)
 
 ### XXXXXX.fasta
-A custom fasta sequence for a contaminant is you do not want to use the full
+A custom fasta sequence for a contaminant if you do not want to use the full
 sequence. The name must be XXXXXX.fasta where XXXXXX is the uniprot ID of the
 contaminant listed in the contaminants.txt file.
 
