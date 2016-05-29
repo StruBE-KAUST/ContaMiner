@@ -106,7 +106,7 @@ do
             taskid=$contaminant"_"$ipack"_"$alt_sg_slug
             sg_score=$(grep "$alt_sg" "$sg_scores_file" |\
                 cut --delimiter=':' -f 2)
-            score=$(( $model_score * sg_score ))
+            score=$(( $model_score * $sg_score ))
             printf "$taskid" >> "$tasks_file"
             printf "_$score\n" >> "$tasks_file"
         done
