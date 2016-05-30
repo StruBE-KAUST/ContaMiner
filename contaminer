@@ -82,7 +82,7 @@ alt_space_groups=$(printf "$alt_space_groups" |
     tr -d '\n' | 
     sed 's/.*-->\ *\(1.*\)/\1/' |
     sed 's/"\ *[0-9]\ *"/\n/g' | 
-    sed 's/1\ *"//' |sed 's/"$//')
+    sed 's/"$//' | sed 's/1\ *"//')
 printf "[OK]\n"
 
 # Evaluate list of contaminants
