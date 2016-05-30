@@ -60,7 +60,7 @@ not totally POSIX-compliant, the scripts are working, at least, with
 One last dependancy is lockfile. For most of the operating systems, this command
 is part of the procmail package. We need lockfile instead of flock, lockf, fcntl
 or any POSIX solution, because the file locking is just broken under Linux,
-especially through NFS. I do not lie : [On the brokenness of File
+especially through NFS. I am not lying : [On the brokenness of File
 lockin](http://0pointer.de/blog/projects/locking.html)
 
 ## How to install it ?
