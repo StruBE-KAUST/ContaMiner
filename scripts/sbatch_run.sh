@@ -43,12 +43,28 @@ scrdir="$output_dir/scr_solve"
 model_dir="$contam_path/$contaminant/models"
 cd "$output_dir"
 
+# Define timeout
+slurm_time=$(squeue -j $SLURM_JOBID -h -o "%l")
+days_limit=$(echo "$slurm_time" | cut --delimiter="-" -sf1)
+time_limit=$(echo "$slurm_time" | cut --delimiter="-" -f 2)
+seconds_limit=$(( $(date -d "$time_limit" "+%k*3600+%M*60+%S") ))
+# We remove 10 mn to be sure we have enough time to run the final steps
+seconds_limit=$(( $seconds_limit + $days_limit * 24 * 3600 - 600 ))
+
 # Delay the start of the job to avoid I/O overload
 sleep $(( $RANDOM % 120 ))
 
 # Core job
 morda_solve -f "$input_file_name" -m "$model_dir" -p $ipack -sg "$alt_sg" \
 -r "$resdir" -po "$outdir" -ps "$scrdir"
+job_PID=$!
+
+# Run a watchdog to stop the job before slurm time limit
+(sleep $seconds_limit; kill -9 $job_PID) &
+watchdog_PID=$!
+
+wait $job_PID
+kill -9 $watchdog_PID
 
 # Parse result
 xml_file=$resdir"/morda_solve.xml"
