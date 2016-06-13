@@ -101,7 +101,7 @@ lock_file="$res_file.lock"
 
 if [ $exit_status -eq 1 ] # watchdog was killed first
 then
-    elaps_time=$(date -u -d @timeout +"%H %2M %2S")
+    elaps_time=$(date -u -d @$timeout +"%Hh %2Mm %2Ss")
     lockfile -r-1 "$lock_file"
     sed -i "/$task_id:cancelled:/c\\$task_id:cancelled:$elaps_time" $res_file
     rm -f "$lock_file"
