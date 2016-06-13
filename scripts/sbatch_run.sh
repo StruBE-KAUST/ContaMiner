@@ -99,6 +99,9 @@ watchdog_PID=$!
 wait $job_PID
 kill -9 $watchdog_PID
 
+exit_status=$!
+
+
 # Parse result
 xml_file=$resdir"/morda_solve.xml"
 log_file=$resdir"/morda_solve.log"
@@ -106,7 +109,15 @@ err=$(grep "<err_level>" $xml_file | cut --delimiter=" " -f 8)
 elaps_time=$(grep "Elapsed: " $log_file | tail -n 1 | cut --delimiter=":" -f 3)
 elaps_time=$(printf "$elaps_time" | tr -d '\n' | sed 's/^\ *//g')
 lock_file="$res_file.lock"
-case $err in
+
+if [ $exit_status -eq 1 ] # watchdog was killed first
+then
+    elaps_time=$(date -u -d @timeout +"%H %2M %2S")
+    lockfile -r-1 "$lock_file"
+    sed -i "/$task_id:cancelled:/c\\$task_id:cancelled:$elaps_time" $res_file
+    rm -f "$lock_file"
+else
+    case $err in
     7)
         lockfile -r-1 "$lock_file"
         sed -i "/$task_id:cancelled:/c\\$task_id:nosolution:$elaps_time" $res_file
@@ -168,7 +179,8 @@ case $err in
         sed -i "/$task_id:cancelled:/c\\$task_id:error:$elaps_time" $res_file
         rm -f "$lock_file"
         ;;
-esac
+    esac
+fi
 
 # == 1 because current job is still running
 if [ $(squeue -u $(whoami) -o %o | grep "$input_file_name" | wc -l) -eq 1 ]
