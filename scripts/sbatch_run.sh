@@ -43,12 +43,53 @@ scrdir="$output_dir/scr_solve"
 model_dir="$contam_path/$contaminant/models"
 cd "$output_dir"
 
+# Define timeout
+slurm_time=$(squeue -j $SLURM_JOBID -h -o "%l")
+days_limit=$(echo "$slurm_time" | cut --delimiter="-" -sf1)
+field1=$(echo "$slurm_time" | cut --delimiter=":" -sf1)
+field2=$(echo "$slurm_time" | cut --delimiter=":" -sf2)
+field3=$(echo "$slurm_time" | cut --delimiter=":" -sf3)
+
+if [ -z "$field3" ]
+then
+    if [ -z "$field2" ]
+    then
+        timeout=$field1
+    else
+        timeout=$(( $field1*60 + $field2 ))
+    fi
+else
+    timeout=$(( $field1*3600 + $field2*60 + $field3))
+fi
+# Add days
+if [ -n "$days_limit" ]
+then
+    timeout=$(( $timeout + $days_limit *24*3600 ))
+fi
+
+# We remove 10 mn to be sure we have enough time to run the final steps
+timeout=$(( $timeout - 600 ))
+
 # Delay the start of the job to avoid I/O overload
-sleep $(( $RANDOM % 120 ))
 
 # Core job
-morda_solve -f "$input_file_name" -m "$model_dir" -p $ipack -sg "$alt_sg" \
--r "$resdir" -po "$outdir" -ps "$scrdir"
+sleep $(( $RANDOM % 120 )) && morda_solve \
+-f "$input_file_name" \
+-m "$model_dir" \
+-p $ipack \
+-sg "$alt_sg" \
+-r "$resdir" \
+-po "$outdir" \
+-ps "$scrdir" &
+job_PID=$!
+
+# Run a watchdog to stop the job before slurm time limit
+(sleep $timeout; kill -9 $job_PID) &
+watchdog_PID=$!
+
+wait $job_PID
+kill -9 $watchdog_PID
+exit_status=$?
 
 # Parse result
 xml_file=$resdir"/morda_solve.xml"
@@ -57,7 +98,15 @@ err=$(grep "<err_level>" $xml_file | cut --delimiter=" " -f 8)
 elaps_time=$(grep "Elapsed: " $log_file | tail -n 1 | cut --delimiter=":" -f 3)
 elaps_time=$(printf "$elaps_time" | tr -d '\n' | sed 's/^\ *//g')
 lock_file="$res_file.lock"
-case $err in
+
+if [ $exit_status -eq 1 ] # watchdog was killed first
+then
+    elaps_time=$(date -u -d @$timeout +"%Hh %2Mm %2Ss")
+    lockfile -r-1 "$lock_file"
+    sed -i "/$task_id:cancelled:/c\\$task_id:cancelled:$elaps_time" $res_file
+    rm -f "$lock_file"
+else
+    case $err in
     7)
         lockfile -r-1 "$lock_file"
         sed -i "/$task_id:cancelled:/c\\$task_id:nosolution:$elaps_time" $res_file
@@ -119,7 +168,8 @@ case $err in
         sed -i "/$task_id:cancelled:/c\\$task_id:error:$elaps_time" $res_file
         rm -f "$lock_file"
         ;;
-esac
+    esac
+fi
 
 # == 1 because current job is still running
 if [ $(squeue -u $(whoami) -o %o | grep "$input_file_name" | wc -l) -eq 1 ]
