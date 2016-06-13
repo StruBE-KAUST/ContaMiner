@@ -46,21 +46,54 @@ cd "$output_dir"
 # Define timeout
 slurm_time=$(squeue -j $SLURM_JOBID -h -o "%l")
 days_limit=$(echo "$slurm_time" | cut --delimiter="-" -sf1)
-time_limit=$(echo "$slurm_time" | cut --delimiter="-" -f 2)
-seconds_limit=$(( $(date -d "$time_limit" "+%k*3600+%M*60+%S") ))
+field1=$(echo "$slurm_time" | cut --delimiter=":" -sf1)
+field2=$(echo "$slurm_time" | cut --delimiter=":" -sf2)
+field3=$(echo "$slurm_time" | cut --delimiter=":" -sf3)
+
+echo $slurm_time
+echo $field1
+echo $field2
+echo $field3
+
+if [ -z "$field3" ]
+then
+echo "3 vide"
+    if [ -z "$field2" ]
+    then
+echo "2 vide"
+        timeout=$field1
+    else
+echo "2 plein"
+        timeout=$(( $field1*60 + $field2 ))
+    fi
+else
+echo "3 plein"
+    timeout=$(( $field1*3600 + $field2*60 + $field3))
+fi
+# Add days
+if [ -n "$days_limit" ]
+then
+    timeout=$(( $timeout + $days_limit *24*3600 ))
+fi
+
 # We remove 10 mn to be sure we have enough time to run the final steps
-seconds_limit=$(( $seconds_limit + $days_limit * 24 * 3600 - 600 ))
+timeout=$(( $timeout - 600 ))
 
 # Delay the start of the job to avoid I/O overload
-sleep $(( $RANDOM % 120 ))
 
 # Core job
-morda_solve -f "$input_file_name" -m "$model_dir" -p $ipack -sg "$alt_sg" \
--r "$resdir" -po "$outdir" -ps "$scrdir"
+sleep $(( $RANDOM % 120 )) && morda_solve \
+-f "$input_file_name" \
+-m "$model_dir" \
+-p $ipack \
+-sg "$alt_sg" \
+-r "$resdir" \
+-po "$outdir" \
+-ps "$scrdir" &
 job_PID=$!
 
 # Run a watchdog to stop the job before slurm time limit
-(sleep $seconds_limit; kill -9 $job_PID) &
+(sleep $timeout; kill -9 $job_PID) &
 watchdog_PID=$!
 
 wait $job_PID
