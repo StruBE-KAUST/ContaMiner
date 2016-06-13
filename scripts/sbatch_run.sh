@@ -98,9 +98,7 @@ watchdog_PID=$!
 
 wait $job_PID
 kill -9 $watchdog_PID
-
-exit_status=$!
-
+exit_status=$?
 
 # Parse result
 xml_file=$resdir"/morda_solve.xml"
