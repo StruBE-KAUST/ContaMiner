@@ -50,24 +50,15 @@ field1=$(echo "$slurm_time" | cut --delimiter=":" -sf1)
 field2=$(echo "$slurm_time" | cut --delimiter=":" -sf2)
 field3=$(echo "$slurm_time" | cut --delimiter=":" -sf3)
 
-echo $slurm_time
-echo $field1
-echo $field2
-echo $field3
-
 if [ -z "$field3" ]
 then
-echo "3 vide"
     if [ -z "$field2" ]
     then
-echo "2 vide"
         timeout=$field1
     else
-echo "2 plein"
         timeout=$(( $field1*60 + $field2 ))
     fi
 else
-echo "3 plein"
     timeout=$(( $field1*3600 + $field2*60 + $field3))
 fi
 # Add days
