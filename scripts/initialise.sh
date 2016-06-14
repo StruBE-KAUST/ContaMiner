@@ -16,7 +16,6 @@
 ##    with this program; if not, write to the Free Software Foundation, Inc.,
 ##    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-## initialise.sh version 1.0.1
 ## Download the fasta files associated to the contaminants.txt file
 ## Then run morda_prep for each contaminant.
 
