@@ -105,11 +105,12 @@ case $err in
             # Increase score for this model and space group
             nbpacks_file="$contam_path/$contaminant/nbpacks"
             old_score=$(grep "$ipack:" "$nbpacks_file" | \
-                cut --delimiter=':' -f 2)
+                cut --delimiter=':' -f 2 | tail -n 1)
             new_score=$(( $old_score + 1 ))
             sed -i "s/$ipack:.*/$ipack:$new_score/" "$nbpacks_file"
 
-            old_score=$(grep "$alt_sg:" "$sg_scores_file" | cut -d':' -f 2)
+            old_score=$(grep "$alt_sg:" "$sg_scores_file" | \
+                cut --delimiter=':' -f 2 | tail -n 1)
             new_score=$(( $old_score + 1 ))
             sed -i "s/$alt_sg:.*/$alt_sg:$new_score/" "$sg_scores_file"
         fi
