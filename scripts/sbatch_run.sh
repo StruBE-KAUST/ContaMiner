@@ -111,7 +111,7 @@ case $err in
 
             old_score=$(grep "$alt_sg:" "$sg_scores_file" | cut -d':' -f 2)
             new_score=$(( $old_score + 1 ))
-            sed -i "s/$alt_sg.*/$alt_sg:$new_score/" "$sg_scores_file"
+            sed -i "s/$alt_sg:.*/$alt_sg:$new_score/" "$sg_scores_file"
         fi
         ;;
     *)
