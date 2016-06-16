@@ -104,7 +104,7 @@ do
             alt_sg_slug=$(printf $alt_sg | sed "s/ /-/g")
             taskid=$contaminant"_"$ipack"_"$alt_sg_slug
             sg_score=$(grep "$alt_sg:" "$sg_scores_file" |\
-                cut --delimiter=':' -f 2)
+                cut --delimiter=':' -f 2 | tail -n 1)
             if [ -z "$sg_score" ]
             then
                 sg_score=0
