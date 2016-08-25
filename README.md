@@ -4,7 +4,8 @@ This repository contains the source code of ContaMiner. You can find a quick
 description of ContaMiner on the [StruBE
 website](https://strube.cbrc.kaust.edu.sa/contaminer).
 
-Because you are special (indeed, not many people will read this README), I added alittle description for you. Ok, you can read the same on the [StruBE
+Because you are special (indeed, not many people will read this README), I
+added a little description for you. Ok, you can read the same on the [StruBE
 website](https://strube.cbrc.kaust.edu.sa/contaminer).
 
 # What is ContaMiner ?
