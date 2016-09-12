@@ -4,14 +4,15 @@ This repository contains the source code of ContaMiner. You can find a quick
 description of ContaMiner on the [StruBE
 website](https://strube.cbrc.kaust.edu.sa/contaminer).
 
-Because you are special (indeed, not many people will read this README), I added alittle description for you. Ok, you can read the same on the [StruBE
+Because you are special (indeed, not many people will read this README), I
+added a little description for you. Ok, you can read the same on the [StruBE
 website](https://strube.cbrc.kaust.edu.sa/contaminer).
 
 # What is ContaMiner ?
 ContaMiner is a rapid large-scale detection of contaminant crystals.
 
 Protein contaminants from the expression host, purification buffers or from
-affinity tags, may cristallise instead of the protein of interest.
+affinity tags, may crystallize instead of the protein of interest.
 Unfortunately, this only becomes clear once the crystal structure has been
 determined...
 
