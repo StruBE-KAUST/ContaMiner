@@ -18,7 +18,7 @@
 
 ## Configure BASH, KSH, and ZSH interpreters in POSIX mode
 
-if [ -n "$BASH_VERSION" -o -n "$KSH_VERSION" ]
+if [ -n "$BASH_VERSION" ] || [ -n "$KSH_VERSION" ]
 then
     set -o posix
 fi
@@ -26,4 +26,5 @@ if [ -n "$ZSH_VERSION" ]
 then
     emulate sh
     NULLCMD=:
+    export NULLCMD
 fi
