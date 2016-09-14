@@ -22,24 +22,29 @@
 # Parameters :
 # $1 : uniprot_id
 # $2 : location (create a directory inside the location)
-# $3 : directory where custom sequences are stores
-
+# $3 : directory where custom sequences are stored
 fasta_download () {
-    uni_id=$(printf "$1" | tr [:lower:] [:upper])
+    if [ $# -ne 3 ]
+    then
+        printf "Wrong number of arguments.\n"
+        exit 1
+    fi
+
+    uni_id=$(printf "%s" "$1" | tr "[:lower:]" "[:upper]")
+
     mkdir -p "$2/$uni_id"
-    cd "$2/$uni_id"
 
     if [ ! -f "$uni_id.fasta" ]
     then
         if [ -f "$3/$uni_id.fasta" ]
         then
-            cp "$3/$uni_id.fasta" ./
+            cp "$3/$uni_id.fasta" "$2/$uni_id"
         else
-            fasta="http://www.uniprot.org/uniprot/"$uni_id".fasta"
-            wget -q $fasta
+            fasta_url="http://www.uniprot.org/uniprot/$uni_id.fasta"
+            wget -q "$fasta_url" -O "$2/$uni_id/$uni_id.fasta"
             if [ $? -ne 0 ]
             then
-                printf "$uni_id : error. Fasta file not downloaded.\n"
+                printf "%s : error. Fasta file not downloaded.\n" "$uni_id"
             fi
         fi
     fi
