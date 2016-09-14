@@ -18,39 +18,47 @@
 
 ## Provide functions to convert cif file to mtz, and check integrity
 
-convert2mtz () {
-    filename=$1
-    if printf "$1" | grep -q ".*\.cif"
-    then
-        filename=$(printf "$1" | sed 's/\.cif/\.mtz/')
-        printf "END" | cif2mtz HKLIN "$1" HKLOUT "$filename" > /dev/null
-    fi
-    printf "$filename"
+# Convert file CIF file $1 to MTZ file $2
+toMtz () {
+    printf "END" | cif2mtz HKLIN "$1" HKLOUT "$2" > /dev/null
 }
 
-check () {
-    if [ -n "$(mtzdmp "$1" | grep "Error")" ]
+# Check if $1 is a valid MTZ file
+checkMtz () {
+    if grep -q "Error" "$(mtzdmp "$1")"
     then
-        exit 1
+        exit_code=1
+    else
+        exit_code=0
     fi
+    exit $exit_code
 }
 
-safe_convert () {
-	if [ $# -ne 1 ] || printf "$1" | grep -vq ".*\.\(mtz\|cif\)"
+# Check if $1 is a CIF file, convert it to a MTZ file named as $1 with the
+# extension .mtz, then check if the new created file is valid
+safeToMtz () {
+	if [ $# -ne 1 ] || printf "%s" "$1" | grep -vq ".*\.\(mtz\|cif\)"
 	then
 		printf "Wrong number of arguments or wrong file type.\n"
 		exit 1
 	fi
-	if [ ! -f $1 ]
+	if [ ! -f "$1" ]
 	then
-		printf "File $1 does not exist.\n"
+		printf "File %s does not exist.\n" "$1"
 		exit 1
 	fi
-    mtz_file_name=$(convert2mtz $1)
+
+    mtz_file_name=$(printf "%s" "$1" | sed 's/\.cif/\.mtz/')
+
+    if printf "%s" "$1" | grep -q ".*\.cif"
+    then
+        toMtz "$1"
+    fi
+
     check "$mtz_file_name"
     if [ $? -ne 0 ]
     then
-        printf "The conversion of $1 is not possible.\n"
+        printf "The conversion of %s failed.\n" "$1"
         exit $?
     fi
 }
