@@ -18,9 +18,6 @@
 
 ## Install ContaMiner and create the database
 
-# Stop in case of error
-set -e
-
 # Move to directory where install.sh is
 cm_path="$(dirname "$(readlink -f "$0")")"
 cd "$cm_path" || \
