@@ -20,8 +20,6 @@
 ## $1 : diffraction data file (.cif or .mtz)
 ## $2 : list of contaminants to test (optional txt file)
 
-set -e
-
 define_paths=
 export define_paths
 . "$define_paths"
