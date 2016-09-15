@@ -36,68 +36,68 @@ fi
 
 # Prepare environment
 contabase_dir="$cm_path/data/contabase"
-mkdir -p $contabase_dir
+mkdir -p "$contabase_dir"
+export SOURCE1
+export SOURCE2
+export SOURCE3
+CM_PATH="$cm_path"
+export CM_PATH
 
 printf "Downloading fasta sequences... "
 
 # Define download function
 download_path="$cm_path/scripts/download.sh"
+# shellcheck source=download.sh
 . "$download_path"
 export -f fasta_download
 
 # Download fasta files
-for line in `cat "$contam_init_file"`
+init_dir="$cm_path/init"
+grep -v '^ *#' < "$contabase" | grep -v '^$' | while IFS= read -r line
 do
-    printf "$line\n" | cut --delimiter=':' -f 1
-    printf "$contam_path\n"
-    printf "$init_path\n"
-done | xargs -n 3 -P 0 sh -c 'fasta_download "$0" "$1" "$2"'
+    printf "%s\n" "$line" | cut --delimiter=':' -f 1
+    printf "%s\n" "$contabase_dir"
+    printf "%s\n" "$init_dir"
+done | xargs -n 3 -P 0 sh -c "fasta_download \"$0\" \"$1\" \"$2\""
 printf "[OK]\n"
 
-# Download large structure
-printf "Downloading a big structure file... "
-if [ ! -f "$big_struct_cif" ]
-then
-    wget -q "http://www.rcsb.org/pdb/download/downloadFile.do?\
-fileFormat=structfact&structureId=4Y4O" -O "$big_struct_cif"
-fi
-printf "[OK]\n"
-
-# Check avalability of morda_prep
+# Check availability of morda_prep
 morda_prep -h > /dev/null 2>&1
 if [ $? -eq 127 ]
 then
-    printf "morda_prep not found. Something went wrong.\n"
-    printf "Please check your installation.\n"
+    printf "morda_prep not found. Please check your installation.\n"
     exit 1
 fi
 
 # Submit prep jobs
 printf "Submitting preparation jobs to SLURM... "
-cd "$contam_path"
-for line in `cat "$contam_init_file"`
+cd "$contabase_dir" || \
+    (printf "%s does not exist." && exit 1)
+grep -v '^ *#' < "$contabase" | grep -v '^$' | while IFS= read -r line
 do
-    contam=$(printf $line | cut --delimiter=':' -f 1)
-    nb_homo=$(printf $line | cut --delimiter=':' -f 2)
-    model_score=$(printf $line | cut --delimiter=':' -f 3)
+    contaminant_id=$(printf "%s" "$line" | cut --delimiter=':' -f 1)
+    nb_homologues=$(printf "%s" "$line" | cut --delimiter=':' -f 2)
+    contaminant_score=$(printf "%s" "$line" | cut --delimiter=':' -f 3)
 
-    fasta_file=$contam".fasta"
-    if [ ! -f "$contam/$fasta_file" ]
+    fasta_file=$contaminant_id".fasta"
+    if [ ! -f "$contaminant_id/$fasta_file" ]
     then
-        printf "$contam : fasta file does not exist. Re-run the installation.\n"
+        printf "%s : fasta file does not exist. Re-run the installation.\n" \
+            "$contaminant_id"
         exit 1
     fi
 
-    if [ -f "$contam/nbpacks" ]
+    if [ ! -f "$contaminant_id/packs" ]
     then
-        printf "$contam seems to be prepared already. Skipping...\n"
-    else
-        touch "$contam/nbpacks"
-        sbatch $scripts_path"/sbatch_prep.sh" "$source1" "$source2" "$source3" \
-        "$contam" "$big_struct_cif" "$nb_homo" "$model_score" > /dev/null
+        # Presence of this file means the preparation is done, or in progress
+        printf "%s preparation starting... "
+        touch "$contaminant_id/packs"
+        sbatch "$cm_path/scripts/CM_prep.slurm" \
+            "$contaminant_id" "$nb_homologues" "$contaminant_score" > /dev/null
+        printf "[OK]\n"
     fi
 done
 printf "[OK]\n"
 
 # Init space_groups scores
-cp "$init_path/sg_scores.txt" "$sg_scores_file"
+#cp "$init_path/sg_scores.txt" "$sg_scores_file"
