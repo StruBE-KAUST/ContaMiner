@@ -30,13 +30,13 @@ contaminants_list="$init_path/contaminants.txt"
 sg_scores="$data_path/sg_scores.txt"
 
 # CCP4 and MoRDa paths
-source1=""
-source2=""
-source3=""
+SOURCE1=""
+SOURCE2=""
+SOURCE3=""
 
 export contaminants_dir
 export sg_scores
 export contaminants_list
-export source1
-export source2
-export source3
+export SOURCE1
+export SOURCE2
+export SOURCE3
