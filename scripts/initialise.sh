@@ -20,10 +20,10 @@
 ## Then run morda_prep for each contaminant.
 
 # Source MoRDa and CCP4 paths
-cm_path="$(dirname "$(readlink -f "$0")")"
+cm_path="$(dirname "$(dirname "$(readlink -f "$0")")")"
 define_paths="$cm_path/scripts/define_paths.sh"
 # shellcheck source=/dev/null
-. "$define_paths.sh"
+. "$define_paths"
 
 # Check the contabase.txt file
 contabase="$cm_path/init/contabase.txt"
