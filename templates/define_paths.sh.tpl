@@ -16,27 +16,11 @@
 ##    with this program; if not, write to the Free Software Foundation, Inc.,
 ##    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-## Define the different directories for the project.
-
-# ContaMiner paths
-define_paths=""
-scripts_path=$(dirname "$define_paths")
-cm_path=$(dirname "$scripts_path")
-cm_script="$cm_path/contaminer"
-data_path="$cm_path/data"
-contaminants_dir="$data_path/contaminants"
-init_path="$data_path/init"
-contaminants_list="$init_path/contaminants.txt"
-sg_scores="$data_path/sg_scores.txt"
-
 # CCP4 and MoRDa paths
 SOURCE1=""
 SOURCE2=""
 SOURCE3=""
 
-export contaminants_dir
-export sg_scores
-export contaminants_list
 export SOURCE1
 export SOURCE2
 export SOURCE3
