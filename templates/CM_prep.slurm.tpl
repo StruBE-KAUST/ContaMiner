@@ -23,38 +23,40 @@
 ## END
 
 # Prepare environment
-base_dir=$(pwd)
-contam="$4"
-struct_file="$5"
-nb_homo=$6
+contam="$1"
+struct_file="$2"
+nb_homo=$3
 fasta_file="$contam.fasta"
-cd "$contam"
-model_score=$7
+cd "$contam" || exit 1
+model_score=$4
 
 # Load MoRDa
-. $1
-. $2
-. $3
+# shellcheck source=/dev/null
+. "$SOURCE1"
+# shellcheck source=/dev/null
+. "$SOURCE2"
+# shellcheck source=/dev/null
+. "$SOURCE3"
 
 # Delay the start of the job to avoid I/O overload
-sleep $(( $RANDOM % 120 ))
+random=$( head -c1 /dev/random | od -viA n | tr -d "[:blank:]")
+sleep "$random"
 
 # Core job
-morda_prep -s $fasta_file -f $struct_file -alt -n $nb_homo
+morda_prep -s "$fasta_file" -f "$struct_file" -alt -n "$nb_homo"
 
 # Parse result
-nbpacks=$(cat "out_prep/pack_info.xml" | \
-sed -n "s/.*<n_pack> *\([0-9]\+\) *<\/n_pack>/\1/p" | tail -n 1)
+nbpacks=$(sed -n "s/.*<n_pack> *\([0-9]\+\) *<\/n_pack>/\1/p" "out_prep/pack_info.xml" | tail -n 1)
 
 printf "" > nbpacks
-for i in $(seq $nbpacks)
+for i in $(seq "$nbpacks")
 do
-    printf "$i:$model_score\n" >> nbpacks
+    printf "%s:%s\n" "$i" "$model_score">> nbpacks
 done
 
 # Clean environment
 find . -mindepth 1 -maxdepth 1 \
-    \( ! -name models -and ! -name *.fasta -and ! -name nbpacks \) \
+    \( ! -name models -and ! -name nbpacks -and ! -name -- "*.fasta"\) \
     -exec rm -r {} \;
 
 xml_file="models/model_prep.xml"
