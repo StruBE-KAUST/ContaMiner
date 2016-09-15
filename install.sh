@@ -156,6 +156,7 @@ case $answer in
         ;;
     *)
         printf "Initialisation starting..."
+        # TODO : Change to contaminer initialise
         sh scripts/initialise.sh
         printf "When the jobs are completed, the initialisation is finished. Then you \
         can use ContaMiner. To check the jobs running for your user, you can use :\n\

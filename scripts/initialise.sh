@@ -19,16 +19,15 @@
 ## Download the fasta files associated to the contaminants.txt file
 ## Then run morda_prep for each contaminant.
 
-# Retrieve paths
-if [ -z "$define_paths" ]
-then
-    printf "Do not use this script. "
-    printf "Please run install.sh in the root directory.\n"
-    exit 1
-fi
-. $define_paths
+# Source MoRDa and CCP4 paths
+cm_path="$(dirname "$(readlink -f "$0")")"
+define_paths="$cm_path/scripts/define_paths.sh"
+# shellcheck source=/dev/null
+. "$define_paths.sh"
 
-if [ ! -f "$contam_init_file" ]
+# Check the contabase.txt file
+contabase="$cm_path/init/contabase.txt"
+if [ ! -f "$contabase" ]
 then
     printf "The list of contaminants does not exist. "
     printf "Please check your installation.\n"
@@ -36,12 +35,14 @@ then
 fi
 
 # Prepare environment
-mkdir -p $contam_path
+contabase_dir="$cm_path/data/contabase"
+mkdir -p $contabase_dir
 
 printf "Downloading fasta sequences... "
 
 # Define download function
-. $scripts_path/download.sh
+download_path="$cm_path/scripts/download.sh"
+. "$download_path"
 export -f fasta_download
 
 # Download fasta files
