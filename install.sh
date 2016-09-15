@@ -143,6 +143,7 @@ sed "$cmd_line" "$run_template" > "$run_script"
 cm_template="templates/contaminer.tpl"
 cm_main="contaminer"
 sed "s,cm_path=.*,cm_path=\"$cm_path\"," "$cm_template" > "$cm_main"
+chmod +x "$cm_main"
 
 
 ### Ask is we should start the DB initialisation
