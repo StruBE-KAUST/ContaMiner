@@ -18,29 +18,153 @@
 
 ## Install ContaMiner and create the database
 
+# Stop in case of error
 set -e
 
-# Change own_path var to define_paths in define_paths.sh
-define_paths=$(dirname $(readlink -f $0))"/scripts/define_paths.sh"
-sed -i "s,define_paths=.*,define_paths=\"$define_paths\"," $define_paths
+# Move to directory where install.sh is
+cm_path="$(dirname "$(readlink -f "$0")")"
+cd "$cm_path" || \
+    (printf "Error when moving to %s." "$cm_path" && exit 1)
 
-. $define_paths
+# Change to POSIX mode
+. "scripts/posix_mode.sh"
 
-PATH="$scripts_path:$PATH"
-export PATH
-export define_paths
 
-configure.sh
+### Try to find CCP4 installation ###
+printf "Finding CCP4 installation... "
+ccp4_path=""
 
-# Add the $define_path indication to contaminer main script
-sed -i "s,define_paths=.*,define_paths=\"$define_paths\"," "$cm_script"
+# Try if the user sourced the scripts from CCP4
+ccp4_path=$(whereis molrep 2>/dev/null | cut --delimiter=':' -f 2-)
 
-initialise.sh
+# Try to find the setup scripts in common locations
+ccp4_name="bin/ccp4.setup-sh\$"
+if [ -z "$ccp4_path" ]
+then
+    ccp4_path=$(locate -ql1 --regex "$ccp4_name" 2>/dev/null)
+fi
+if [ -z "$ccp4_path" ]
+then
+    ccp4_path=$(find /opt -regex ".*$ccp4_name" 2>/dev/null | head -n1)
+fi
+if [ -z "$ccp4_path" ]
+then
+    ccp4_path=$(find "$HOME" -regex ".*$ccp4_name" 2>/dev/null | head -n1)
+fi
 
-printf "When the jobs are completed, the initilisation is finished. Then you \
-can use ContaMiner. To check the jobs running for your user, you can use :\n\
-squeue -u $(whoami)\n"
+# Exit 1 if not found
+if [ -z "$ccp4_path" ]
+then
+    printf "[FAILED]\n"
+    printf "Try to source bin/ccp4.setup-sh before installing ContaMiner.\n"
+    exit 1
+fi
+
+# ccp4_path contains the full path to $ccp4_name or molrep, not the main dir
+ccp4_path="$(dirname "$(dirname "$ccp4_path")")"
+
+printf "[OK]\n"
+
+
+### Try to find MoRDa installation ###
+printf "Finding MoRDa installation... "
+morda_path=""
+
+# Try if the user sourced the script from morda
+morda_path=$(whereis morda 2>/dev/null | cut --delimiter=':' -f 2-)
+if [ -n "$morda_path" ]
+then
+    morda_path="$(dirname "$morda_path")"
+fi
+
+# Try to find the setup script in common locations
+morda_name="morda_env_sh\$"
+if [ -z "$morda_path" ]
+then
+    morda_path=$(locate -ql1 --regex "$morda_name" 2>/dev/null)
+fi
+if [ -z "$morda_path" ]
+then
+    morda_path=$(find /opt -regex ".*$morda_name" 2>/dev/null | head -n1)
+fi
+if [ -z "$morda_path" ]
+then
+    morda_path=$(find "$HOME" -regex ".*$morda_name" 2>/dev/null | head -n1)
+fi
+
+# Exit 1 if not found
+if [ -z "$morda_path" ]
+then
+    printf "[FAILED]\n"
+    printf "Try to source setup_morda before installing ContaMiner.\n"
+    exit 1
+fi
+
+# morda_path contains the full path to $morda_name or morda bin dir
+morda_path="$(dirname "$morda_path")"
+
+printf "[OK]\n"
+
+
+### Write sources in paths script ###
+# Define full path to scripts
+source1="$ccp4_path/setup-scripts/ccp4.setup-sh"
+source2="$ccp4_path/bin/ccp4.setup-sh"
+source3="$morda_path/morda_env_sh"
+
+# Write file
+define_paths_template="templates/define_paths.sh.tpl"
+define_paths="scripts/define_paths.sh"
+cp "$define_paths_template" "$define_paths"
+sed -i "s,SOURCE1=.*,SOURCE1=\"$source1\"," $define_paths
+sed -i "s,SOURCE2=.*,SOURCE2=\"$source2\"," $define_paths
+sed -i "s,SOURCE3=.*,SOURCE3=\"$source3\"," $define_paths
+
+# Copy sbatch options in sbatch scripts
+prep_options_file="init/prep_options.slurm"
+prep_template="templates/CM_prep.slurm.tpl"
+prep_script="scripts/CM_prep.slurm"
+
+cmd_line=':a;N;$!ba;s/## START.*## END/## START\n'
+cmd_line="$cmd_line$(tr '\n' '\r' < $prep_options_file | sed 's/\r/\\n/g')"
+cmd_line="$cmd_line"'\n## END/g'
+sed "$cmd_line" "$prep_template" > "$prep_script"
+
+
+run_options_file="init/run_options.slurm"
+run_template="templates/CM_solve.slurm.tpl"
+run_script="scripts/CM_solve.slurm"
+
+cmd_line=':a;N;$!ba;s/## START.*## END/## START\n'
+cmd_line="$cmd_line$(tr '\n' '\r' < $run_options_file | sed 's/\r/\\n/g')"
+cmd_line="$cmd_line"'\n## END/g'
+sed "$cmd_line" "$run_template" > "$run_script"
+
+
+# Add the $cm_path indication to contaminer main script
+# $cm_path is defined on the top of this file
+cm_template="templates/contaminer.tpl"
+cm_main="contaminer"
+sed "s,cm_path=.*,cm_path=\"$cm_path\"," "$cm_template" > "$cm_main"
+
+
+### Ask is we should start the DB initialisation
+printf "Do you want to initialise ContaBase ? [Y/n] "
+read -r answer
+case $answer in 
+    [nN])
+        printf "Initialisation skipped. You can initialise ContaBase by "
+        printf "running\n  contaminer initialise\n"
+        ;;
+    *)
+        printf "Initialisation starting..."
+        sh scripts/initialise.sh
+        printf "When the jobs are completed, the initialisation is finished. Then you \
+        can use ContaMiner. To check the jobs running for your user, you can use :\n\
+        squeue -u %s\n" "$(whoami)"
+        ;;
+esac
 
 printf "You can now move the contaminer script wherever you want on your \
-operating system. You can, for example, move it in your a directory listed \
+operating system. You can, for example, move it in a directory listed \
 in your PATH.\n"
