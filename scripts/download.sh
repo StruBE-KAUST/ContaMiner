@@ -27,7 +27,7 @@ fasta_download () {
     if [ $# -ne 3 ]
     then
         printf "Wrong number of arguments.\n"
-        exit 1
+        return 1
     fi
 
     uni_id=$(printf "%s" "$1" | tr "[:lower:]" "[:upper]")

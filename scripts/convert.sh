@@ -25,13 +25,12 @@ toMtz () {
 
 # Check if $1 is a valid MTZ file
 checkMtz () {
+    return_code=0
     if grep -q "Error" "$(mtzdmp "$1")"
     then
-        exit_code=1
-    else
-        exit_code=0
+        return_code=1
     fi
-    exit $exit_code
+    return $return_code
 }
 
 # Check if $1 is a CIF file, convert it to a MTZ file named as $1 with the
@@ -40,12 +39,12 @@ safeToMtz () {
 	if [ $# -ne 1 ] || printf "%s" "$1" | grep -vq ".*\.\(mtz\|cif\)"
 	then
 		printf "Wrong number of arguments or wrong file type.\n"
-		exit 1
+		return 1
 	fi
 	if [ ! -f "$1" ]
 	then
 		printf "File %s does not exist.\n" "$1"
-		exit 1
+		return 1
 	fi
 
     mtz_file_name=$(printf "%s" "$1" | sed 's/\.cif/\.mtz/')
@@ -55,10 +54,9 @@ safeToMtz () {
         toMtz "$1"
     fi
 
-    check "$mtz_file_name"
-    if [ $? -ne 0 ]
+    if check "$mtz_file_name"
     then
         printf "The conversion of %s failed.\n" "$1"
-        exit $?
+        return $?
     fi
 }
