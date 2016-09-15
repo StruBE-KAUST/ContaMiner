@@ -29,6 +29,11 @@
 ## START
 ## END
 
+# Change to POSIX mode
+posix_mode="$CM_PATH/scripts/posix_mode.sh"
+# shellcheck source=../scripts/posix_mode.sh
+. "$posix_mode"
+
 # Prepare environment
 contaminant_id="$1"
 nb_homologues=$2
