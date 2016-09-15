@@ -1,0 +1,6 @@
+*
+!.gitignore
+!convert.sh
+!download.sh
+!posix_mode.sh
+!xmltools.sh
