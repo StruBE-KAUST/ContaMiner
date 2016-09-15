@@ -31,5 +31,5 @@ getXpath () {
         printf "%s does not exist.\n" "$2"
         return 1
     fi
-    printf "cat %s\n" | xmllint --shell "$2"
+    printf "cat %s\n" "$1" | xmllint --shell "$2"
 }
