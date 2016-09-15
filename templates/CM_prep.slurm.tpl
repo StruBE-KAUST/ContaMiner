@@ -17,18 +17,29 @@
 ##    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 ## sbatch script to run morda_prep
+## Parameters :
+## $1 : UniProt ID of the contaminant to prepare
+## $2 : Number of homologues to prepare (n arg of morda_prep)
+## $3 (opt) : Init score of the contaminants for machine learning (1 by default)
+## env should contain SOURCE[1-3] to load CCP4 and MoRDa
+## env should contain CM_PATH which is the path to the root directory of
+## ContaMiner
 
 ## SBATCH options
 ## START
 ## END
 
 # Prepare environment
-contam="$1"
-struct_file="$2"
-nb_homo=$3
-fasta_file="$contam.fasta"
-cd "$contam" || exit 1
-model_score=$4
+contaminant_id="$1"
+nb_homologues=$2
+contaminant_score=1
+if [ $# -ge 3 ]
+then
+    contaminant_score=$3
+fi
+
+cd "$contaminant_id" || \
+( printf "%s directory does not exist." "$contaminant_id" && exit 1 )
 
 # Load MoRDa
 # shellcheck source=/dev/null
@@ -38,26 +49,41 @@ model_score=$4
 # shellcheck source=/dev/null
 . "$SOURCE3"
 
+# Load other tools
+xml_tools="$CM_PATH/scripts/xmltools.sh"
+# shellcheck source=../scripts/xmltools.sh
+. "$xml_tools"
+
 # Delay the start of the job to avoid I/O overload
 random=$( head -c1 /dev/random | od -viA n | tr -d "[:blank:]")
 sleep "$random"
 
 # Core job
-morda_prep -s "$fasta_file" -f "$struct_file" -alt -n "$nb_homo"
+fasta_file="$contaminant_id.fasta"
+morda_prep -s "$fasta_file" -n "$nb_homologues"
 
-# Parse result
-nbpacks=$(sed -n "s/.*<n_pack> *\([0-9]\+\) *<\/n_pack>/\1/p" "out_prep/pack_info.xml" | tail -n 1)
+# Parse morda_prep.xml to find nbpacks
+xml_file="models/model_prep.xml"
+nbpacks=0
 
-printf "" > nbpacks
+# See <a href="https://github.com/koalaman/shellcheck/wiki/SC2039">
+IFS="$(printf '%b_' '\n')"; IFS="${IFS%_}"
+
+for domain in $(getXpath "//domain/text()" "$xml_file")
+do
+    if [ "$domain" -eq 0 ] || [ "$domain" -eq 1 ]
+    then
+        nbpacks=$(( nbpacks + 1 ))
+    fi
+done
+
+printf "" > packs
 for i in $(seq "$nbpacks")
 do
-    printf "%s:%s\n" "$i" "$model_score">> nbpacks
+    printf "%s:%s\n" "$i" "$contaminant_score">> packs
 done
 
 # Clean environment
 find . -mindepth 1 -maxdepth 1 \
     \( ! -name models -and ! -name nbpacks -and ! -name -- "*.fasta"\) \
     -exec rm -r {} \;
-
-xml_file="models/model_prep.xml"
-sed -i 's,<nmon> \+[0-9]\+ </nmon>,<nmon>     0 </nmon>,g' $xml_file
