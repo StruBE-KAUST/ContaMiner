@@ -75,13 +75,14 @@ result_file="results.txt"
 tasks_file="tasks.txt"
 printf "" > "$result_file"
 printf "" > "$tasks_file"
-printf "%s [OK]" "$work_dir"
+printf "%s [OK]\n" "$work_dir"
 
 # Convert file to mtz in case of
 printf "Converting file to MTZ... "
 # shellcheck source=../scripts/convert.sh
 . "$CM_PATH/scripts/convert.sh"
-safeToMtz "$input_file_name"
+safeToMtz "$input_file_name" || \
+    (printf "[FAILED]\n" && exit 1)
 mtz_file_name=$(printf "%s" "$input_file_name" | sed 's/\.cif$/\.mtz/')
 printf "[OK]\n"
 

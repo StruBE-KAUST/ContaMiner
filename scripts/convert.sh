@@ -26,7 +26,7 @@ toMtz () {
 # Check if $1 is a valid MTZ file
 checkMtz () {
     return_code=0
-    if grep -q "Error" "$(mtzdmp "$1")"
+    if printf "%s" "$(mtzdmp "$1")" | grep -q "Error"
     then
         return_code=1
     fi
