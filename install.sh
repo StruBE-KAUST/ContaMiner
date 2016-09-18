@@ -31,6 +31,10 @@ cd "$CM_PATH" || \
 printf "Finding CCP4 installation... "
 ccp4_path=""
 
+# Source define_paths, in case of re-run install.sh after previous installation
+# shellcheck source=scripts/define_paths.sh
+. "scripts/define_paths.sh" > 2>/dev/null
+
 # Try if the user sourced the scripts from CCP4
 ccp4_path=$(whereis molrep 2>/dev/null | cut --delimiter=':' -f 2-)
 
