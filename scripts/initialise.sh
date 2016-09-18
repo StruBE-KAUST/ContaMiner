@@ -90,7 +90,7 @@ do
     if [ ! -f "$contaminant_id/packs" ]
     then
         # Presence of this file means the preparation is done, or in progress
-        printf "%s preparation starting... "
+        printf "%s preparation starting... " "$contaminant_id"
         touch "$contaminant_id/packs"
         sbatch "$cm_path/scripts/CM_prep.slurm" \
             "$contaminant_id" "$nb_homologues" "$contaminant_score" > /dev/null
