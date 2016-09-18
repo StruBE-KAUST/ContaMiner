@@ -24,7 +24,7 @@ cd "$CM_PATH" || \
     (printf "Error when moving to %s." "$CM_PATH" && exit 1)
 
 # Change to POSIX mode
-. "scripts/posix_mode.sh"
+(. "scripts/posix_mode.sh") || :
 
 
 ### Try to find CCP4 installation ###
