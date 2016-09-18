@@ -126,7 +126,7 @@ do
             then
                 sg_score=0
             fi
-            task_score=$(( $model_score * $sg_score ))
+            task_score=$(( $pack_score * $sg_score ))
             tasks_list="${tasks_list}\n${task_id}_${task_score}"
         done
     done
