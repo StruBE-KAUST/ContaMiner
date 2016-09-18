@@ -54,7 +54,7 @@ safeToMtz () {
         toMtz "$1"
     fi
 
-    if check "$mtz_file_name"
+    if checkMtz "$mtz_file_name"
     then
         printf "The conversion of %s failed.\n" "$1"
         return $?
