@@ -19,9 +19,9 @@
 ## Install ContaMiner and create the database
 
 # Move to directory where install.sh is
-cm_path="$(dirname "$(readlink -f "$0")")"
-cd "$cm_path" || \
-    (printf "Error when moving to %s." "$cm_path" && exit 1)
+CM_PATH="$(dirname "$(readlink -f "$0")")"
+cd "$CM_PATH" || \
+    (printf "Error when moving to %s." "$CM_PATH" && exit 1)
 
 # Change to POSIX mode
 . "scripts/posix_mode.sh"
@@ -138,12 +138,15 @@ cmd_line="$cmd_line"'\n## END/g'
 sed "$cmd_line" "$run_template" > "$run_script"
 
 
-# Add the $cm_path indication to contaminer main script
-# $cm_path is defined on the top of this file
+# Add the $CM_PATH indication to contaminer main script
+# $CM_PATH is defined on the top of this file
 cm_template="templates/contaminer.tpl"
 cm_main="contaminer"
-sed "s,cm_path=.*,cm_path=\"$cm_path\"," "$cm_template" > "$cm_main"
+sed "s,CM_PATH=.*,CM_PATH=\"$CM_PATH\"," "$cm_template" > "$cm_main"
 chmod +x "$cm_main"
+
+# Copy sg_scores from init to data
+cp "$CM_PATH/init/sg_scores.txt" "$CM_PATH/data/"
 
 
 ### Ask is we should start the DB initialisation

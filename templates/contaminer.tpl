@@ -18,102 +18,122 @@
 
 ## Run a job
 ## $1 : diffraction data file (.cif or .mtz)
-## $2 : list of contaminants to test (optional txt file)
+## $2 : list of contaminants to test (optional txt file) (default is
+## init/contabase.txt)
 
-define_paths=
-export define_paths
-. "$define_paths"
+CM_PATH=
+export CM_PATH
 
-IFS='
-'
+# shellcheck source=/dev/null
+. "$CM_PATH/scripts/define_paths.sh"
+export SOURCE1
+export SOURCE2
+export SOURCE3
 
 # Check input
-if [ $# -lt 1 ] || printf $1 | grep -vq ".*\.\(mtz\|cif\)"
+if [ $# -lt 1 ] || printf "%s" "$1" | grep -vq ".*\.\(mtz\|cif\)"
 then
 	printf "Usage :\n"
-	printf " $0 <file.mtz> | <file.cif> [file.txt]\n"
+	printf " %s <file.mtz> | <file.cif> [file.txt]\n" "$0"
 	exit 1
 fi
-if [ ! -f $1 ]
+if [ ! -f "$1" ]
 then
-	printf "File $1 does not exist.\n"
+	printf "File %s does not exist.\n" "$1"
 	exit 1
 fi
-if [ $# -eq 2 ] && [ ! -f $2 ]
+if [ $# -eq 2 ] && [ ! -f "$2" ]
 then
-	printf "File $2 does not exist.\n"
+	printf "File %s does not exist.\n" "$2"
     exit 1
 fi
 
 # Prepare environment
+printf "Preparing environment... "
+# Create work_dir or work_dir_0 or work_dir_1, ...
 work_dir=$(basename "$1" | sed -r 's/\.mtz|\.cif//')
-mkdir -p "$work_dir"
+if ! mkdir "$work_dir" 2>/dev/null
+then
+    n=0
+    while ! mkdir "${work_dir}_$n" 2>/dev/null
+    do
+        n=$((n+1))
+    done
+    work_dir="${work_dir}_$n"
+fi
 cp "$1" "$work_dir"
 input_file_name=$(readlink -f "$work_dir/$(basename "$1")")
-list_file_name=""
+list_file="$CM_PATH/init/contabase.txt"
 if [ $# -eq 2 ]
 then
     cp "$2" "$work_dir"
-    list_file_name=$(readlink -f "$work_dir/$(basename "$2")")
+    list_file=$(readlink -f "$work_dir/$(basename "$2")")
 fi
-cd "$work_dir"
+cd "$work_dir" || \
+    (printf "%s does not exist." "$work_dir" && exit 1)
 result_file="results.txt"
 tasks_file="tasks.txt"
 printf "" > "$result_file"
 printf "" > "$tasks_file"
+printf "%s [OK]" "$work_dir"
 
 # Convert file to mtz in case of
-printf "Converting file... "
+printf "Converting file to MTZ... "
+# shellcheck source=../scripts/convert.sh
 . "$scripts_path/convert.sh"
-safe_convert "$input_file_name"
-mtz_file_name=$(printf "$input_file_name" | sed 's/\.cif$/\.mtz/')
+safeToMtz "$input_file_name"
+mtz_file_name=$(printf "%s" "$input_file_name" | sed 's/\.cif$/\.mtz/')
 printf "[OK]\n"
 
 # Determine space group
 printf "Determining alternative space groups... "
 space_group=$(mtzdmp "$mtz_file_name" | grep "Space group" | 
     sed "s/.*'\(.*\)'.*/\1/")
-alt_sg_commands="N\nSG "$space_group"\n\n"
-alt_space_groups=$(printf "$alt_sg_commands" | alt_sg_list)
-alt_space_groups=$(printf "$alt_space_groups" | 
+alt_sg_commands="N\nSG $space_group\n\n"
+alt_space_groups=$(printf "%s" "$alt_sg_commands" | alt_sg_list)
+alt_space_groups=$(printf "%s" "$alt_space_groups" | 
     tr -d '\n' | 
     sed 's/.*-->\ *\(1.*\)/\1/' |
     sed 's/"\ *[0-9]\ *"/\n/g' | 
     sed 's/"$//' | sed 's/1\ *"//')
 printf "[OK]\n"
 
-# Evaluate list of contaminants
-if [ -z "$list_file_name" ]
-then
-    list_file_name="$contam_init_file"
-fi
-
 # Submit solving jobs
 printf "Creating list of jobs... "
-for contaminant in $(cat "$list_file_name" | cut --delimiter=':' -f 1)
+contabase="$CM_PATH/data/contabase"
+sg_scores_file="$CM_PATH/data/sg_scores.txt"
+tasks_list=""
+grep -v '^ *#' < "$list_file" | grep -v '^$' | while IFS= read -r line
 do
-    contam_file="$contam_path/$contaminant"
-    for line in $(cat "$contam_file/nbpacks")
+    # clean line
+    contaminant_id=$(printf "%s" "$line" \
+        | cut --delimiter=':' -f1\
+        | cut --delimiter='#' -f1\
+        | tr -d "[:blank:]")
+
+    grep -v '^ *#' < "$contabase/$contaminant_id/packs" \
+        | grep -v '^$' |  while IFS= read -r pack
     do
-        ipack=$(printf "$line" | cut --delimiter=':' -f 1)
-        model_score=$(printf "$line" | cut --delimiter=':' -f 2)
+        pack=$(printf "%s" "$pack" | cut --delimiter=':' -f1)
+        pack_score=$(printf "$pack" | cut --delimiter=':' -f2)
         for alt_sg in $alt_space_groups
         do
-            alt_sg_slug=$(printf $alt_sg | sed "s/ /-/g")
-            taskid=$contaminant"_"$ipack"_"$alt_sg_slug
+            alt_sg_slug=$(printf "%s" "$alt_sg" | sed "s/ /-/g")
+            taskid="${contaminant_id}_${ipack}_${alt_sg_slug}"
             sg_score=$(grep "$alt_sg:" "$sg_scores_file" |\
-                cut --delimiter=':' -f 2 | tail -n 1)
+                cut --delimiter=':' -f2 | tail -n 1)
             if [ -z "$sg_score" ]
             then
                 sg_score=0
             fi
-            score=$(( $model_score * $sg_score ))
-            printf "$taskid" >> "$tasks_file"
-            printf "_$score\n" >> "$tasks_file"
+            task_score=$(( $model_score * $sg_score ))
+            tasks_list="${tasks_list}\n${task_id}_${task_score}"
         done
     done
 done
 printf "[OK]\n"
+
+printf "%s" "$tasks_list"
 
 printf "Submitting jobs to SLURM... "
 for task in $(cat "$tasks_file" | sort -rk 4 -t '_')
