@@ -90,5 +90,5 @@ done
 
 # Clean environment
 find . -mindepth 1 -maxdepth 1 \
-    \( ! -name models -and ! -name nbpacks -and ! -name -- "*.fasta"\) \
+    ! -name models -and ! -name packs -and ! -name "*.fasta" \
     -exec rm -r {} \;
