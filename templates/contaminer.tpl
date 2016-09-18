@@ -80,7 +80,7 @@ printf "%s [OK]" "$work_dir"
 # Convert file to mtz in case of
 printf "Converting file to MTZ... "
 # shellcheck source=../scripts/convert.sh
-. "$scripts_path/convert.sh"
+. "$CM_PATH/scripts/convert.sh"
 safeToMtz "$input_file_name"
 mtz_file_name=$(printf "%s" "$input_file_name" | sed 's/\.cif$/\.mtz/')
 printf "[OK]\n"
