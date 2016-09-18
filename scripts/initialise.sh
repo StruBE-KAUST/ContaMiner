@@ -58,7 +58,7 @@ do
     printf "%s\n" "$line" | cut --delimiter=':' -f 1
     printf "%s\n" "$contabase_dir"
     printf "%s\n" "$init_dir"
-done | xargs -n 3 -P 0 sh -c "fasta_download \"$0\" \"$1\" \"$2\""
+done | xargs -n 3 -P 0 sh -c 'fasta_download "$0" "$1" "$2"'
 printf "[OK]\n"
 
 # Check availability of morda_prep
