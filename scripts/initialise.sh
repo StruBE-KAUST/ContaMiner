@@ -44,7 +44,6 @@ CM_PATH="$cm_path"
 export CM_PATH
 
 printf "Downloading fasta sequences... "
-
 # Define download function
 download_path="$cm_path/scripts/download.sh"
 # shellcheck source=download.sh
