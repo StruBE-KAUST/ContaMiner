@@ -95,6 +95,8 @@ alt_space_groups=$(printf "%s" "$alt_space_groups" |
     sed 's/.*-->\ *\(1.*\)/\1/' |
     sed 's/"\ *[0-9]\ *"/\n/g' | 
     sed 's/"$//' | sed 's/1\ *"//')
+# POSIX rule : TXT files must end with \n
+alt_space_groups="$alt_space_groups\n"
 printf "[OK]\n"
 
 # Submit solving jobs
