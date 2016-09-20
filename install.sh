@@ -33,7 +33,7 @@ ccp4_path=""
 
 # Source define_paths, in case of re-run install.sh after previous installation
 # shellcheck source=scripts/define_paths.sh
-(. "scripts/define_paths.sh") || :
+(. "scripts/define_paths.sh" 2>/dev/null) || :
 
 # Success if user sourced CCP4, or define_paths.sh is initialized
 ccp4_path=$(which --skip-alias --skip-functions molrep 2>/dev/null)
