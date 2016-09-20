@@ -168,7 +168,7 @@ else
             fi
 
             # Increase score for this model and space group
-            packs_file="$CM_PATH/$contaminant/packs"
+            packs_file="$CM_PATH/data/contabase/$contaminant/packs"
             old_score=$( \
                 grep "$pack:" "$packs_file" \
                 | cut --delimiter=':' -f 2 \
