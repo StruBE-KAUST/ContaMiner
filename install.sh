@@ -104,7 +104,7 @@ then
 fi
 # From this step, find is I/O intensive and can be slow. Ask user if he wants
 # to continue.
-printf "[FAILED]\n Do you want to search harder ? [Y/n] "
+printf "[FAILED]\nDo you want to search harder ? [Y/n] "
 read -r answer
 case $answer in
     [nN])
