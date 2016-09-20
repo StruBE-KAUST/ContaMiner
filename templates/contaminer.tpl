@@ -155,7 +155,7 @@ do
     taskid=$(printf "%s" "$line" | cut --delimiter='_' -f1-3)
     printf "%s:cancelled:0h 00m 00s\n" "$taskid" >> "$result_file"
     sbatch "$CM_PATH/scripts/CM_solve.slurm" \
-        "$contaminant" "$input_file_name" "$pack" "$alt_sg" > /dev/null
+        "$contaminant" "$mtz_file_name" "$pack" "$alt_sg" > /dev/null
 done < tasks_list_sorted
 rm tasks_list
 rm tasks_list_sorted
