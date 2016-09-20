@@ -24,8 +24,8 @@ cd "$CM_PATH" || \
     (printf "Error when moving to %s." "$CM_PATH" && exit 1)
 
 # Change to POSIX mode
-(. "scripts/posix_mode.sh") || :
-
+. "scripts/posix_mode.sh" || \
+    ( printf "Directory seems corrupted. Please check.\n" && exit 1 )
 
 ### Try to find CCP4 installation ###
 printf "Finding CCP4 installation... "
@@ -33,10 +33,10 @@ ccp4_path=""
 
 # Source define_paths, in case of re-run install.sh after previous installation
 # shellcheck source=scripts/define_paths.sh
-. "scripts/define_paths.sh" 2>/dev/null
+(. "scripts/define_paths.sh") || :
 
-# Try if the user sourced the scripts from CCP4
-ccp4_path=$(whereis molrep 2>/dev/null | cut --delimiter=':' -f 2-)
+# Success if user sourced CCP4, or define_paths.sh is initialized
+ccp4_path=$(which --skip-alias --skip-functions molrep 2>/dev/null)
 
 # Try to find the setup scripts in common locations
 ccp4_name="bin/ccp4.setup-sh\$"
@@ -72,7 +72,7 @@ printf "Finding MoRDa installation... "
 morda_path=""
 
 # Try if the user sourced the script from morda
-morda_path=$(whereis morda 2>/dev/null | cut --delimiter=':' -f 2-)
+morda_path=$(which --skip-alias --skip-functions morda 2>/dev/null)
 if [ -n "$morda_path" ]
 then
     morda_path="$(dirname "$morda_path")"
