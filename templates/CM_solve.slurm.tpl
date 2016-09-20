@@ -160,7 +160,6 @@ else
             jobids=$( \
                 squeue -u "$(whoami)" -o %A:%o \
                 | grep "$input_file_name" \
-                | grep -v "$contaminant" \
                 | cut --delimiter=":" -f1 \
                 )
             if [ -n "$jobids" ]
