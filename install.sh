@@ -52,31 +52,34 @@ then
 fi
 # From this step, find is I/O intensive and can be slow. Ask user if he wants
 # to continue
-printf "[FAILED]\nDo you want to search harder ? [Y/n] "
-read -r answer
-case $answer in
-    [nN])
-        ;;
-    *)
-        printf "Finding CPP4 installation (harder)... "
-        if [ -z "$ccp4_path" ]
-        then
-            ccp4_path=$( \
-                find /opt -regex ".*$ccp4_name" 2>/dev/null \
-                | head -n1)
-        fi
-        if [ -z "$ccp4_path" ]
-        then
-            ccp4_path=$( \
-                find "$HOME" -regex ".*$ccp4_name" 2>/dev/null \
-                | head -n1)
-        fi
-        if [ -z "$ccp4_path" ]
-        then
-            printf "[FAILED]\n"
-        fi
-        ;;
-esac
+if [ -z "$ccp4_path" ]
+then
+    printf "[FAILED]\nDo you want to search harder ? [Y/n] "
+    read -r answer
+    case $answer in
+        [nN])
+            ;;
+        *)
+            printf "Finding CPP4 installation (harder)... "
+            if [ -z "$ccp4_path" ]
+            then
+                ccp4_path=$( \
+                    find /opt -regex ".*$ccp4_name" 2>/dev/null \
+                    | head -n1)
+            fi
+            if [ -z "$ccp4_path" ]
+            then
+                ccp4_path=$( \
+                    find "$HOME" -regex ".*$ccp4_name" 2>/dev/null \
+                    | head -n1)
+            fi
+            if [ -z "$ccp4_path" ]
+            then
+                printf "[FAILED]\n"
+            fi
+            ;;
+    esac
+fi
 
 # Exit 1 if not found
 if [ -z "$ccp4_path" ]
@@ -109,31 +112,34 @@ then
 fi
 # From this step, find is I/O intensive and can be slow. Ask user if he wants
 # to continue.
-printf "[FAILED]\nDo you want to search harder ? [Y/n] "
-read -r answer
-case $answer in
-    [nN])
-        ;;
-    *)
-        printf "Finding MoRDa installation (harder)... "
-        if [ -z "$morda_path" ]
-        then
-            morda_path=$( \
-                find /opt -regex ".*$morda_name" 2>/dev/null \
-                | head -n1)
-        fi
-        if [ -z "$morda_path" ]
-        then
-            morda_path=$( \
-                find "$HOME" -regex ".*$morda_name" 2>/dev/null \
-                | head -n1)
-        fi
-        if [ -z "$ccp4_path" ]
-        then
-            printf "[FAILED]\n"
-        fi
-        ;;
-esac
+if [ -z "$morda_path" ]
+then
+    printf "[FAILED]\nDo you want to search harder ? [Y/n] "
+    read -r answer
+    case $answer in
+        [nN])
+            ;;
+        *)
+            printf "Finding MoRDa installation (harder)... "
+            if [ -z "$morda_path" ]
+            then
+                morda_path=$( \
+                    find /opt -regex ".*$morda_name" 2>/dev/null \
+                    | head -n1)
+            fi
+            if [ -z "$morda_path" ]
+            then
+                morda_path=$( \
+                    find "$HOME" -regex ".*$morda_name" 2>/dev/null \
+                    | head -n1)
+            fi
+            if [ -z "$ccp4_path" ]
+            then
+                printf "[FAILED]\n"
+            fi
+            ;;
+    esac
+fi
 
 # Exit 1 if not found
 if [ -z "$morda_path" ]
