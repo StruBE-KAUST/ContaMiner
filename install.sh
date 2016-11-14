@@ -16,7 +16,10 @@
 ##    with this program; if not, write to the Free Software Foundation, Inc.,
 ##    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-## Install ContaMiner and create the database
+## Install ContaMiner
+# This file try to find the installation directory of CCP4 and MoRDa.
+# If not found, the scripts stops.
+# If found, the paths are written in define_paths.sh
 
 # Move to directory where install.sh is
 CM_PATH="$(dirname "$(readlink -f "$0")")"
@@ -143,7 +146,7 @@ morda_path="$(dirname "$morda_path")"
 printf "[OK]\n"
 
 
-### Write sources in paths script ###
+### Write sources in define_paths.sh ###
 # Define full path to scripts
 source1="$ccp4_path/setup-scripts/ccp4.setup-sh"
 source2="$ccp4_path/bin/ccp4.setup-sh"
