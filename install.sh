@@ -81,13 +81,12 @@ esac
 # Exit 1 if not found
 if [ -z "$ccp4_path" ]
 then
-    printf "Try to source bin/ccp4.setup-sh before installing ContaMiner.\n"
+    printf "Please source bin/ccp4.setup-sh before running %s.\n" "$0"
     exit 1
 fi
 
 # ccp4_path contains the full path to $ccp4_name or molrep, not the main dir
 ccp4_path="$(dirname "$(dirname "$ccp4_path")")"
-
 printf "[OK]\n"
 
 
@@ -139,13 +138,12 @@ esac
 # Exit 1 if not found
 if [ -z "$morda_path" ]
 then
-    printf "Try to source setup_morda before installing ContaMiner.\n"
+    printf "Please source morda_env_sh before running %s.\n" "$0"
     exit 1
 fi
 
 # morda_path contains the full path to $morda_name or morda bin dir
 morda_path="$(dirname "$morda_path")"
-
 printf "[OK]\n"
 
 
