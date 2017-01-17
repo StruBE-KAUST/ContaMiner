@@ -127,6 +127,6 @@ do
     taskid=$contaminant"_"$ipack"_"$alt_sg_slug
     printf "$taskid:cancelled:0h 00m 00s\n" >> "$result_file"
     sbatch "$scripts_path/sbatch_run.sh" "$define_paths" \
-        "$contaminant" "$input_file_name" "$ipack" "$alt_sg" > /dev/null
+        "$contaminant" "$mtz_file_name" "$ipack" "$alt_sg" > /dev/null
 done
 printf "[OK]\n"
