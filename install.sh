@@ -26,7 +26,7 @@ CM_PATH="$(dirname "$(readlink -f "$0")")"
 {
     cd "$CM_PATH"
 } || {
-    printf "Error when moving to %s." "$CM_PATH"
+    printf "Error when moving to %s.\n" "$CM_PATH"
     exit 1
 }
 
