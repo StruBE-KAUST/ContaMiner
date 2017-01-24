@@ -267,9 +267,8 @@ case $answer in
         ;;
     *)
         printf "Initialization starting..."
-        # TODO : Change to contaminer initialize
         {
-            sh scripts/initialize.sh
+            sh contaminer initialize
         } || {
             printf "Error while initializing the contabase.\n" >&2
             exit 1
