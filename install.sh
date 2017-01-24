@@ -250,29 +250,26 @@ data_file="$CM_PATH/data/sg_scores.txt"
 
 
 ### Ask is we should start the DB initialisation
-printf "Do you want to initialise ContaBase ? [Y/n] "
+printf "Do you want to initialize ContaBase ? [Y/n] "
 read -r answer
 case $answer in 
     [nN])
-        printf "Initialisation skipped. You can initialise ContaBase by "
-        printf "running\n  contaminer initialise\n"
+        printf "Initialization skipped. You can initialize ContaBase by "
+        printf "running:\n  contaminer initialize\n\n"
         ;;
     *)
-        printf "Initialisation starting..."
-        # TODO : Change to contaminer initialise
+        printf "Initialization starting..."
+        # TODO : Change to contaminer initialize
         {
-            sh scripts/initialise.sh
+            sh scripts/initialize.sh
         } || {
             printf "Error while initializing the contabase.\n" >&2
             exit 1
         }
-        printf "When the jobs are completed, the initialisation is finished."
-        printf " Then you can use ContaMiner. To check the jobs running for "
-        printf "your user, you can use :\n"
-        printf "squeue -u %s\n" "$(whoami)"
+        printf "When the jobs are completed, the initialization is finished."
+        printf "To check the running jobs, you can use :\n"
+        printf "  squeue -u %s\n" "$(whoami)\n\n"
         ;;
 esac
 
-printf "You can now move the contaminer script wherever you want on your \
-operating system. You can, for example, move it in a directory listed \
-in your PATH.\n"
+printf "Installation complete"
