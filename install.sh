@@ -177,7 +177,13 @@ source3="$morda_path/morda_env_sh"
 # Write file
 define_paths_template="templates/define_paths.sh.tpl"
 define_paths="scripts/define_paths.sh"
-cp "$define_paths_template" "$define_paths"
+{
+    cp -T "$define_paths_template" "$define_paths"
+} || {
+    printf "Error: Unable to copy " >&2
+    printf "$define_paths_template to $define_paths.\n" >&2
+    exit 1
+}
 sed -i "s,SOURCE1=.*,SOURCE1=\"$source1\"," $define_paths
 sed -i "s,SOURCE2=.*,SOURCE2=\"$source2\"," $define_paths
 sed -i "s,SOURCE3=.*,SOURCE3=\"$source3\"," $define_paths
