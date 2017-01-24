@@ -2,5 +2,8 @@
 !.gitignore
 !convert.sh
 !download.sh
+!initialize.sh
 !posix_mode.sh
+!solve.sh
+!update.sh
 !xmltools.sh

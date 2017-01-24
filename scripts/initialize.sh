@@ -22,6 +22,12 @@
 # Source MoRDa and CCP4 paths
 cm_path="$(dirname "$(dirname "$(readlink -f "$0")")")"
 define_paths="$cm_path/scripts/define_paths.sh"
+if [ ! -f "$define_paths" ]
+then
+    printf "Error: Installation seems corrupted. " >&2
+    printf "Please re-install ContaMiner.\n" >&2
+    exit 1
+fi
 # shellcheck source=/dev/null
 . "$define_paths"
 

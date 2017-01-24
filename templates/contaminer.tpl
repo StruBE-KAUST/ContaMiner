@@ -26,7 +26,8 @@ export CM_PATH
 define_paths="$CM_PATH/scripts/define_paths.sh"
 if [ ! -f "$define_paths" ]
 then
-    printf "Installation seems corrupted. Please re-install ContaMiner.\n" >&2
+    printf "Installation seems corrupted. " >&2
+    printf "Please re-install ContaMiner.\n" >&2
     exit 1
 fi
 
