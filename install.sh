@@ -23,12 +23,20 @@
 
 # Move to directory where install.sh is
 CM_PATH="$(dirname "$(readlink -f "$0")")"
-cd "$CM_PATH" || \
-    (printf "Error when moving to %s." "$CM_PATH" && exit 1)
+{
+    cd "$CM_PATH"
+} || {
+    printf "Error when moving to %s." "$CM_PATH"
+    exit 1
+}
 
 # Change to POSIX mode
-. "scripts/posix_mode.sh" || \
-    ( printf "Directory seems corrupted. Please check.\n" && exit 1 )
+{
+    . "scripts/posix_mode.sh"
+} || {
+    printf "Directory seems corrupted. Please check.\n"
+    exit 1
+}
 
 ### Try to find CCP4 installation ###
 printf "Finding CCP4 installation... "
