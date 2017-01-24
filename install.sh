@@ -35,20 +35,25 @@ printf "Finding CCP4 installation... "
 ccp4_path=""
 
 # Source define_paths, in case of re-run install.sh after previous installation
-# shellcheck source=scripts/define_paths.sh
-. "scripts/define_paths.sh" 2>/dev/null
-if [ -n "$SOURCE1" ]
-then
-    . $SOURCE1
-fi
-if [ -n "$SOURCE2" ]
-then
-    . $SOURCE2
-fi
-if [ -n "$SOURCE3" ]
-then
-    . $SOURCE3
-fi
+(
+    # shellcheck source=templates/define_paths.sh.tpl
+    . "scripts/define_paths.sh" 2>/dev/null
+    if [ -n "$SOURCE1" ]
+    then
+        # shellcheck source=/dev/null
+        . "$SOURCE1"
+    fi
+    if [ -n "$SOURCE2" ]
+    then
+        # shellcheck source=/dev/null
+        . "$SOURCE2"
+    fi
+    if [ -n "$SOURCE3" ]
+    then
+        # shellcheck source=/dev/null
+        . "$SOURCE3"
+    fi
+)
 
 # Success if user sourced CCP4, or define_paths.sh is initialized
 ccp4_path=$(which --skip-alias --skip-functions molrep 2>/dev/null)
