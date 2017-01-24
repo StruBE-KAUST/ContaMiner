@@ -181,12 +181,18 @@ define_paths="scripts/define_paths.sh"
     cp -T "$define_paths_template" "$define_paths"
 } || {
     printf "Error: Unable to copy " >&2
-    printf "$define_paths_template to $define_paths.\n" >&2
+    printf "%s to %s.\n" "$define_paths_template" "$define_paths" >&2
     exit 1
 }
-sed -i "s,SOURCE1=.*,SOURCE1=\"$source1\"," $define_paths
-sed -i "s,SOURCE2=.*,SOURCE2=\"$source2\"," $define_paths
-sed -i "s,SOURCE3=.*,SOURCE3=\"$source3\"," $define_paths
+
+{
+    sed -i "s,SOURCE1=.*,SOURCE1=\"$source1\"," $define_paths
+    sed -i "s,SOURCE2=.*,SOURCE2=\"$source2\"," $define_paths
+    sed -i "s,SOURCE3=.*,SOURCE3=\"$source3\"," $define_paths
+} || {
+    printf "Error: Unable to write file %s.\n" "$define_paths" >&2
+    exit 1
+}
 
 # Copy sbatch options in sbatch scripts
 prep_options_file="init/prep_options.slurm"
@@ -196,7 +202,12 @@ prep_script="scripts/CM_prep.slurm"
 cmd_line=':a;N;$!ba;s/## START.*## END/## START\n'
 cmd_line="$cmd_line$(tr '\n' '\r' < $prep_options_file | sed 's/\r/\\n/g')"
 cmd_line="$cmd_line"'\n## END/g'
-sed "$cmd_line" "$prep_template" > "$prep_script"
+{
+    sed "$cmd_line" "$prep_template" > "$prep_script"
+} || {
+    printf "Error: Unable to write file %s.\n" "$prep_script" >&2
+    exit 1
+}
 
 
 run_options_file="init/run_options.slurm"
@@ -206,18 +217,36 @@ run_script="scripts/CM_solve.slurm"
 cmd_line=':a;N;$!ba;s/## START.*## END/## START\n'
 cmd_line="$cmd_line$(tr '\n' '\r' < $run_options_file | sed 's/\r/\\n/g')"
 cmd_line="$cmd_line"'\n## END/g'
-sed "$cmd_line" "$run_template" > "$run_script"
+{
+    sed "$cmd_line" "$run_template" > "$run_script"
+} || {
+    printf "Error: Unable to write file %s.\n" "$run_script" >&2
+    exit 1
+}
 
 
 # Add the $CM_PATH indication to contaminer main script
 # $CM_PATH is defined on the top of this file
 cm_template="templates/contaminer.tpl"
 cm_main="contaminer"
-sed "s,CM_PATH=.*,CM_PATH=\"$CM_PATH\"," "$cm_template" > "$cm_main"
-chmod +x "$cm_main"
+{
+    sed "s,CM_PATH=.*,CM_PATH=\"$CM_PATH\"," "$cm_template" > "$cm_main"
+    chmod +x "$cm_main"
+} || {
+    printf "Error: Unable to modify %s.\n" "$cm_main" >&2
+    exit 1
+}
 
 # Copy sg_scores from init to data
-cp "$CM_PATH/init/sg_scores.txt" "$CM_PATH/data/"
+template_file="$CM_PATH/init/sg_scores.txt"
+data_file="$CM_PATH/data/sg_scores.txt"
+{
+    cp -T "$template_file" "$data_file"
+} || {
+    printf "Error: Unable to copy " >&2
+    printf "%s to %s.\n" "$template_file" "$data_file" >&2
+    exit 1
+}
 
 
 ### Ask is we should start the DB initialisation
@@ -231,10 +260,16 @@ case $answer in
     *)
         printf "Initialisation starting..."
         # TODO : Change to contaminer initialise
-        sh scripts/initialise.sh
-        printf "When the jobs are completed, the initialisation is finished. Then you \
-        can use ContaMiner. To check the jobs running for your user, you can use :\n\
-        squeue -u %s\n" "$(whoami)"
+        {
+            sh scripts/initialise.sh
+        } || {
+            printf "Error while initializing the contabase.\n" >&2
+            exit 1
+        }
+        printf "When the jobs are completed, the initialisation is finished."
+        printf " Then you can use ContaMiner. To check the jobs running for "
+        printf "your user, you can use :\n"
+        printf "squeue -u %s\n" "$(whoami)"
         ;;
 esac
 
