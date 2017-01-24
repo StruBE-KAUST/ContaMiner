@@ -38,7 +38,7 @@ case $1 in
         sh "$CM_PATH/scripts/update.sh"
         ;;
     solve)
-        sh "$CM_PATH/scripts/solve.sh
+        sh "$CM_PATH/scripts/solve.sh"
         ;;
     *)
         printf "ContaMiner v2.0.0\n"
