@@ -49,6 +49,19 @@ export SOURCE3
 CM_PATH="$cm_path"
 export CM_PATH
 
+# Init machine learning scores
+init_scores="$cm_path/init/ml_scores.xml"
+data_scores="$cm_path/data/ml_scores.xml"
+if [ ! -f "$data_scores" ]
+then
+    {
+        cp -T "$init_scores" "$data_scores"
+    } || {
+        printf "Unable to copy %s to %s." "$init_scores" "$data_scores" >&2
+        exit 1
+    }
+fi
+
 printf "Downloading fasta sequences... "
 # Define download function
 download_path="$cm_path/scripts/download.sh"
@@ -111,7 +124,6 @@ do
         else
             nb_homologues=3
         fi
-        contaminant_score=1
 
         fasta_file=$ID".fasta"
         if [ ! -f "$ID/$fasta_file" ]
@@ -127,12 +139,25 @@ do
             printf "%s : preparation starting... " "$ID"
             touch "$ID/packs"
             sbatch "$cm_path/scripts/CM_prep.slurm" \
-                "$ID" "$nb_homologues" "$contaminant_score" > /dev/null
+                "$ID" "$nb_homologues" > /dev/null
             printf "[OK]\n"
+        fi
+
+        contaminant_score=$(\
+            printf "cat //contaminant[uniprot_id='%s']/score/text()" \
+                "$ID" \
+                | xmllint --shell "$data_scores" \
+                | grep -v "/ >")
+        if [ -n "$contaminant_score" ]
+        then
+            str_to_ins=$(\
+                printf "        <contaminant>\n"
+                printf "            <uniprot_id>%s</uniprot_id>\n"
+                printf "            <score>1</score>\n"
+                printf "        </contaminant>\n"
+                printf "    </contaminants>\n")
+            sed -i "/<\/contaminant>/c$str_to_ins" "$data_scores"
         fi
     fi
 done
 printf "[OK]\n"
-
-# Init space_groups scores
-#cp "$init_path/sg_scores.txt" "$sg_scores_file"
