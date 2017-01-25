@@ -43,8 +43,12 @@ then
     contaminant_score=$3
 fi
 
-cd "$contaminant_id" || \
-( printf "%s directory does not exist." "$contaminant_id" && exit 1 )
+{
+    cd "$contaminant_id"
+} || {
+    printf "%s directory does not exist." "$contaminant_id" >&2
+    exit 1
+}
 
 # Load MoRDa
 # shellcheck source=/dev/null
@@ -65,7 +69,12 @@ sleep "$random"
 
 # Core job
 fasta_file="$contaminant_id.fasta"
-morda_prep -s "$fasta_file" -n "$nb_homologues"
+{
+    morda_prep -s "$fasta_file" -n "$nb_homologues"
+} || {
+    printf "Error: morda_prep failed for contaminant %s" "$contaminant_id" >&2
+    exit 1
+}
 
 # Parse morda_prep.xml to find nbpacks
 xml_file="models/model_prep.xml"
