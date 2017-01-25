@@ -76,6 +76,9 @@ done | xargs -n 3 -P 0 sh -c 'fasta_download "$0" "$1" "$2"'
 printf "[OK]\n"
 
 # Check availability of morda_prep
+. "$SOURCE1"
+. "$SOURCE2"
+. "$SOURCE3"
 morda_prep -h > /dev/null 2>&1
 if [ $? -eq 127 ]
 then
