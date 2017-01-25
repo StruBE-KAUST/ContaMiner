@@ -32,7 +32,7 @@ fi
 . "$define_paths"
 
 # Check the contabase.txt file
-contabase="$cm_path/init/contabase.txt"
+contabase="$cm_path/init/contabase.xml"
 if [ ! -f "$contabase" ]
 then
     printf "The list of contaminants does not exist. "
@@ -58,11 +58,18 @@ export -f fasta_download
 
 # Download fasta files
 init_dir="$cm_path/init"
-grep -v '^ *#' < "$contabase" | grep -v '^$' | while IFS= read -r line
+# shellcheck disable=SC2016
+printf "cat //contaminant/uniprot_id/text()\n" \
+    | xmllint --shell "$contabase" \
+    | grep -v "/ >" \
+    | while IFS= read -r ID
 do
-    printf "%s\n" "$line" | cut --delimiter=':' -f 1
-    printf "%s\n" "$contabase_dir"
-    printf "%s\n" "$init_dir"
+    if [ -n "$ID" ]
+    then
+        printf "%s\n" "$ID"
+        printf "%s\n" "$contabase_dir"
+        printf "%s\n" "$init_dir"
+    fi
 done | xargs -n 3 -P 0 sh -c 'fasta_download "$0" "$1" "$2"'
 printf "[OK]\n"
 
@@ -78,28 +85,44 @@ fi
 printf "Submitting preparation jobs to SLURM... "
 cd "$contabase_dir" || \
     (printf "\n%s does not exist." "$contabase_dir" && exit 1)
-grep -v '^ *#' < "$contabase" | grep -v '^$' | while IFS= read -r line
+printf "cat //contaminant/uniprot_id/text()\n" \
+    | xmllint --shell "$contabase" \
+    | grep -v "/ >" \
+    | while IFS='-' read -r ID
 do
-    contaminant_id=$(printf "%s" "$line" | cut --delimiter=':' -f 1)
-    nb_homologues=$(printf "%s" "$line" | cut --delimiter=':' -f 2)
-    contaminant_score=$(printf "%s" "$line" | cut --delimiter=':' -f 3)
-
-    fasta_file=$contaminant_id".fasta"
-    if [ ! -f "$contaminant_id/$fasta_file" ]
+    if [ -n "$ID" ]
     then
-        printf "%s : fasta file does not exist. Re-run the installation.\n" \
-            "$contaminant_id"
-        exit 1
-    fi
+        exact_model=$(\
+            printf "cat //contaminant/[uniprot_id='%s']/exact_model/text()" \
+                "$ID" \
+                | xmllint --shell "$contabase" \
+                | grep -v "/ >")
+        nb_homologues=0
+        if [ "$exact_model" = "true" ]
+        then
+            nb_homologues=1
+        else
+            nb_homologues=3
+        fi
+        contaminant_score=1
 
-    if [ ! -f "$contaminant_id/packs" ]
-    then
-        # Presence of this file means the preparation is done, or in progress
-        printf "%s : preparation starting... " "$contaminant_id"
-        touch "$contaminant_id/packs"
-        sbatch "$cm_path/scripts/CM_prep.slurm" \
-            "$contaminant_id" "$nb_homologues" "$contaminant_score" > /dev/null
-        printf "[OK]\n"
+        fasta_file=$ID".fasta"
+        if [ ! -f "$ID/$fasta_file" ]
+        then
+            printf "%s : fasta file does not exist. " "$ID"
+            printf "Please re-run the initialization.\n"
+            exit 1
+        fi
+
+        if [ ! -f "$ID/packs" ]
+        then
+            # Presence of this file means the preparation is done, or in progress
+            printf "%s : preparation starting... " "$ID"
+            touch "$ID/packs"
+            sbatch "$cm_path/scripts/CM_prep.slurm" \
+                "$ID" "$nb_homologues" "$contaminant_score" > /dev/null
+            printf "[OK]\n"
+        fi
     fi
 done
 printf "[OK]\n"
