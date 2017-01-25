@@ -245,17 +245,6 @@ cm_main="contaminer"
     exit 1
 }
 
-# Copy sg_scores from init to data
-template_file="$CM_PATH/init/sg_scores.txt"
-data_file="$CM_PATH/data/sg_scores.txt"
-{
-    cp -T "$template_file" "$data_file"
-} || {
-    printf "Error: Unable to copy " >&2
-    printf "%s to %s.\n" "$template_file" "$data_file" >&2
-    exit 1
-}
-
 
 ### Ask is we should start the DB initialisation
 printf "Do you want to initialize ContaBase ? [Y/n] "
