@@ -62,10 +62,12 @@ init_dir="$cm_path/init"
 printf "cat //contaminant/uniprot_id/text()\n" \
     | xmllint --shell "$contabase" \
     | grep -v "/ >" \
-    | while IFS= read -r ID
+    | grep -v "-" \
+    | while IFS='-' read -r ID
 do
     if [ -n "$ID" ]
     then
+        ID=$(printf "%s" "%$ID" | tr -d "\r\n ")
         printf "%s\n" "$ID"
         printf "%s\n" "$contabase_dir"
         printf "%s\n" "$init_dir"
@@ -88,12 +90,14 @@ cd "$contabase_dir" || \
 printf "cat //contaminant/uniprot_id/text()\n" \
     | xmllint --shell "$contabase" \
     | grep -v "/ >" \
+    | grep -v "-" \
     | while IFS='-' read -r ID
 do
     if [ -n "$ID" ]
     then
+        ID=$(printf "%s" "$ID" | tr -d "\r\n ")
         exact_model=$(\
-            printf "cat //contaminant/[uniprot_id='%s']/exact_model/text()" \
+            printf "cat //contaminant[uniprot_id='%s']/exact_model/text()" \
                 "$ID" \
                 | xmllint --shell "$contabase" \
                 | grep -v "/ >")

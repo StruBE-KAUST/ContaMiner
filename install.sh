@@ -266,16 +266,15 @@ case $answer in
         printf "running:\n  contaminer initialize\n\n"
         ;;
     *)
-        printf "Initialization starting..."
         {
             sh contaminer initialize
         } || {
             printf "Error while initializing the contabase.\n" >&2
             exit 1
         }
-        printf "When the jobs are completed, the initialization is finished."
+        printf "When the jobs are completed, the initialization is finished. "
         printf "To check the running jobs, you can use :\n"
-        printf "  squeue -u %s\n" "$(whoami)\n\n"
+        printf "  squeue -u %s\n\n" "$(whoami)"
         ;;
 esac
 
