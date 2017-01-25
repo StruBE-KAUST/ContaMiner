@@ -67,7 +67,7 @@ printf "cat //contaminant/uniprot_id/text()\n" \
 do
     if [ -n "$ID" ]
     then
-        ID=$(printf "%s" "%$ID" | tr -d "\r\n ")
+        ID=$(printf "%s" "$ID" | tr -d "\r\n ")
         printf "%s\n" "$ID"
         printf "%s\n" "$contabase_dir"
         printf "%s\n" "$init_dir"
