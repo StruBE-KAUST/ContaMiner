@@ -1,0 +1,376 @@
+<ml_scores>
+    <space_groups>
+        <space_group>
+            <name>P 21 21 21</name>
+            <score>23</score>
+        </space_group>
+        <space_group>
+            <name>P 1 21 1</name>
+            <score>16</score>
+        </space_group>
+        <space_group>
+            <name>C 1 2 1</name>
+            <score>10</score>
+        </space_group>
+        <space_group>
+            <name>P 21 21 2</name>
+            <score>5</score>
+        </space_group>
+        <space_group>
+            <name>C 2 2 21</name>
+            <score>5</score>
+        </space_group>
+        <space_group>
+            <name>P 1</name>
+            <score>4</score>
+        </space_group>
+        <space_group>
+            <name>P 43 21 2</name>
+            <score>3</score>
+        </space_group>
+        <space_group>
+            <name>P 41 21 2</name>
+            <score>3</score>
+        </space_group>
+        <space_group>
+            <name>P 32 2 1</name>
+            <score>3</score>
+        </space_group>
+        <space_group>
+            <name>P 31 2 1</name>
+            <score>3</score>
+        </space_group>
+        <space_group>
+            <name>I 2 2 2</name>
+            <score>2</score>
+        </space_group>
+        <space_group>
+            <name>P 61 2 2</name>
+            <score>1</score>
+        </space_group>
+        <space_group>
+            <name>H 3</name>
+            <score>1</score>
+        </space_group>
+        <space_group>
+            <name>H 3 2</name>
+            <score>1</score>
+        </space_group>
+        <space_group>
+            <name>P 65 2 2</name>
+            <score>1</score>
+        </space_group>
+        <space_group>
+            <name>P 61</name>
+            <score>1</score>
+        </space_group>
+        <space_group>
+            <name>P 65</name>
+            <score>1</score>
+        </space_group>
+        <space_group>
+            <name>P 63</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 41</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 31</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 32</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 43</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>I 4 2 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 42 21 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 63 2 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>I 41 2 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 21 3</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>I 4</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>I 2 3</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 4 21 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 3 2 1</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 2 21 21</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 62 2 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>I 41</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 64 2 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 43 2 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>I 21 3</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>I 21 21 21</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 6</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 41 2 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 64</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>C 2 2 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>F 4 3 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 62</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 1 2 1</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 3</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>I 1 2 1</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 41 3 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>F 2 2 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 2 2 21</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 21 2 21</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 32 1 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>F 2 3</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>I 4 3 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 4</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 43 3 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 31 1 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 42</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 6 2 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>I 41 3 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>F 41 3 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 2 3</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 42 2 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 4 2 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 4 3 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>B 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 42 3 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P -1</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 3 1 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 2 2 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 1 1 21</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>I 21</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>R 3 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>R 3</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>C 1 21 1</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>I 1 21 1</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>C 1 2/c 1</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 1 21/c 1</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>I 41/a</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 1 21/n 1</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>F 4 2 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>C 4 21 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>A 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 1 1 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P b c a</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P -3</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>I -4 2 d</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>P 21 2 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>A 1</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>I -4 c 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>B 2 21 2</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>C 21</name>
+            <score>0</score>
+        </space_group>
+        <space_group>
+            <name>B 1 1 2</name>
+            <score>0</score>
+        </space_group>
+    </space_groups>
+</ml_scores>
