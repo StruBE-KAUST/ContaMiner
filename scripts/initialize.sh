@@ -89,8 +89,11 @@ done | xargs -n 3 -P 0 sh -c 'fasta_download "$0" "$1" "$2"'
 printf "[OK]\n"
 
 # Check availability of morda_prep
+#shellcheck source=/dev/null
 . "$SOURCE1"
+#shellcheck source=/dev/null
 . "$SOURCE2"
+#shellcheck source=/dev/null
 . "$SOURCE3"
 morda_prep -h > /dev/null 2>&1
 if [ $? -eq 127 ]
@@ -148,15 +151,14 @@ do
                 "$ID" \
                 | xmllint --shell "$data_scores" \
                 | grep -v "/ >")
-        if [ -n "$contaminant_score" ]
+        if [ -z "$contaminant_score" ]
         then
-            str_to_ins=$(\
-                printf "        <contaminant>\n"
-                printf "            <uniprot_id>%s</uniprot_id>\n"
-                printf "            <score>1</score>\n"
-                printf "        </contaminant>\n"
-                printf "    </contaminants>\n")
-            sed -i "/<\/contaminant>/c$str_to_ins" "$data_scores"
+            str_to_ins1='\        <contaminant>\n'
+            str_to_ins2='            <uniprot_id>'$ID'<\/uniprot_id>\n'
+            str_to_ins3='            <score>1<\/score>\n'
+            str_to_ins4='        <\/contaminant>\n    <\/contaminants>'
+            str_to_ins=$str_to_ins1$str_to_ins2$str_to_ins3$str_to_ins4
+            sed -i "/<\/contaminants>/c$str_to_ins" "$data_scores"
         fi
     fi
 done
