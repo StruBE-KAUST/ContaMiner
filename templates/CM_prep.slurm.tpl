@@ -20,7 +20,6 @@
 ## Parameters :
 ## $1 : UniProt ID of the contaminant to prepare
 ## $2 : Number of homologues to prepare (n arg of morda_prep)
-## $3 (opt) : Init score of the contaminants for machine learning (1 by default)
 ## env should contain SOURCE[1-3] to load CCP4 and MoRDa
 ## env should contain CM_PATH which is the path to the root directory of
 ## ContaMiner
@@ -36,13 +35,7 @@ posix_mode="$CM_PATH/scripts/posix_mode.sh"
 
 # Prepare environment
 contaminant_id="$1"
-nb_homologues=$2
-contaminant_score=1
-if [ $# -ge 3 ]
-then
-    contaminant_score=$3
-fi
-
+nb_homologues="$2"
 {
     cd "$contaminant_id"
 } || {
