@@ -103,7 +103,7 @@ then
 fi
 
 # Submit prep jobs
-printf "Submitting preparation jobs to SLURM... "
+nb_contaminants_submitted=0
 cd "$contabase_dir" || \
     (printf "\n%s does not exist." "$contabase_dir" && exit 1)
 printf "cat //contaminant/uniprot_id/text()\n" \
@@ -139,7 +139,7 @@ do
         if [ ! -f "$ID/packs" ]
         then
             # Presence of this file means the preparation is done, or in progress
-            printf "%s : preparation starting... " "$ID"
+            printf "%s: Submission to SLURM... " "$ID"
             touch "$ID/packs"
             {
                 sbatch "$cm_path/scripts/CM_prep.slurm" \
@@ -149,6 +149,7 @@ do
                     "$ID" >&2
                 exit 1
             }
+            nb_contaminants_submitted=$(( nb_contaminants_submitted + 1 ))
             printf "[OK]\n"
         fi
 
@@ -168,4 +169,6 @@ do
         fi
     fi
 done
-printf "[OK]\n"
+
+printf "Number of contaminants submitted for preparation: %s" \
+    "$nb_contaminants_submitted"
