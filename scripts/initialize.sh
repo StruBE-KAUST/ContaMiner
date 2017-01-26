@@ -146,7 +146,7 @@ do
                     "$ID" "$nb_homologues" > /dev/null
             } || {
                 printf "Error: Unable to submit batch job to prepare %s."\
-                    "$ID"
+                    "$ID" >&2
                 exit 1
             }
             printf "[OK]\n"
