@@ -141,8 +141,14 @@ do
             # Presence of this file means the preparation is done, or in progress
             printf "%s : preparation starting... " "$ID"
             touch "$ID/packs"
-            sbatch "$cm_path/scripts/CM_prep.slurm" \
-                "$ID" "$nb_homologues" > /dev/null
+            {
+                sbatch "$cm_path/scripts/CM_prep.slurm" \
+                    "$ID" "$nb_homologues" > /dev/null
+            } || {
+                printf "Error: Unable to submit batch job to prepare %s."\
+                    "$ID"
+                exit 1
+            }
             printf "[OK]\n"
         fi
 
