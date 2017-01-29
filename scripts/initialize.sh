@@ -106,11 +106,16 @@ fi
 nb_contaminants_submitted=0
 cd "$contabase_dir" || \
     (printf "\n%s does not exist." "$contabase_dir" && exit 1)
+tmp_dir=$(mktemp -d)
+pipe="$tmp_dir/pipe"
+mkfifo "$pipe"
+
 printf "cat //contaminant/uniprot_id/text()\n" \
     | xmllint --shell "$contabase" \
     | grep -v "/ >" \
-    | grep -v "-" \
-    | while IFS='-' read -r ID
+    | grep -v "-" > "$pipe" &
+
+while IFS='-' read -r ID
 do
     if [ -n "$ID" ]
     then
@@ -168,7 +173,9 @@ do
             sed -i "/<\/contaminants>/c$str_to_ins" "$data_scores"
         fi
     fi
-done
+done < "$pipe"
 
-printf "Number of contaminants submitted for preparation: %s" \
+trap 'rm -rf "$tmp_dir"' EXIT INT TERM HUP
+
+printf "Number of contaminants submitted for preparation: %s\n" \
     "$nb_contaminants_submitted"
