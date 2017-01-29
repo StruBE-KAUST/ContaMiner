@@ -265,4 +265,4 @@ case $answer in
         ;;
 esac
 
-printf "Installation complete"
+printf "Installation complete\n"
