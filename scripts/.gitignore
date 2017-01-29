@@ -5,5 +5,6 @@
 !initialize.sh
 !posix_mode.sh
 !solve.sh
+!status.sh
 !update.sh
 !xmltools.sh
