@@ -32,6 +32,7 @@ CM_PATH="$(dirname "$(readlink -f "$0")")"
 
 # Change to POSIX mode
 {
+    # shellcheck source=scripts/posix_mode.sh
     . "scripts/posix_mode.sh"
 } || {
     printf "Directory seems corrupted. Please check.\n"

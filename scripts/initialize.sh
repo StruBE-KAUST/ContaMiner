@@ -19,6 +19,15 @@
 ## Download the fasta files associated to the contaminants.txt file
 ## Then run morda_prep for each contaminant.
 
+# Change to POSIX mode
+{
+    # shellcheck source=../scripts/posix_mode.sh
+    . "scripts/posix_mode.sh"
+} || {
+    printf "Directory seems corrupted. Please check.\n"
+    exit 1
+}
+
 # Source MoRDa and CCP4 paths
 cm_path="$(dirname "$(dirname "$(readlink -f "$0")")")"
 define_paths="$cm_path/scripts/define_paths.sh"

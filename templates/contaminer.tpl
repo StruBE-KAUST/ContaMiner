@@ -25,6 +25,7 @@ export CM_PATH
 
 # Change to POSIX mode
 {
+    # shellcheck source=../scripts/posix_mode.sh
     . "$CM_PATH/scripts/posix_mode.sh"
 } || {
     printf "Directory seems to be corrupted. Please check.\n"
