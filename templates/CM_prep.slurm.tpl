@@ -73,7 +73,7 @@ fasta_file="$contaminant_id.fasta"
 xml_file="models/model_prep.xml"
 nbpacks=0
 
-# See <a href="https://github.com/koalaman/shellcheck/wiki/SC2039">
+# See <a href="https://github.com/koalaman/shellcheck/wiki/SC2039"></a>
 IFS="$(printf '%b_' '\n')"; IFS="${IFS%_}"
 
 for domain in $(getXpath "//domain/text()" "$xml_file")
