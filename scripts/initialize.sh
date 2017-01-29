@@ -179,3 +179,6 @@ trap 'rm -rf "$tmp_dir"' EXIT INT TERM HUP
 
 printf "Number of contaminants submitted for preparation: %s\n" \
     "$nb_contaminants_submitted"
+
+printf "Wait for the preparation to be complete before submitting a job.\n"
+printf "You can check the ContaMiner status by using %s status.\n" "$0"

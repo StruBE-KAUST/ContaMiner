@@ -252,7 +252,7 @@ read -r answer
 case $answer in 
     [nN])
         printf "Initialization skipped. You can initialize ContaBase by "
-        printf "running:\n  contaminer initialize\n\n"
+        printf "running:\n  ./contaminer initialize\n\n"
         ;;
     *)
         {
@@ -261,9 +261,6 @@ case $answer in
             printf "Error while initializing the contabase.\n" >&2
             exit 1
         }
-        printf "When the jobs are completed, the initialization is finished. "
-        printf "To check the running jobs, you can use :\n"
-        printf "  squeue -u %s\n\n" "$(whoami)"
         ;;
 esac
 

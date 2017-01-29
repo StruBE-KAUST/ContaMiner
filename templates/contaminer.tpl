@@ -57,6 +57,7 @@ case $1 in
         printf "Available commands:\n"
         printf "  initialize - prepare the models for the first time"
         printf "contaminant\n"
+        printf "  status - show if the ContaBase is ready\n"
         printf "  update - prepare the models after a MoRDa update\n"
         printf "  solve - detect a contaminant\n"
         printf "\n"
