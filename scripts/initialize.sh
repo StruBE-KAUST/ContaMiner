@@ -78,22 +78,23 @@ download_path="$cm_path/scripts/download.sh"
 . "$download_path"
 export -f fasta_download
 
+# Load XML tools
+xml_tools="$CM_PATH/scripts/xmltools.sh"
+# shellcheck source=xmltools.sh
+. "$xml_tools"
+
 # Download fasta files
 init_dir="$cm_path/init"
+
+# See <a href="https://github.com/koalaman/shellcheck/wiki/SC2039"></a>
+IFS="$(printf '%b_' '\n')"; IFS="${IFS%_}"
+
 # shellcheck disable=SC2016
-printf "cat //contaminant/uniprot_id/text()\n" \
-    | xmllint --shell "$contabase" \
-    | grep -v "/ >" \
-    | grep -v "-" \
-    | while IFS='-' read -r ID
+for ID in $(getXpath "//contaminant/uniprot_id/text()" "$contabase")
 do
-    if [ -n "$ID" ]
-    then
-        ID=$(printf "%s" "$ID" | tr -d "\r\n ")
-        printf "%s\n" "$ID"
-        printf "%s\n" "$contabase_dir"
-        printf "%s\n" "$init_dir"
-    fi
+    printf "%s\n" "$ID"
+    printf "%s\n" "$contabase_dir"
+    printf "%s\n" "$init_dir"
 done | xargs -n 3 -P 0 sh -c 'fasta_download "$0" "$1" "$2"'
 printf "[OK]\n"
 
@@ -115,25 +116,15 @@ fi
 nb_contaminants_submitted=0
 cd "$contabase_dir" || \
     (printf "\n%s does not exist." "$contabase_dir" && exit 1)
-tmp_dir=$(mktemp -d)
-pipe="$tmp_dir/pipe"
-mkfifo "$pipe"
 
-printf "cat //contaminant/uniprot_id/text()\n" \
-    | xmllint --shell "$contabase" \
-    | grep -v "/ >" \
-    | grep -v "-" > "$pipe" &
-
-while IFS='-' read -r ID
+for ID in $(getXpath "//contaminant/uniprot_id/text()" "$contabase")
 do
     if [ -n "$ID" ]
     then
         ID=$(printf "%s" "$ID" | tr -d "\r\n ")
         exact_model=$(\
-            printf "cat //contaminant[uniprot_id='%s']/exact_model/text()" \
-                "$ID" \
-                | xmllint --shell "$contabase" \
-                | grep -v "/ >")
+            getXpath "//contaminant[uniprot_id='$ID']/exact_model/text()" \
+                "$contabase")
         nb_homologues=0
         if [ "$exact_model" = "true" ]
         then
@@ -168,10 +159,8 @@ do
         fi
 
         contaminant_score=$(\
-            printf "cat //contaminant[uniprot_id='%s']/score/text()" \
-                "$ID" \
-                | xmllint --shell "$data_scores" \
-                | grep -v "/ >")
+            getXpath "//contaminant[uniprot_id='$ID']/score/text()" \
+                "$data_scores")
         if [ -z "$contaminant_score" ]
         then
             str_to_ins1='\        <contaminant>\n'
@@ -182,9 +171,7 @@ do
             sed -i "/<\/contaminants>/c$str_to_ins" "$data_scores"
         fi
     fi
-done < "$pipe"
-
-trap 'rm -rf "$tmp_dir"' EXIT INT TERM HUP
+done
 
 printf "Number of contaminants submitted for preparation: %s\n" \
     "$nb_contaminants_submitted"

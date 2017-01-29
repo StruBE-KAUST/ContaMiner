@@ -50,8 +50,7 @@ CPUs. ContaMiner is designed to work on a cluster or a supercomputer. Currently,
 the only supported workload manager is SLURM. LSF and SGE could be supported
 later.
 
-The set of scripts is written to be POSIX.1-2001, or POSIX with mktemp
-compliant. While many shells are
+The set of scripts is written to be POSIX compliant. While many shells are
 not totally POSIX-compliant, the scripts are working, at least, with
 -   Ash
 -   Bash

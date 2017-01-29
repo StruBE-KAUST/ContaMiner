@@ -37,6 +37,10 @@
 # shellcheck source=/dev/null
 . "$SOURCE3"
 
+# Load XML tools
+xml_tools="$CM_PATH/scripts/xmltools.sh"
+# shellcheck source=../scripts/xmltools.sh
+. "$xml_tools"
 
 contaminant="$1"
 input_file_name="$2"
@@ -135,19 +139,9 @@ else
         ;;
     0)
         # xmllpath outdated, no support of --xpath option...
-        q_factor=$( \
-            printf "cat //q_factor/text()\n" \
-            | xmllint --shell "$xml_file" \
-            | grep -v "/ >" \
-            | tr -d "[:blank:]" \
-            )
+        q_factor=$(getXpath "//q_factor/text()" "$xml_file")
 
-        percent=$( \
-            printf "cat //percent/text()\n" \
-            | xmllint --shell "$xml_file" \
-            | grep -v "/ >" \
-            | tr -d "[:blank:]" \
-            )
+        percent=$(getXpath "//percent/text()" "$xml_file")
 
         newline="$q_factor-$percent:$elaps_time"
         lockfile -r-1 "$lock_file"
