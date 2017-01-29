@@ -39,7 +39,7 @@ case $1 in
     update)
         sh "$CM_PATH/scripts/update.sh"
         ;;
-    status
+    status)
         sh "$CM_PATH/scripts/status.sh"
         ;;
     solve)
