@@ -23,13 +23,13 @@
 CM_PATH=
 export CM_PATH
 
-define_paths="$CM_PATH/scripts/define_paths.sh"
-if [ ! -f "$define_paths" ]
-then
-    printf "Installation seems corrupted. " >&2
-    printf "Please re-install ContaMiner.\n" >&2
+# Change to POSIX mode
+{
+    . "$CM_PATH/scripts/posix_mode.sh"
+} || {
+    printf "Directory seems to be corrupted. Please check.\n"
     exit 1
-fi
+}
 
 case $1 in
     initialize)
