@@ -23,8 +23,10 @@ CM_PATH="$cm_path"
 export CM_PATH
 
 # Remove ContaBase
+printf "Removing current database... "
 contabase_dir="$cm_path/data/contabase"
 rm -rf "$contabase_dir"
+printf "[OK]\n"
 
 # Initialize the ContaBase
 sh "$cm_path/scripts/initialize.sh"
