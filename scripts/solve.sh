@@ -27,15 +27,6 @@ then
     exit 1
 fi
 
-# Change to POSIX mode
-{
-    # shellcheck source=../scripts/posix_mode.sh
-    . "$CM_PATH/scripts/posix_mode.sh"
-} || {
-    printf "Directory seems corrupted. Please check.\n"
-    exit 1
-}
-
 # Check ContaBase is complete
 contabase_dir="$CM_PATH/data/contabase"
 # shellcheck source=status.sh
