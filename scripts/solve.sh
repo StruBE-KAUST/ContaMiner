@@ -36,6 +36,18 @@ fi
     exit 1
 }
 
+# Check ContaBase is complete
+contabase_dir="$CM_PATH/data/contabase"
+# shellcheck source=status.sh
+status="$CM_PATH/scripts/status.sh"
+. "$status" > /dev/null
+if ! is_prepared "$contabase_dir"
+then
+    printf "Warning: ContaBase is not ready. " >&2
+    printf "Some contaminants may not be tested.\n" >&2
+fi
+
+
 # Source MoRDa and CCP4 paths
 define_paths="$CM_PATH/scripts/define_paths.sh"
 if [ ! -f "$define_paths" ]
