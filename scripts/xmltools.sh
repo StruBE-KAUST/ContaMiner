@@ -44,6 +44,13 @@ getXpath () {
         | awk '{$1=$1};1'
 }
 
+## $1 : XPath
+## $2 : Value to set
+## $3 : XML file
+setXpath (){
+    XMLshell "cd $1\nset $2\nsave" "$3" >/dev/null
+}
+
 ## Print the number of nodes for an XPath.
 ## $1 : Xpath
 ## $2 : XML file
