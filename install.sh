@@ -29,11 +29,12 @@ CM_PATH="$(dirname "$(readlink -f "$0")")"
     printf "Error when moving to %s.\n" "$CM_PATH"
     exit 1
 }
+export CM_PATH
 
 # Change to POSIX mode
 {
     # shellcheck source=scripts/posix_mode.sh
-    . "scripts/posix_mode.sh"
+    . "$CM_PATH/scripts/posix_mode.sh"
 } || {
     printf "Directory seems corrupted. Please check.\n"
     exit 1
@@ -44,10 +45,10 @@ printf "Finding CCP4 installation... "
 ccp4_path=""
 
 # Source define_paths, in case of re-run install.sh after previous installation
-if [ -f "scripts/define_paths.sh" ]
+if [ -f "$CM_PATH/scripts/define_paths.sh" ]
 then
     # shellcheck source=templates/define_paths.sh.tpl
-    . "scripts/define_paths.sh" 2>/dev/null
+    . "$CM_PATH/scripts/define_paths.sh" 2>/dev/null
     if [ -n "$SOURCE1" ]
     then
         # shellcheck source=/dev/null
@@ -184,8 +185,8 @@ source2="$ccp4_path/bin/ccp4.setup-sh"
 source3="$morda_path/morda_env_sh"
 
 # Write file
-define_paths_template="templates/define_paths.sh.tpl"
-define_paths="scripts/define_paths.sh"
+define_paths_template="$CM_PATH/templates/define_paths.sh.tpl"
+define_paths="$CM_PATH/scripts/define_paths.sh"
 {
     cp -T "$define_paths_template" "$define_paths"
 } || {
@@ -195,21 +196,21 @@ define_paths="scripts/define_paths.sh"
 }
 
 {
-    sed -i "s,SOURCE1=.*,SOURCE1=\"$source1\"," $define_paths
-    sed -i "s,SOURCE2=.*,SOURCE2=\"$source2\"," $define_paths
-    sed -i "s,SOURCE3=.*,SOURCE3=\"$source3\"," $define_paths
+    sed -i "s,SOURCE1=.*,SOURCE1=\"$source1\"," "$define_paths"
+    sed -i "s,SOURCE2=.*,SOURCE2=\"$source2\"," "$define_paths"
+    sed -i "s,SOURCE3=.*,SOURCE3=\"$source3\"," "$define_paths"
 } || {
     printf "Error: Unable to write file %s.\n" "$define_paths" >&2
     exit 1
 }
 
 # Copy sbatch options in sbatch scripts
-prep_options_file="init/prep_options.slurm"
-prep_template="templates/CM_prep.slurm.tpl"
-prep_script="scripts/CM_prep.slurm"
+prep_options_file="$CM_PATH/init/prep_options.slurm"
+prep_template="$CM_PATH/templates/CM_prep.slurm.tpl"
+prep_script="$CM_PATH/scripts/CM_prep.slurm"
 
 cmd_line=':a;N;$!ba;s/## START.*## END/## START\n'
-cmd_line="$cmd_line$(tr '\n' '\r' < $prep_options_file | sed 's/\r/\\n/g')"
+cmd_line="$cmd_line$(tr '\n' '\r' < "$prep_options_file" | sed 's/\r/\\n/g')"
 cmd_line="$cmd_line"'\n## END/g'
 {
     sed "$cmd_line" "$prep_template" > "$prep_script"
