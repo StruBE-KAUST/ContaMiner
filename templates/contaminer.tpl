@@ -43,7 +43,7 @@ case $1 in
         sh "$CM_PATH/scripts/status.sh"
         ;;
     solve)
-        sh "$CM_PATH/scripts/solve.sh"
+        sh "$CM_PATH/scripts/solve.sh" "$1" "$2"
         ;;
     *)
         printf "ContaMiner v2.0.0\n"
