@@ -20,7 +20,7 @@
 ## $2 : MTZ input filename
 ## $3 : pack #
 ## $4 : space_group
-## env must contain CM_PATH, SOURCE1, SOURCE2, and SOURCE3
+## env must contain CM_PATH
 ## current_path must contain the input MTZ file and the results.txt file
 
 ## sbatch script to run MoRDa and parse the result
@@ -29,7 +29,10 @@
 ## START
 ## END
 
-# Prepare environment
+# Source MoRDa and CCP4 paths
+define_paths="$CM_PATH/scripts/define_paths.sh"
+# shellcheck source=/dev/null
+. "$define_paths"
 # shellcheck source=/dev/null
 . "$SOURCE1"
 # shellcheck source=/dev/null
@@ -42,21 +45,30 @@ xml_tools="$CM_PATH/scripts/xmltools.sh"
 # shellcheck source=../scripts/xmltools.sh
 . "$xml_tools"
 
-contaminant="$1"
-input_file_name="$2"
-res_file=$(readlink -f "results.txt")
-pack="$3"
+contaminant_id="$1"
+mtz_file_name="$2"
+results_file=$(readlink -f "results.txt")
+pack_number="$3"
 alt_sg="$4"
 alt_sg_slug=$(printf "%s" "$alt_sg" | sed 's/ /-/g')
-task_id="${contaminant}_${pack}_${alt_sg_slug}"
-mkdir -p "$task_id"
+task_id="${contaminant_id}_${pack_number}_${alt_sg_slug}"
+{
+    mkdir -p "$task_id"
+} || {
+    printf "Error: Unable to create directory %s\n" "$task_id" >&2
+    exit 1
+}
 output_dir=$(readlink -f "$task_id")
 resdir="$output_dir/results_solve"
 outdir="$output_dir/out_solve"
 scrdir="$output_dir/scr_solve"
-model_dir="$CM_PATH/data/contabase/$contaminant/models"
-cd "$output_dir" || \
-    (printf "%s does not exist." "$output_dir" && exit 1)
+model_dir="$CM_PATH/data/contabase/$contaminant_id/models"
+{
+    cd "$output_dir"
+} || {
+    printf "%s does not exist." "$output_dir"
+    exit 1
+}
 
 # Define timeout
 slurm_time=$(squeue -j "$SLURM_JOBID" -h -o "%l")
@@ -91,9 +103,9 @@ sleep "$random"
 
 # Core job
 morda_solve \
-    -f "$input_file_name" \
+    -f "$mtz_file_name" \
     -m "$model_dir" \
-    -p "$pack" \
+    -p "$pack_number" \
     -sg "$alt_sg" \
     -r "$resdir" \
     -po "$outdir" \
@@ -101,7 +113,11 @@ morda_solve \
 job_PID=$!
 
 # Run a watchdog to stop the job before slurm time limit
-(sleep $timeout; kill -9 $job_PID; printf "Aborted") & 2>/dev/null
+{
+    sleep $timeout
+    kill -9 $job_PID
+    printf "Abort\n"
+}& 2>/dev/null
 watchdog_PID=$!
 
 # Wait for the watchdog to timeout and kill the job, or the job to terminate.
@@ -115,45 +131,45 @@ exit_status=$?
 # Parse result
 xml_file=$resdir"/morda_solve.xml"
 log_file=$resdir"/morda_solve.log"
-err=$(grep "<err_level>" "$xml_file" | cut --delimiter=" " -f 8)
+err=$(getXpath "//err_level/text()" "$xml_file")
 elaps_time=$(grep "Elapsed: " "$log_file" \
     | tail -n 1 \
     | cut --delimiter=":" -f 3 \
     | tr -d '\n' \
     | sed 's/^\ *//g' \
     )
-lock_file="$res_file.lock"
+lock_file="$results_file.lock"
 
 if [ $exit_status -eq 1 ] # job has been aborted
 then
     elaps_time=$(date -u -d @$timeout +"%Hh %2Mm %2Ss")
     lockfile -r-1 "$lock_file"
-    sed -i "/$task_id:/c\\$task_id:aborted:$elaps_time" "$res_file"
+    sed -i "/$task_id:/c\\$task_id:aborted:$elaps_time" "$results_file"
     rm -f "$lock_file"
 else
     case $err in
     7)
         lockfile -r-1 "$lock_file"
-        sed -i "/$task_id:/c\\$task_id:nosolution:$elaps_time" "$res_file"
+        sed -i "/$task_id:/c\\$task_id:nosolution:$elaps_time" "$results_file"
         rm -f "$lock_file"
         ;;
     0)
         # xmllpath outdated, no support of --xpath option...
         q_factor=$(getXpath "//q_factor/text()" "$xml_file")
-
         percent=$(getXpath "//percent/text()" "$xml_file")
 
         newline="$q_factor-$percent:$elaps_time"
         lockfile -r-1 "$lock_file"
-        sed -i "/$task_id:/c\\$task_id:$newline" "$res_file"
+        sed -i "/$task_id:/c\\$task_id:$newline" "$results_file"
         rm -f "$lock_file"
 
-        # Remove all jobs for other contaminants if positive result
-        if [ "$percent" -ge 90 ]
+        # If positive result
+        if [ "$percent" -ge 98 ]
         then
+            # Remove all jobs for other contaminants
             jobids=$( \
                 squeue -u "$(whoami)" -o %A:%o \
-                | grep "$input_file_name" \
+                | grep "$mtz_file_name" \
                 | cut --delimiter=":" -f1 \
                 )
             if [ -n "$jobids" ]
@@ -161,37 +177,45 @@ else
                 scancel "$jobids"
             fi
 
-            # Increase score for this model and space group
-            packs_file="$CM_PATH/data/contabase/$contaminant/packs"
-            old_score=$( \
+            # Increase score for this contaminant, model and space group
+            ml_scores_file="$CM_PATH/data/ml_scores.xml"
+            contaminant_old_score=$(getXpath \
+                "//contaminant[uniprot_id='$contaminant_id'/score/text()" \
+                "$ml_scores_file" \
+                )
+            contaminant_score=$(( contaminant_old_score + 1 ))
+            setXpath "//contaminant[uniprot_id='$contaminant_id'/score" \
+                $contaminant_score "$ml_scores_file"
+
+            packs_file="$CM_PATH/data/contabase/$contaminant_id/packs"
+            pack_old_score=$( \
                 grep "$pack:" "$packs_file" \
                 | cut --delimiter=':' -f 2 \
                 | tail -n 1 \
                 )
-            new_score=$(( old_score + 1 ))
-            sed -i "s/$pack:.*/$pack:$new_score/" "$packs_file"
+            pack_score=$(( pack_old_score + 1 ))
+            sed -i "s/$pack_number:.*/$pack_number:$pack_score/" "$packs_file"
 
-            sg_scores_file="$CM_PATH/data/sg_scores.txt"
-            old_score=$( \
-                grep "$alt_sg:" "$sg_scores_file" \
-                | cut --delimiter=':' -f 2 \
-                | tail -n 1 \
+            sg_old_score=$(getXpath \
+                "//space_group[name='$alt_sg']/score/text()" \
+                "$ml_scores_file" \
                 )
-            new_score=$(( old_score + 1 ))
-            sed -i "s/$alt_sg:.*/$alt_sg:$new_score/" "$sg_scores_file"
+            sg_score=$(( sg_old_score + 1 ))
+            setXpath "//space_group[name='$alt_sg']/score" \
+                $sg_score "$ml_scores_file"
         fi
         ;;
     *)
         lockfile -r-1 "$lock_file"
-        sed -i "/$task_id:/c\\$task_id:error:$elaps_time" "$res_file"
+        sed -i "/$task_id:/c\\$task_id:error:$elaps_time" "$results_file"
         rm -f "$lock_file"
         ;;
     esac
 fi
 
 # == 1 because current job is still running
-if [ "$(squeue -u "$(whoami)" -o %o | grep -c "$input_file_name")" -eq 1 ]
+if [ "$(squeue -u "$(whoami)" -o %o | grep -c "$mtz_file_name")" -eq 1 ]
 then
     # job finished for this diffraction data file
-    sh "$CM_PATH/finish.sh" "$(readlink -f "$res_file")"
+    sh "$CM_PATH/finish.sh" "$(readlink -f "$results_file")"
 fi
