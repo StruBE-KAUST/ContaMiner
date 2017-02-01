@@ -87,7 +87,7 @@ done
 printf "" > packs
 for i in $(seq "$nbpacks")
 do
-    printf "%s:%s\n" "$i" "$contaminant_score">> packs
+    printf "%s:1\n" "$i" >> packs
 done
 
 # Clean environment
