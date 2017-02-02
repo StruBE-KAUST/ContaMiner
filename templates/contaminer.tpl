@@ -42,6 +42,9 @@ case $1 in
     status)
         sh "$CM_PATH/scripts/status.sh"
         ;;
+    display)
+        sh "$CM_PATH/scripts/display.sh"
+        ;;
     solve)
         sh "$CM_PATH/scripts/solve.sh" "$1" "$2"
         ;;
@@ -62,6 +65,7 @@ case $1 in
         printf "  init - prepare the models for the first time"
         printf "contaminant\n"
         printf "  status - show if the ContaBase is ready\n"
+        printf "  display - display the ContaBase in XML format\n"
         printf "  update - prepare the models after a MoRDa update\n"
         printf "  solve - detect a contaminant\n"
         printf "\n"
