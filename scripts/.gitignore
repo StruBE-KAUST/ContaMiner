@@ -1,6 +1,7 @@
 *
 !.gitignore
 !convert.sh
+!display.sh
 !download.sh
 !initialize.sh
 !posix_mode.sh
