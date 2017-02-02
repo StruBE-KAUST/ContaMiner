@@ -258,7 +258,7 @@ case $answer in
         ;;
     *)
         {
-            sh contaminer initialize
+            sh "$CM_PATH/scripts/initialize.sh"
         } || {
             printf "Error while initializing the contabase.\n" >&2
             exit 1
