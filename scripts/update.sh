@@ -18,15 +18,11 @@
 
 ## Remove the current data_base and execute a run a new initialization
 
-cm_path="$(dirname "$(dirname "$(readlink -f "$0")")")"
-CM_PATH="$cm_path"
-export CM_PATH
-
 # Remove ContaBase
 printf "Removing current database... "
-contabase_dir="$cm_path/data/contabase"
+contabase_dir="$CM_PATH/data/contabase"
 rm -rf "$contabase_dir"
 printf "[OK]\n"
 
 # Initialize the ContaBase
-sh "$cm_path/scripts/initialize.sh"
+sh "$CM_PATH/scripts/initialize.sh"
