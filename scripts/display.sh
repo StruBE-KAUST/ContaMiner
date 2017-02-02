@@ -27,7 +27,7 @@ find "$CM_PATH/data/contabase" -maxdepth 1 -mindepth 1 -type d \
     | while IFS= read -r cont
 do
     echo "<contaminant>"
-    echo "  <uniprot_id>$cont</uniprot_id>"
+    echo "  <uniprot_id>$(basename "$cont")</uniprot_id>"
     extractPacks "$cont/models/model_prep.xml"
     echo "</contaminant>"
 done
