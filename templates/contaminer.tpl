@@ -33,7 +33,7 @@ export CM_PATH
 }
 
 case $1 in
-    initialize)
+    init)
         sh "$CM_PATH/scripts/initialize.sh"
         ;;
     update)
@@ -59,7 +59,7 @@ case $1 in
         printf "J. Appl. Cryst., 49:2252-2258\n"
         printf "\n"
         printf "Available commands:\n"
-        printf "  initialize - prepare the models for the first time"
+        printf "  init - prepare the models for the first time"
         printf "contaminant\n"
         printf "  status - show if the ContaBase is ready\n"
         printf "  update - prepare the models after a MoRDa update\n"
