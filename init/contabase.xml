@@ -342,6 +342,7 @@
     <category>
         <id>2</id>
         <name>Protein in yeast</name>
+        <default>false</default>
         <contaminant>
             <uniprot_id>P00330</uniprot_id>
             <short_name>ADH1_YEAST</short_name>
@@ -362,6 +363,7 @@
     <category>
         <id>3</id>
         <name>Tag</name>
+        <default>false</default>
         <contaminant>
             <uniprot_id>P0AA25</uniprot_id>
             <short_name>THIO_ECOLI</short_name>
@@ -439,6 +441,7 @@
     <category>
         <id>4</id>
         <name>Protein used during purification or crystallization</name>
+        <default>false</default>
         <contaminant>
             <uniprot_id>P03303</uniprot_id>
             <short_name>POLG_HRV14</short_name>
@@ -591,6 +594,7 @@
     <category>
         <id>5</id>
         <name>Microbial contaminants of host cell and reagents</name>
+        <default>true</default>
         <contaminant>
             <uniprot_id>B4SL31</uniprot_id>
             <short_name>B4SL31_STRM5</short_name>
@@ -628,6 +632,7 @@
     <category>
         <id>6</id>
         <name>Other expression systems</name>
+        <default>false</default>
         <contaminant>
             <uniprot_id>P83696</uniprot_id>
             <short_name>P83696_ALCXX</short_name>
