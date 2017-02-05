@@ -72,7 +72,7 @@ then
     printf "File %s does not exist.\n" "$1" >&2
     exit 1
 fi
-if [ $# -eq 2 ] && [ ! -f "$2" ]
+if [ $# -eq 2 ] && [ -n "$2" ] && [ ! -f "$2" ]
 then
     printf "File %s does not exist.\n" "$2" >&2
     exit 1
@@ -137,7 +137,7 @@ printf "[OK]\n"
 printf "Selecting contaminants..."
 contabase="$CM_PATH/init/contabase.xml"
 contaminants_list=""
-if [ $# -eq 2 ]
+if [ $# -eq 2 ] && [ -n "$2" ]
 then
     contaminants_list="$(cat "$2")"
 else
