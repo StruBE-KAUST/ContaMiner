@@ -142,7 +142,7 @@ then
     contaminants_list="$(cat "$2")"
 else
     contaminants_list="$(
-        getXpath "//category[default=true]/contaminant/uniprot_id/text()" \
+        getXpath "//category[default='true']/contaminant/uniprot_id/text()" \
             "$contabase"
         )"
 fi
@@ -159,7 +159,7 @@ do
         getXpath "//contaminant[uniprot_id=$contaminant_id]/score/text()" \
             "$ml_scores" \
             )
-    grep -v '^ *#' < "$contabase/$contaminant_id/packs" \
+    grep -v '^ *#' < "$contabase_dir/$contaminant_id/packs" \
         | grep -v '^$' \
         | while IFS= read -r pack_line
     do
@@ -178,7 +178,6 @@ do
             printf "%s_%s\n" "$task_id" "$task_score"
         done
     done
-    rm packs_list
 ## Then sort according to the score
 ## Then submit the jobs 
 done | sort -rk 4 -t '_' -g \
