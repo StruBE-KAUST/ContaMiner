@@ -112,9 +112,9 @@ then
         printf "[FAILED]\n"
         exit 1
     }
+    printf "[OK]\n"
 fi
 mtz_file_name=$(printf "%s" "$input_file_name" | sed 's/\.cif$/\.mtz/')
-printf "[OK]\n"
 
 # Select alternative space group
 printf "Selecting alternative space groups... "
