@@ -171,7 +171,7 @@ do
             alt_sg_slug=$(printf "%s" "$alt_sg" | sed "s/ /-/g")
             task_id="${contaminant_id}_${pack}_${alt_sg_slug}"
             sg_score=$( \
-                getXpath "//space_group[name=$alt_sg]/score/text()" \
+                getXpath "//space_group[name='$alt_sg']/score/text()" \
                     "$ml_scores" \
                     )
             task_score=$(( contaminant_score * pack_score * sg_score ))
