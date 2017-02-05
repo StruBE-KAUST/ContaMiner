@@ -29,8 +29,8 @@ fi
 
 # Check ContaBase is complete
 contabase_dir="$CM_PATH/data/contabase"
-# shellcheck source=status.sh
 status="$CM_PATH/scripts/status.sh"
+# shellcheck source=status.sh
 . "$status" > /dev/null
 if ! is_prepared "$contabase_dir"
 then
@@ -65,16 +65,16 @@ xml_tools="$CM_PATH/scripts/xmltools.sh"
 if [ $# -lt 1 ] || printf "%s" "$1" | grep -vq ".*\.\(mtz\|cif\)"
 then
     printf "Missing arguments\n" >&2
-	exit 1
+    exit 1
 fi
 if [ ! -f "$1" ]
 then
-	printf "File %s does not exist.\n" "$1" >&2
-	exit 1
+    printf "File %s does not exist.\n" "$1" >&2
+    exit 1
 fi
 if [ $# -eq 2 ] && [ ! -f "$2" ]
 then
-	printf "File %s does not exist.\n" "$2" >&2
+    printf "File %s does not exist.\n" "$2" >&2
     exit 1
 fi
 
