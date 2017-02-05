@@ -98,7 +98,7 @@ input_file_name=$(readlink -f "$work_dir/$(basename "$1")")
 }
 result_file="results.txt"
 printf "" > "$result_file"
-printf "%s [OK]\n" "$work_dir"
+printf "[OK]\n"
 
 # Convert file to mtz if applicable
 # shellcheck source=../scripts/convert.sh
