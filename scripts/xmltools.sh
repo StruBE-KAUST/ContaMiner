@@ -31,7 +31,7 @@ XMLshell () {
         printf "%s does not exist.\n" "$2"
         return 1
     fi
-    printf "%s\n" "$1" | xmllint --shell "$2"
+    printf "%b\n" "$1" | xmllint --shell "$2"
 }
 
 ## $1 : XPath
