@@ -72,7 +72,7 @@ then
     printf "File %s does not exist.\n" "$1" >&2
     exit 1
 fi
-if [ $# -eq 2 ] && [ -n "$2" ] && [ ! -f "$2" ]
+if [ $# -ge 2 ] && [ -n "$2" ] && [ ! -f "$2" ]
 then
     printf "File %s does not exist.\n" "$2" >&2
     exit 1
@@ -90,6 +90,11 @@ work_dir=$(basename "$1" | sed -r 's/\.mtz|\.cif//')
 }
 cp "$1" "$work_dir"
 input_file_name=$(readlink -f "$work_dir/$(basename "$1")")
+if [ $# -ge 2 ]
+then
+    cp "$2" "$work_dir"
+    list_file_name=$(readlink -f "$work_dir/$(basename "$2")")
+fi
 {
     cd "$work_dir"
 } || {
@@ -137,9 +142,9 @@ printf "[OK]\n"
 printf "Selecting contaminants..."
 contabase="$CM_PATH/init/contabase.xml"
 contaminants_list=""
-if [ $# -eq 2 ] && [ -n "$2" ]
+if [ $# -ge 2 ] && [ -n "$2" ]
 then
-    contaminants_list="$(cat "$2")"
+    contaminants_list="$(cat "$list_file_name")"
 else
     contaminants_list="$(
         getXpath "//category[default='true']/contaminant/uniprot_id/text()" \

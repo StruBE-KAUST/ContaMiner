@@ -121,23 +121,14 @@ job_PID=$!
 watchdog_PID=$!
 
 # Wait for the watchdog to timeout and kill the job, or the job to terminate.
-wait $job_PID
-kill -9 $watchdog_PID
+wait $job_PID 2> /dev/null
+kill -9 $watchdog_PID 2> /dev/null
 
 # exit_status is 1 if the watchdog terminated before being killed
 # ie : job is aborted
 exit_status=$?
 
 # Parse result
-xml_file=$resdir"/morda_solve.xml"
-log_file=$resdir"/morda_solve.log"
-err=$(getXpath "//err_level/text()" "$xml_file")
-elaps_time=$(grep "Elapsed: " "$log_file" \
-    | tail -n 1 \
-    | cut --delimiter=":" -f 3 \
-    | tr -d '\n' \
-    | sed 's/^\ *//g' \
-    )
 lock_file="$results_file.lock"
 
 if [ $exit_status -eq 1 ] # job has been aborted
@@ -147,6 +138,15 @@ then
     sed -i "/$task_id:/c\\$task_id:aborted:$elaps_time" "$results_file"
     rm -f "$lock_file"
 else
+    xml_file=$resdir"/morda_solve.xml"
+    log_file=$resdir"/morda_solve.log"
+    err=$(getXpath "//err_level/text()" "$xml_file")
+    elaps_time=$(grep "Elapsed: " "$log_file" \
+        | tail -n 1 \
+        | cut --delimiter=":" -f 3 \
+        | tr -d '\n' \
+        | sed 's/^\ *//g' \
+        )
     case $err in
     7)
         lockfile -r-1 "$lock_file"
