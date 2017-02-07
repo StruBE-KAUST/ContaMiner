@@ -117,12 +117,12 @@ job_PID=$!
     sleep $timeout
     kill -9 $job_PID
     printf "Abort\n"
-}& 2>/dev/null
+}& > /dev/null 2>&1
 watchdog_PID=$!
 
 # Wait for the watchdog to timeout and kill the job, or the job to terminate.
-wait $job_PID 2> /dev/null
-kill -9 $watchdog_PID 2> /dev/null
+wait $job_PID > /dev/null 2>&1
+kill -9 $watchdog_PID > /dev/null 2>&1
 
 # exit_status is 1 if the watchdog terminated before being killed
 # ie : job is aborted
