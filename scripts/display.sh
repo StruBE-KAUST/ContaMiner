@@ -76,7 +76,8 @@ do
                 printf "                <name>%s</name>\n" "$sugg_name"
                 printf "            </suggestion>\n"
             done
-            extractPacks "$contabase_dir/$uniprot_id/models/model_prep.xml"
+            extractPacks "$contabase_dir/$uniprot_id/models/model_prep.xml" \
+                sed 's/^/            /'
         fi
     done
 done
