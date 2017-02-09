@@ -33,7 +33,7 @@ do
     printf "        <id>%s</id>\n" "$category_id"
     default=$(getXpath "//category[id='$category_id']/default/text()" \
         "$contabase")
-    printf "        <default>%s</default>" "$default"
+    printf "        <default>%s</default>\n" "$default"
     for uniprot_id in $(\
         list_contaminants_in_category "$category_id" "$contabase")
     do
@@ -77,7 +77,7 @@ do
                 printf "            </suggestion>\n"
             done
             extractPacks "$contabase_dir/$uniprot_id/models/model_prep.xml" \
-                sed 's/^/            /'
+                | sed 's/^/            /'
         fi
     done
 done
