@@ -22,12 +22,62 @@ xml_tools="$CM_PATH/scripts/xmltools.sh"
 # shellcheck source=xmltools.sh
 . "$xml_tools"
 
+contabase="$CM_PATH/init/contabase.xml"
+contabase_dir="$CM_PATH/data/contabase"
+
 ## Display prepared contaminants from the contabase
-find "$CM_PATH/data/contabase" -maxdepth 1 -mindepth 1 -type d \
-    | while IFS= read -r cont
+printf "<contabase>\n"
+for category_id in $(list_categories "$contabase")
 do
-    echo "<contaminant>"
-    echo "  <uniprot_id>$(basename "$cont")</uniprot_id>"
-    extractPacks "$cont/models/model_prep.xml"
-    echo "</contaminant>"
+    printf "    <category>\n"
+    printf "        <id>%s</id>\n" "$category_id"
+    default=$(getXpath "//category[id='$category_id']/default/text()" \
+        "$contabase")
+    printf "        <default>%s</default>" "$default"
+    for uniprot_id in $(\
+        list_contaminants_in_category "$category_id" "$contabase")
+    do
+        if [ -d "$contabase_dir/$uniprot_id" ]
+        then
+            printf "        <contaminant>\n"
+            printf "            <uniprot_id>%s</uniprot_id>\n" "$uniprot_id"
+            short_name="$(getXpath \
+                "//contaminant[uniprot_id='$uniprot_id']/short_name/text()" \
+                "$contabase")"
+            printf "            <short_name>%s</short_name>\n" "$short_name"
+            long_name="$(getXpath \
+                "//contaminant[uniprot_id='$uniprot_id']/long_name/text()" \
+                "$contabase")"
+            printf "            <long_name>%s</long_name>\n" "$long_name"
+            organism="$(getXpath \
+                "//contaminant[uniprot_id='$uniprot_id']/organism/text()" \
+                "$contabase")"
+            printf "            <organism>%s</organism>\n" "$organism"
+            exact="$(getXpath \
+                "//contaminant[uniprot_id='$uniprot_id']/exact/text()" \
+                "$contabase")"
+            printf "            <exact_model>%s</exact_model>\n" "$exact"
+
+            # Add ref and sugg
+            for pubmed_id in $(getXpath \
+                "//contaminant[uniprot_id='$uniprot_id']//pubmed_id/text()" \
+                "$contabase")
+            do
+                printf "            <reference>\n"
+                printf "                <pubmed_id>%s</pubmed_id>\n" \
+                    "$pubmed_id"
+                printf "            </reference>\n"
+            done
+            for sugg_name in $(getXpath \
+                "//contaminant[uniprot_id='$uniprot_id']/suggestion/name/text()" \
+                "$contabase")
+            do
+                printf "            <suggestion>\n"
+                printf "                <name>%s</name>\n" "$sugg_name"
+                printf "            </suggestion>\n"
+            done
+            extractPacks "$contabase_dir/$uniprot_id/models/model_prep.xml"
+        fi
+    done
 done
+printf "</contabase>\n"

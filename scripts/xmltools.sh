@@ -221,3 +221,17 @@ extractPacks () {
         :
     done
 }
+
+## $1 : XML file (ContaBase)
+list_categories () {
+    getXpath "//category/id/text()" "$1"
+}
+
+## $1 : category id
+## $2 : XML file
+list_contaminants_in_category () {
+    getXpath "//category[id='$1']/contaminant/uniprot_id/text()" "$2"
+}
+
+# shellcheck source=/dev/null
+. /dev/null
