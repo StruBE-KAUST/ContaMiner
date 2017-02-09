@@ -35,8 +35,14 @@
             <long_name>Inorganic pyrophosphatase</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>16814929</reference>
-            <suggestion>Jonathan Cooper</suggestion>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
+            <suggestion>
+                <name>
+                <name>Jonathan Cooper</name>
+            </name>
+            </suggestion>
         </contaminant>
         <contaminant>
             <uniprot_id>P27302</uniprot_id>
@@ -44,7 +50,9 @@
             <long_name>Transketolase 1</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>19887109</reference>
+            <reference>
+                <pubmed_id>19887109</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P0A715</uniprot_id>
@@ -52,7 +60,9 @@
             <long_name>2-dehydro-3-deoxyphosphooctonate aldolase</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>19887109</reference>
+            <reference>
+                <pubmed_id>19887109</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P0A9K9</uniprot_id>
@@ -60,7 +70,9 @@
             <long_name>FKBP-type peptidyl-prolyl cis-trans isomerase SlyD</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>false</exact_model>
-            <reference>16814929</reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P69054</uniprot_id>
@@ -68,7 +80,9 @@
             <long_name>Succinate dehydrogenase cytochrome b556 subunit</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>19162196</reference>
+            <reference>
+                <pubmed_id>19162196</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P31224</uniprot_id>
@@ -76,8 +90,12 @@
             <long_name>Multidrug efflux pump subunit AcrB</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>19162196</reference>
-            <reference>18931428</reference>
+            <reference>
+                <pubmed_id>19162196</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>18931428</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P0AD61</uniprot_id>
@@ -85,7 +103,9 @@
             <long_name>Pyruvate kinase I</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>19887109</reference>
+            <reference>
+                <pubmed_id>19887109</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P0A8N5</uniprot_id>
@@ -93,7 +113,9 @@
             <long_name>Lysine--tRNA ligase, heat inducible</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>19887109</reference>
+            <reference>
+                <pubmed_id>19887109</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P00957</uniprot_id>
@@ -101,7 +123,9 @@
             <long_name>Alanine--tRNA ligase</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>19887109</reference>
+            <reference>
+                <pubmed_id>19887109</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P77398</uniprot_id>
@@ -109,8 +133,12 @@
             <long_name>Bifunctional polymyxin resistance protein ArnA</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
-            <reference>16814929</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P0AGD1</uniprot_id>
@@ -118,8 +146,12 @@
             <long_name>Superoxide dismutase [Cu-Zn]</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
-            <reference>16814929</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P0A6U8</uniprot_id>
@@ -127,8 +159,12 @@
             <long_name>Glycogen synthase</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
-            <reference>16814929</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P13029</uniprot_id>
@@ -136,7 +172,9 @@
             <long_name>Catalase-peroxidase</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>false</exact_model>
-            <reference>19887109</reference>
+            <reference>
+                <pubmed_id>19887109</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P76344</uniprot_id>
@@ -144,8 +182,12 @@
             <long_name>Metal-binding protein ZinT</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
-            <reference>16814929</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P0ABD3</uniprot_id>
@@ -153,7 +195,9 @@
             <long_name>Bacterioferritin</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <suggestion>Jonathan Cooper</suggestion>
+            <suggestion>
+                <name>Jonathan Cooper</name>
+            </suggestion>
         </contaminant>
         <contaminant>
             <uniprot_id>P0AEE3</uniprot_id>
@@ -161,7 +205,9 @@
             <long_name>Serine endoprotease DegS</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <suggestion>James Murray</suggestion>
+            <suggestion>
+                <name>James Murray</name>
+            </suggestion>
         </contaminant>
         <contaminant>
             <uniprot_id>P0AFG6</uniprot_id>
@@ -169,8 +215,12 @@
             <long_name>Dihydrolipoyllysine-residue succinyltransferase component of 2-oxoglutarate dehydrogenase complex</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
-            <reference>16814929</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P0A6F5</uniprot_id>
@@ -178,7 +228,9 @@
             <long_name>60 kDa chaperonin</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>16814929</reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P0A858</uniprot_id>
@@ -186,7 +238,9 @@
             <long_name>Triosephosphate isomerase</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>19887109</reference>
+            <reference>
+                <pubmed_id>19887109</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P0A9S3</uniprot_id>
@@ -194,7 +248,9 @@
             <long_name>Galactitol-1-phosphate 5-dehydrogenase</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>19887109</reference>
+            <reference>
+                <pubmed_id>19887109</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P17169</uniprot_id>
@@ -202,8 +258,12 @@
             <long_name>Glutamine--fructose-6-phosphate aminotransferase [isomerizing]</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
-            <reference>16814929</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P0A6X3</uniprot_id>
@@ -211,8 +271,12 @@
             <long_name>RNA-binding protein Hfq</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
-            <reference>16814929</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P0A9Q1</uniprot_id>
@@ -220,7 +284,9 @@
             <long_name>Aerobic respiration control protein ArcA</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>19887109</reference>
+            <reference>
+                <pubmed_id>19887109</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P0AFG3</uniprot_id>
@@ -228,8 +294,12 @@
             <long_name>2-oxoglutarate dehydrogenase E1 component</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
-            <reference>16814929</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P0A9A9</uniprot_id>
@@ -237,8 +307,12 @@
             <long_name>Ferric uptake regulation protein</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
-            <reference>16814929</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P03023</uniprot_id>
@@ -246,7 +320,9 @@
             <long_name>Lactose operon repressor</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <suggestion>Jonathan Cooper</suggestion>
+            <suggestion>
+                <name>Jonathan Cooper</name>
+            </suggestion>
         </contaminant>
         <contaminant>
             <uniprot_id>P0ADZ4</uniprot_id>
@@ -254,7 +330,9 @@
             <long_name>30S ribosomal protein S15</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>16814929</reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P62577</uniprot_id>
@@ -262,8 +340,12 @@
             <long_name>Chloramphenicol acetyltransferase</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
-            <reference>16814929</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P06720</uniprot_id>
@@ -271,7 +353,9 @@
             <long_name>Alpha-galactosidase</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>false</exact_model>
-            <reference>19887109</reference>
+            <reference>
+                <pubmed_id>19887109</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P0AC53</uniprot_id>
@@ -279,7 +363,9 @@
             <long_name>Glucose-6-phosphate 1-dehydrogenase</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>false</exact_model>
-            <reference>16814929</reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P23908</uniprot_id>
@@ -287,7 +373,9 @@
             <long_name>Acetylornithine deacetylase</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>false</exact_model>
-            <reference>16814929</reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P21367</uniprot_id>
@@ -302,9 +390,15 @@
             <long_name>Outer membrane protein F</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>25517996</reference>
-            <suggestion>Stephen MacMahon</suggestion>
-            <suggestion>Bert Van-Den-Berg</suggestion>
+            <reference>
+                <pubmed_id>25517996</pubmed_id>
+            </reference>
+            <suggestion>
+                <name>Stephen MacMahon</name>
+            </suggestion>
+            <suggestion>
+                <name>Bert Van-Den-Berg</name>
+            </suggestion>
         </contaminant>
         <contaminant>
             <uniprot_id>P21179</uniprot_id>
@@ -312,7 +406,9 @@
             <long_name>Catalase HPII</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-             <suggestion>Jonathan Cooper</suggestion>
+             <suggestion>
+                <name>Jonathan Cooper</name>
+            </suggestion>
         </contaminant>
         <contaminant>
             <uniprot_id>P0A9B2</uniprot_id>
@@ -320,7 +416,9 @@
             <long_name>Glyceraldehyde-3-phosphate dehydrogenase A</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <suggestion>Rebekah Bjork</suggestion>
+            <suggestion>
+                <name>Rebekah Bjork</name>
+            </suggestion>
         </contaminant>
         <contaminant>
             <uniprot_id>P08200</uniprot_id>
@@ -328,7 +426,9 @@
             <long_name>Isocitrate dehydrogenase [NADP]</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <suggestion>Jonathan Cooper</suggestion>
+            <suggestion>
+                <name>Jonathan Cooper</name>
+            </suggestion>
         </contaminant>
         <contaminant>
             <uniprot_id>B1XB85</uniprot_id>
@@ -336,7 +436,9 @@
             <long_name>Triosephosphate isomerase</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>23695562</reference>
+            <reference>
+                <pubmed_id>23695562</pubmed_id>
+            </reference>
         </contaminant>
     </category>
     <category>
@@ -349,7 +451,9 @@
             <long_name>Alcohol dehydrogenase 1</long_name>
             <organism>Saccharomyces cerevisiae</organism>
             <exact_model>true</exact_model>
-            <suggestion>own data</suggestion>
+            <suggestion>
+                <name>own data</name>
+            </suggestion>
         </contaminant>
         <contaminant>
             <uniprot_id>P53184</uniprot_id>
@@ -357,7 +461,9 @@
             <long_name>Nicotinamidase</long_name>
             <organism>Saccharomyces cerevisiae</organism>
             <exact_model>true</exact_model>
-            <reference>16511075</reference>
+            <reference>
+                <pubmed_id>16511075</pubmed_id>
+            </reference>
         </contaminant>
     </category>
     <category>
@@ -370,7 +476,9 @@
             <long_name>Thioredoxin-1</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P63165</uniprot_id>
@@ -378,7 +486,9 @@
             <long_name>Small ubiquitin-related modifier 1</long_name>
             <organism>Homo sapiens</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P0ABD8</uniprot_id>
@@ -386,7 +496,9 @@
             <long_name>Biotin carboxyl carrier protein of acetyl-CoA carboxylase</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>true</exact_model>
-            <reference>24600443</reference>
+            <reference>
+                <pubmed_id>24600443</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P0AFG0</uniprot_id>
@@ -394,7 +506,9 @@
             <long_name>Transcription termination/antitermination protein NusG</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>false</exact_model>
-            <reference>24600443</reference>
+            <reference>
+                <pubmed_id>24600443</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P08515</uniprot_id>
@@ -402,7 +516,9 @@
             <long_name>Glutathione S-transferase class-mu 26 kDa isozyme</long_name>
             <organism>Schistosoma japonicum</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P0AEY0</uniprot_id>
@@ -419,7 +535,9 @@
                 KDAQTRITK
             </sequence>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P0AFF6</uniprot_id>
@@ -427,7 +545,9 @@
             <long_name>Transcription termination/antitermination protein NusA</long_name>
             <organism>Escherichia coli</organism>
             <exact_model>false</exact_model>
-            <reference>26660914</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P0A3G3</uniprot_id>
@@ -435,7 +555,9 @@
             <long_name>Haloalkane dehalogenase</long_name>
             <organism>Rhodococcus sp.</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
         </contaminant>
     </category>
     <category>
@@ -454,7 +576,9 @@
                 KQ
             </sequence>
             <exact_model>false</exact_model>
-            <reference>26660914</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P00698</uniprot_id>
@@ -462,7 +586,9 @@
             <long_name>Lysozyme C</long_name>
             <organism>Gallus gallus</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P04517</uniprot_id>
@@ -477,7 +603,9 @@
                 SQ
             </sequence>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P00742</uniprot_id>
@@ -485,7 +613,9 @@
             <long_name>Coagulation factor X</long_name>
             <organism>Homo sapiens</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>Q02724</uniprot_id>
@@ -493,7 +623,9 @@
             <long_name>Ubiquitin-like-specific protease 1</long_name>
             <organism>Saccharomyces cerevisiae</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P00735</uniprot_id>
@@ -508,7 +640,9 @@
                 SGGPFVMKSPFNNRWYQMGIVSWGEGCDRDGKYGFYTHVFRLKKWIQKVIDQFGE
             </sequence>
             <exact_model>Bos taurus</exact_model>
-            <reference>26660914</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P98072</uniprot_id>
@@ -516,7 +650,9 @@
             <long_name>Enteropeptidase</long_name>
             <organism>Bos taurus</organism>
             <exact_model>false</exact_model>
-            <reference>26660914</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P00760</uniprot_id>
@@ -524,7 +660,9 @@
             <long_name>Cationic trypsin</long_name>
             <organism>Bos taurus</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P00766</uniprot_id>
@@ -532,7 +670,9 @@
             <long_name>Chymotrypsinogen A</long_name>
             <organism>Bos taurus</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P00800</uniprot_id>
@@ -540,7 +680,9 @@
             <long_name>Thermolysin</long_name>
             <organism>Bacillus thermoproteolyticus</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P06873</uniprot_id>
@@ -548,7 +690,9 @@
             <long_name>Proteinase K</long_name>
             <organism>Engyodontium album</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P00791</uniprot_id>
@@ -556,7 +700,9 @@
             <long_name>Pepsin A</long_name>
             <organism>Sus scrofa</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P08246</uniprot_id>
@@ -564,7 +710,9 @@
             <long_name>Neutrophil elastase</long_name>
             <organism>Homo sapiens</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P81054</uniprot_id>
@@ -572,7 +720,9 @@
             <long_name>Peptidyl-Lys metalloendopeptidase</long_name>
             <organism>Grifola frondosa</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>Q7M135</uniprot_id>
@@ -580,7 +730,9 @@
             <long_name>Lysyl endopeptidase</long_name>
             <organism>Lysobacter enzymogenes</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P00639</uniprot_id>
@@ -588,7 +740,9 @@
             <long_name>Deoxyribonuclease-1</long_name>
             <organism>Bos taurus</organism>
             <exact_model>true</exact_model>
-            <reference>26660914</reference>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
         </contaminant>
     </category>
     <category>
@@ -601,7 +755,9 @@
             <long_name>Alkaline phosphatase</long_name>
             <organism>Stenotrophomonas maltophilia</organism>
             <exact_model>true</exact_model>
-            <reference>27487824</reference>
+            <reference>
+                <pubmed_id>27487824</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>P85173</uniprot_id>
@@ -609,8 +765,12 @@
             <long_name>Phosphate-binding protein</long_name>
             <organism>Unknown prokaryotic organism</organism>
             <exact_model>true</exact_model>
-            <reference>24121327</reference>
-            <suggestion>Marcin Wojdyr</suggestion>
+            <reference>
+                <pubmed_id>24121327</pubmed_id>
+            </reference>
+            <suggestion>
+                <name>Marcin Wojdyr</name>
+            </suggestion>
         </contaminant>
         <contaminant>
             <uniprot_id>A8GBZ7</uniprot_id>
@@ -618,7 +778,9 @@
             <long_name>Cyanate hydratase</long_name>
             <organism>Serratia proteamaculans</organism>
             <exact_model>true</exact_model>
-            <reference>25849512</reference>
+            <reference>
+                <pubmed_id>25849512</pubmed_id>
+            </reference>
         </contaminant>
         <contaminant>
             <uniprot_id>S0AKJ8</uniprot_id>
@@ -626,7 +788,9 @@
             <long_name>Glycerol dehydrogenase DhaD</long_name>
             <organism>Serratia plymuthica</organism>
             <exact_model>true</exact_model>
-            <reference>24637749</reference>
+            <reference>
+                <pubmed_id>24637749</pubmed_id>
+            </reference>
         </contaminant>
     </category>
     <category>
@@ -639,7 +803,9 @@
             <long_name>Glyceraldehyde-3-phosphate dehydrogenase</long_name>
             <organism>Alcaligenes xylosoxydans xylosoxydans</organism>
             <exact_model>true</exact_model>
-            <suggestion>Marcin Wojdyr</suggestion>
+            <suggestion>
+                <name>Marcin Wojdyr</name>
+            </suggestion>
         </contaminant>
         <contaminant>
             <uniprot_id>Q9I4D6</uniprot_id>
@@ -647,8 +813,12 @@
             <long_name>Probable hydrolase</long_name>
             <organism>Pseudomonas aeruginosa</organism>
             <exact_model>true</exact_model>
-            <reference>26184183</reference>
-            <suggestion>Marcin Wojdyr</suggestion>
+            <reference>
+                <pubmed_id>26184183</pubmed_id>
+            </reference>
+            <suggestion>
+                <name>Marcin Wojdyr</name>
+            </suggestion>
         </contaminant>
     </category>
 </contabase>
