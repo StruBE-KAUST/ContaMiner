@@ -78,6 +78,7 @@ do
             done
             extractPacks "$contabase_dir/$uniprot_id/models/model_prep.xml" \
                 | sed 's/^/            /'
+            printf "        </contaminant>\n"
         fi
     done
 done
