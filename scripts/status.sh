@@ -59,7 +59,7 @@ if [ -d "$contabase_dir" ]
 then
     if is_prepared "$contabase_dir"
     then
-        printf "ContaBase is ready\n"
+        printf "ContaBase is ready.\n"
     elif is_started "$contabase_dir"
     then
         printf "ContaBase is being initialized.\n"

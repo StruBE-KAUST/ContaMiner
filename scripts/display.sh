@@ -22,6 +22,13 @@ xml_tools="$CM_PATH/scripts/xmltools.sh"
 # shellcheck source=xmltools.sh
 . "$xml_tools"
 
+# Check if ContaBase is ready
+if [ "$(sh "$CM_PATH/scripts/status.sh")" != "ContaBase is ready.\n" ]
+then
+    printf "ContaBase is not ready\n" 2>/dev/null
+    exit 1
+fi
+
 contabase="$CM_PATH/init/contabase.xml"
 contabase_dir="$CM_PATH/data/contabase"
 

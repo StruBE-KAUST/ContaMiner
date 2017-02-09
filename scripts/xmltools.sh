@@ -232,6 +232,3 @@ list_categories () {
 list_contaminants_in_category () {
     getXpath "//category[id='$1']/contaminant/uniprot_id/text()" "$2"
 }
-
-# shellcheck source=/dev/null
-. /dev/null
