@@ -81,5 +81,6 @@ do
             printf "        </contaminant>\n"
         fi
     done
+    printf "    </category>\n"
 done
 printf "</contabase>\n"
