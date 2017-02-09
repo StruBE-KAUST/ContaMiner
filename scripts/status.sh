@@ -23,7 +23,7 @@ is_prepared () {
     if [ -z "$(\
         find "$1" -maxdepth 1 -mindepth 1 -type d \
         -exec sh -c \
-        'if [ ! -f "$1/packs" ] || [ -d "$1/scr_prep" ]
+        'if [ ! -f "$1/packs" ] || [ -d "$1/scr_prep" ] || [ ! -d "$1/models" ]
             then
                 printf "1"
             fi' _ {} \;)" ]
