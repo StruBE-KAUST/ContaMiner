@@ -33,6 +33,7 @@ contabase="$CM_PATH/init/contabase.xml"
 contabase_dir="$CM_PATH/data/contabase"
 
 ## Display prepared contaminants from the contabase
+printf "<?xml version=\"1.0\"?>\n"
 printf "<contabase>\n"
 for category_id in $(list_categories "$contabase")
 do
