@@ -39,6 +39,9 @@ for category_id in $(list_categories "$contabase")
 do
     printf "    <category>\n"
     printf "        <id>%s</id>\n" "$category_id"
+    name=$(getXpath "//category[id='$category_id']/name/text()" \
+        "$contabase")
+    printf "        <name>%s</name>\n" "$name"
     default=$(getXpath "//category[id='$category_id']/default/text()" \
         "$contabase")
     printf "        <default>%s</default>\n" "$default"
