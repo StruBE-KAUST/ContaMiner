@@ -57,6 +57,9 @@ do
                 "//contaminant[uniprot_id='$uniprot_id']/long_name/text()" \
                 "$contabase")"
             printf "            <long_name>%s</long_name>\n" "$long_name"
+            sequence=$(grep -v '>' | tr -d '\n' \
+                < "$contabase_dir/$uniprot_id/$uniprot_id.fasta")
+            printf "            <sequence>%s</sequence>\n" "$sequence"
             organism="$(getXpath \
                 "//contaminant[uniprot_id='$uniprot_id']/organism/text()" \
                 "$contabase")"
