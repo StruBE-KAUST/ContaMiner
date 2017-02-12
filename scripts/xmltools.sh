@@ -139,7 +139,7 @@ extractPack () {
             then
                 quat_structure="domains"
             else
-                quat_structure="monomer"
+                quat_structure="1-mer"
             fi
         fi
     fi 
