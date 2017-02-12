@@ -23,7 +23,7 @@ xml_tools="$CM_PATH/scripts/xmltools.sh"
 . "$xml_tools"
 
 # Check if ContaBase is ready
-if [ "$(sh "$CM_PATH/scripts/status.sh")" != "ContaBase is ready.\n" ]
+if [ "$(sh "$CM_PATH/scripts/status.sh")" != "ContaBase is ready." ]
 then
     printf "ContaBase is not ready\n" 2>/dev/null
     exit 1
