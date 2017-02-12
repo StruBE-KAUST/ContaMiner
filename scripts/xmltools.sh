@@ -88,6 +88,7 @@ extractModel () {
 
     chain_code=$(getXpath \
         "//structure[$1]/model[$2]/chain/text()" "$3")
+    n_res=$(getXpath "//structure[$1]/model[$2]/nres/text()" "$3")
     identity=$(getXpath "//structure[$1]/model[$2]/similarity/text()" "$3")
 
     printf "\
@@ -95,11 +96,13 @@ extractModel () {
     <template>%s</template>\n\
     <chain>%s</chain>\n\
     <domain>%s</domain>\n\
+    <n_res>%s</n_res>\n\
     <identity>%s</identity>\n\
 </model>\n" \
         "$pdb_code" \
         "$chain_code" \
         "$domain" \
+        "$n_res" \
         "$identity"
 }
 
@@ -107,7 +110,6 @@ extractModel () {
 ## $2 : position of the pack's first model
 ## $3 : XML file
 extractPack () {
-    nb_residues_in_pack=0
     quat_structure=""
     cursor="$2"
     end=false
@@ -159,17 +161,11 @@ extractPack () {
             end=true
         fi
 
-        n_res=$(getXpath \
-            "//structure[$1]/model[$cursor]/nres/text()" \
-            "$3")
-        nb_residues_in_pack=$(( nb_residues_in_pack + n_res ))
         model=$(extractModel "$1" "$cursor" "$3" | sed 's/^/    /')
         printf "%s\n" "$model"
         cursor=$(( cursor +1 ))
     done
 
-    printf "\
-    <n_res>%s</n_res>\n" "$nb_residues_in_pack"
     printf "</pack>\n"
 }
 
