@@ -69,7 +69,7 @@ do
                 "$contabase")"
             printf "            <organism>%s</organism>\n" "$organism"
             exact="$(getXpath \
-                "//contaminant[uniprot_id='$uniprot_id']/exact/text()" \
+                "//contaminant[uniprot_id='$uniprot_id']/exact_model/text()" \
                 "$contabase")"
             printf "            <exact_model>%s</exact_model>\n" "$exact"
 
