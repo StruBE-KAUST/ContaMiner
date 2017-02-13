@@ -83,9 +83,10 @@ do
                     "$pubmed_id"
                 printf "            </reference>\n"
             done
-            for sugg_name in $(getXpath \
+            getXpath \
                 "//contaminant[uniprot_id='$uniprot_id']/suggestion/name/text()" \
-                "$contabase")
+                "$contabase" \
+                | while read -r sugg_name
             do
                 printf "            <suggestion>\n"
                 printf "                <name>%s</name>\n" "$sugg_name"
