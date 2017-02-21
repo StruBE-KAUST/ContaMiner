@@ -48,6 +48,9 @@ case $1 in
     solve)
         sh "$CM_PATH/scripts/solve.sh" "$2" "$3"
         ;;
+    job_status)
+        sh "$CM_PATH/scripts/job_status.sh" "$2"
+        ;;
     *)
         printf "ContaMiner v2.0.0\n"
         printf "Usage: %s COMMAND [PARAMETERS]\n" "$0"
