@@ -71,6 +71,7 @@ case $1 in
         printf "  display - display the ContaBase in XML format\n"
         printf "  update - prepare the models after a MoRDa update\n"
         printf "  solve - detect a contaminant\n"
+        printf "  job_status - gives the status of a job\n"
         printf "\n"
         printf "See the README.md file for more information about the "
         printf "available commands.\n"
