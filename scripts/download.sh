@@ -47,7 +47,7 @@ fasta_download () {
             | sed '/^$/d')
         if [ -n "$sequence" ]
         then
-            printf ">custom sequence\n%s" \
+            printf ">custom sequence\n%s\n" \
                 "$sequence" > "$2/$uni_id/$uni_id.fasta"
         else
             fasta_url="http://www.uniprot.org/uniprot/$uni_id.fasta"
