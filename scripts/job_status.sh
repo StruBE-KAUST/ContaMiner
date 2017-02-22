@@ -35,7 +35,7 @@ is_submitted () {
 ## Test if a corresponding line exists in squeue
 is_running () {
     matching_tasks=$( \
-        squeue -u "$(whoami)" i-o %o \
+        squeue -u "$(whoami)" -o "%o-%t" \
         | grep "$(basename "$1")" \
         | grep "R" \
         )
@@ -53,7 +53,7 @@ is_running () {
 ## Test if a corresponding line exists in squeue
 is_complete () {
     matching_tasks=$( \
-        squeue -u "$(whoami)" i-o %o \
+        squeue -u "$(whoami)" -o %o \
         | grep "$(basename "$1")" \
         )
     if [ -z "$matching_tasks" ]
