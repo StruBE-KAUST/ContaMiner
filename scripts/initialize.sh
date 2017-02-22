@@ -83,9 +83,6 @@ xml_tools="$CM_PATH/scripts/xmltools.sh"
 # shellcheck source=xmltools.sh
 . "$xml_tools"
 
-# Download fasta files
-init_dir="$cm_path/init"
-
 # See <a href="https://github.com/koalaman/shellcheck/wiki/SC2039"></a>
 IFS="$(printf '%b_' '\n')"; IFS="${IFS%_}"
 
@@ -94,8 +91,7 @@ for ID in $(getXpath "//contaminant/uniprot_id/text()" "$contabase")
 do
     printf "%s\n" "$ID"
     printf "%s\n" "$contabase_dir"
-    printf "%s\n" "$init_dir"
-done | xargs -n 3 -P 0 sh -c 'fasta_download "$0" "$1" "$2"'
+done | xargs -n 2 -P 0 sh -c 'fasta_download "$0" "$1"'
 printf "[OK]\n"
 
 # Check availability of morda_prep
