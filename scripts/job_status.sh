@@ -53,8 +53,9 @@ is_running () {
 ## Test if a corresponding line exists in squeue
 is_complete () {
     matching_tasks=$( \
-        squeue -u "$(whoami)" -o %o \
+        squeue -u "$(whoami)" -o "%o-%t" \
         | grep "$(basename "$1")" \
+        | grep -v -- "-CG" \
         )
     if [ -z "$matching_tasks" ]
     then
