@@ -19,11 +19,6 @@
 ## Define the function to download a fasta file and store it in the correct
 ## location
 
-# Source xmltools
-xml_tools="$CM_PATH/scripts/xmltools.sh"
-# shellcheck source=xmltools.sh
-. "$xml_tools"
-
 # Parameters :
 # $1 : uniprot_id
 # $2 : location (create a directory inside the location)
@@ -35,6 +30,11 @@ fasta_download () {
     fi
 
     uni_id=$(printf "%s" "$1" | tr "[:lower:]" "[:upper]")
+
+    # Source xmltools
+    xml_tools="$CM_PATH/scripts/xmltools.sh"
+    # shellcheck source=xmltools.sh
+    . "$xml_tools"
 
     mkdir -p "$2/$uni_id"
 
