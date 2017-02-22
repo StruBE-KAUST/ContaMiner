@@ -19,10 +19,14 @@
 ## Define the function to download a fasta file and store it in the correct
 ## location
 
+# Source xmltools
+xml_tools="$CM_PATH/scripts/xmltools.sh"
+# shellcheck source=xmltools.sh
+. "$xml_tools.sh"
+
 # Parameters :
 # $1 : uniprot_id
 # $2 : location (create a directory inside the location)
-# $3 : directory where custom sequences are stored
 fasta_download () {
     if [ $# -ne 3 ]
     then
@@ -36,9 +40,13 @@ fasta_download () {
 
     if [ ! -f "$uni_id.fasta" ]
     then
-        if [ -f "$3/$uni_id.fasta" ]
+        contabase="$CM_PATH/init/contabase.xml"
+        sequence=$(getXpath \
+            "//contaminant[uniprot_id='$uni_id']/sequence/text()" \
+            "$contabase")
+        if [ -n "$sequence" ]
         then
-            cp "$3/$uni_id.fasta" "$2/$uni_id"
+            printf "%s" "$sequence" > "$2/$uni_id/$uni_id.fasta"
         else
             fasta_url="http://www.uniprot.org/uniprot/$uni_id.fasta"
             wget -q "$fasta_url" -O "$2/$uni_id/$uni_id.fasta"

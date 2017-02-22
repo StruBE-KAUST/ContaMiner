@@ -590,7 +590,7 @@
         </contaminant>
         <contaminant>
             <uniprot_id>P04517</uniprot_id>
-            <short_name>POLG_REV</short_name>
+            <short_name>POLG_TEV</short_name>
             <long_name>Genome polyprotein</long_name>
             <organism>Tobacco etch virus</organism>
             <sequence>
