@@ -43,10 +43,12 @@ fasta_download () {
         contabase="$CM_PATH/init/contabase.xml"
         sequence=$(getXpath \
             "//contaminant[uniprot_id='$uni_id']/sequence/text()" \
-            "$contabase")
+            "$contabase" \
+            | sed '/^$/d')
         if [ -n "$sequence" ]
         then
-            printf "%s" "$sequence" > "$2/$uni_id/$uni_id.fasta"
+            printf ">custom sequence\n%s" \
+                "$sequence" > "$2/$uni_id/$uni_id.fasta"
         else
             fasta_url="http://www.uniprot.org/uniprot/$uni_id.fasta"
             wget -q "$fasta_url" -O "$2/$uni_id/$uni_id.fasta"
