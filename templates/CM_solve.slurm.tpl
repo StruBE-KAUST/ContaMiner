@@ -213,10 +213,3 @@ else
         ;;
     esac
 fi
-
-# == 1 because current job is still running
-if [ "$(squeue -u "$(whoami)" -o %o | grep -c "$mtz_file_name")" -eq 1 ]
-then
-    # job finished for this diffraction data file
-    sh "$CM_PATH/finish.sh" "$(readlink -f "$results_file")"
-fi
