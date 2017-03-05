@@ -166,18 +166,6 @@ else
         # If positive result
         if [ "$percent" -ge 99 ]
         then
-            # Remove all jobs for other contaminants
-            jobids=$( \
-                squeue -u "$(whoami)" -o %A:%o \
-                | grep "$mtz_file_name" \
-                | cut --delimiter=":" -f1 \
-                | tr '\n' ' '\
-                )
-            if [ -n "$jobids" ]
-            then
-                scancel $jobids
-            fi
-
             # Increase score for this contaminant, model and space group
             ml_scores_file="$CM_PATH/data/ml_scores.xml"
             contaminant_old_score=$(getXpath \
