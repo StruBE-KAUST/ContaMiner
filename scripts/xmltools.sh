@@ -130,7 +130,15 @@ extractPack () {
         chain_length=${#chain}
         if [ "$chain_length" -gt 1 ]
         then
-            quat_structure="${chain_length}-mer"
+            complex=$(getXpath \
+                "//structure[$1]/model[$2]/complex/text()" \
+                "$3")
+            if [ "$complex" -eq 222 ]
+            then
+                quat_structure="4-mer"
+            else
+                quat_structure="$(( complex / 100 ))-mer"
+            fi
         else
             domain=$(getXpath \
                 "//structure[$1]/model[$2]/domain/text()" \
