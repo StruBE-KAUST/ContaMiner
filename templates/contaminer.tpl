@@ -46,7 +46,12 @@ case $1 in
         sh "$CM_PATH/scripts/display.sh"
         ;;
     solve)
-        sh "$CM_PATH/scripts/solve.sh" "$2" "$3"
+        if [ $# -ge 3 ]
+        then
+            sh "$CM_PATH/scripts/solve.sh" "$2" "$3"
+        else
+            sh "$CM_PATH/scripts/solve.sh" "$2"
+        fi
         ;;
     job_status)
         sh "$CM_PATH/scripts/job_status.sh" "$2"
