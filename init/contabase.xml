@@ -1,7 +1,7 @@
 <contabase>
     <category>
         <id>1</id>
-        <name>Protein in E.Coli</name>
+        <name>Proteins in E.Coli</name>
         <default>true</default>
         <contaminant>
             <uniprot_id>P0ACJ8</uniprot_id>
@@ -441,7 +441,7 @@
     </category>
     <category>
         <id>2</id>
-        <name>Protein in yeast</name>
+        <name>Proteins in yeast</name>
         <default>false</default>
         <contaminant>
             <uniprot_id>P00330</uniprot_id>
@@ -466,7 +466,7 @@
     </category>
     <category>
         <id>3</id>
-        <name>Tag</name>
+        <name>Tags</name>
         <default>false</default>
         <contaminant>
             <uniprot_id>P0AA25</uniprot_id>
@@ -560,7 +560,7 @@
     </category>
     <category>
         <id>4</id>
-        <name>Protein used during purification or crystallization</name>
+        <name>Proteins used during purification or crystallization</name>
         <default>false</default>
         <contaminant>
             <uniprot_id>P03303</uniprot_id>
@@ -793,7 +793,7 @@
     </category>
     <category>
         <id>6</id>
-        <name>Other expression systems</name>
+        <name>From other expression systems</name>
         <default>false</default>
         <contaminant>
             <uniprot_id>P83696</uniprot_id>
