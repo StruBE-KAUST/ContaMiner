@@ -16,12 +16,10 @@
 ##    with this program; if not, write to the Free Software Foundation, Inc.,
 ##    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-## $1 : Contaminant ID
-## $2 : MTZ input filename
-## $3 : pack #
-## $4 : space_group
+## $1 : MTZ file
 ## env must contain CM_PATH
 ## current_path must contain the input MTZ file and the results.txt file
+## must be submitted as a step of a job array
 
 ## sbatch script to run MoRDa and parse the result
 
@@ -45,12 +43,14 @@ xml_tools="$CM_PATH/scripts/xmltools.sh"
 # shellcheck source=../scripts/xmltools.sh
 . "$xml_tools"
 
-contaminant_id="$1"
-mtz_file_name="$2"
+mtz_file_name="$1"
 results_file=$(readlink -f "results.txt")
-pack_number="$3"
-alt_sg="$4"
-alt_sg_slug=$(printf "%s" "$alt_sg" | sed 's/ /-/g')
+line=$(sed -n "${SLURM_ARRAY_TASK_ID}p" "$results_file" \
+    | cut --delimiter=':' -f1)
+contaminant_id=$(printf "%s" "$line" | cut --delimiter='_' -f1)
+pack_number=$(printf "%s" "$line" | cut --delimiter='_' -f2)
+alt_sg_slug=$(printf "%s" "$line" | cut --delimiter='_' -f3)
+alt_sg=$(printf "%s" "$alt_sg" | sed 's/-/ /g')
 task_id="${contaminant_id}_${pack_number}_${alt_sg_slug}"
 {
     mkdir -p "$task_id"

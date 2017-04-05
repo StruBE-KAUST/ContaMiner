@@ -188,17 +188,15 @@ do
 done | sort -rk 4 -t '_' -g \
     | while IFS= read -r line
 do
-    contaminant=$(printf "%s" "$line" | cut --delimiter='_' -f1)
-    pack=$(printf "%s" "$line" | cut --delimiter='_' -f2)
-    alt_sg_slug=$(printf "%s" "$line" | cut --delimiter='_' -f3)
-    alt_sg=$(printf "%s" "$alt_sg_slug" | sed "s/-/ /g")
     taskid=$(printf "%s" "$line" | cut --delimiter='_' -f1-3)
     printf "%s:cancelled:0h 00m 00s\n" "$taskid" >> "$result_file"
-    {
-        sbatch "$CM_PATH/scripts/CM_solve.slurm" \
-            "$contaminant" "$mtz_file_name" "$pack" "$alt_sg" > /dev/null
-    } || {
-        printf "Submission failed\n" >&2
-    }
 done
-printf "[OK]\n"
+
+{
+    sbatch --array=1-$(wc -l < "$result_file") \
+        "$CM_PATH/scripts/CM_solve.slurm" \
+        "$mtz_file_name" > /dev/null
+    printf "[OK]\n"
+} || {
+    printf "[FAIL]\n"
+}
