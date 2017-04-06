@@ -54,8 +54,8 @@ safeToMtz () {
         toMtz "$1" "$mtz_file_name"
     fi
 
-    if checkMtz "$mtz_file_name"
+    if ! checkMtz "$mtz_file_name"
     then
-        return $?
+        return 1
     fi
 }
