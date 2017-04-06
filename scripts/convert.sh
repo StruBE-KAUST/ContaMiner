@@ -51,7 +51,7 @@ safeToMtz () {
 
     if printf "%s" "$1" | grep -q ".*\.cif"
     then
-        toMtz "$1" "$mtz_file_name"
+        toMtz "$1" "$mtz_file_name" 2> /dev/null
     fi
 
     if ! checkMtz "$mtz_file_name"
