@@ -58,7 +58,7 @@ rm -f "$lock_file"               #
 contaminant_id=$(printf "%s" "$line" | cut --delimiter='_' -f1)
 pack_number=$(printf "%s" "$line" | cut --delimiter='_' -f2)
 alt_sg_slug=$(printf "%s" "$line" | cut --delimiter='_' -f3)
-alt_sg=$(printf "%s" "$alt_sg" | sed 's/-/ /g')
+alt_sg=$(printf "%s" "$alt_sg_slug" | sed 's/-/ /g')
 task_id="${contaminant_id}_${pack_number}_${alt_sg_slug}"
 {
     mkdir -p "$task_id"
@@ -184,7 +184,7 @@ else
 
             packs_file="$CM_PATH/data/contabase/$contaminant_id/packs"
             pack_old_score=$( \
-                grep "$pack:" "$packs_file" \
+                grep "$pack_number:" "$packs_file" \
                 | cut --delimiter=':' -f 2 \
                 | tail -n 1 \
                 )
