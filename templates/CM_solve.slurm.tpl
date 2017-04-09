@@ -71,7 +71,7 @@ model_dir="$CM_PATH/data/contabase/$contaminant_id/models"
 }
 
 # Define timeout
-slurm_time=$(squeue -j "$SLURM_JOBID" -h -o "%l")
+slurm_time=$(squeue -j "$SLURM_JOBID" -h -o "%l" | head -n 1)
 days_limit=$(echo "$slurm_time" | cut --delimiter="-" -sf1)
 field1=$(echo "$slurm_time" | cut --delimiter=":" -sf1)
 field2=$(echo "$slurm_time" | cut --delimiter=":" -sf2)
