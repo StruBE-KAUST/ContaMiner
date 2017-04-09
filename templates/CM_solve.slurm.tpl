@@ -45,8 +45,16 @@ xml_tools="$CM_PATH/scripts/xmltools.sh"
 
 mtz_file_name="$1"
 results_file=$(readlink -f "results.txt")
+
+# Lock ###########################
+lock_file="$results_file.lock"   #
+lockfile -r-1 "$lock_file"       #
+
 line=$(sed -n "${SLURM_ARRAY_TASK_ID}p" "$results_file" \
     | cut --delimiter=':' -f1)
+
+rm -f "$lock_file"               #
+
 contaminant_id=$(printf "%s" "$line" | cut --delimiter='_' -f1)
 pack_number=$(printf "%s" "$line" | cut --delimiter='_' -f2)
 alt_sg_slug=$(printf "%s" "$line" | cut --delimiter='_' -f3)
@@ -129,8 +137,6 @@ kill -9 $watchdog_PID > /dev/null 2>&1
 exit_status=$?
 
 # Parse result
-lock_file="$results_file.lock"
-
 if [ $exit_status -eq 1 ] # job has been aborted
 then
     elaps_time=$(date -u -d @$timeout +"%Hh %2Mm %2Ss")
