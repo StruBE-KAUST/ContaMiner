@@ -43,7 +43,7 @@ xml_tools="$CM_PATH/scripts/xmltools.sh"
 # shellcheck source=../scripts/xmltools.sh
 . "$xml_tools"
 
-mtz_file_name="$1"
+mtz_file_name=$(readlink -f "$1")
 results_file=$(readlink -f "results.txt")
 
 # Lock ###########################
