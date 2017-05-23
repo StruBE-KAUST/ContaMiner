@@ -195,7 +195,7 @@ done
 {
     sbatch --array=1-$(wc -l < "$result_file") \
         "$CM_PATH/scripts/CM_solve.slurm" \
-        "$mtz_file_name" > /dev/null
+        "$input_file_name" > /dev/null
     printf "[OK]\n"
 } || {
     printf "[FAIL]\n"
