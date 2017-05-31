@@ -776,6 +776,9 @@
             <long_name>Cyanate hydratase</long_name>
             <organism>Serratia proteamaculans</organism>
             <exact_model>true</exact_model>
+            <suggestion>
+                <name>Christian Linke-Winnebeck</name>
+            </suggestion>
             <reference>
                 <pubmed_id>25849512</pubmed_id>
             </reference>
