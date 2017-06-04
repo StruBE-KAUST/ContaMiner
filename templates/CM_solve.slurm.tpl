@@ -130,6 +130,7 @@ watchdog_PID=$!
 
 # Wait for the watchdog to timeout and kill the job, or the job to terminate.
 wait $job_PID > /dev/null 2>&1
+sleep 1 # Avoid killing watchdog while it's finishing
 kill -9 $watchdog_PID > /dev/null 2>&1
 
 # exit_status is 1 if the watchdog terminated before being killed
