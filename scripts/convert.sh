@@ -59,3 +59,27 @@ safeToMtz () {
         return 1
     fi
 }
+
+## Convert MTZ file to 2 MAP files (1 elec. dens. map and 1 diff)
+## $1 : path to MTZ file to convert
+## $2 : path to elec. dens. map output file
+## $3 : path to diff map output file
+named_mtz2map () {
+    commands="read $1
+fft col FWT PHWT
+mapout $2
+delete map
+fft col DELFWT PHDELWT
+mapout $3"
+    printf "%s" "$commands" | sftools >/dev/null
+}
+
+## Convert MTZ file to 2 MAP files
+## $1 : path to MTZ file to convert
+## Write $1{.mtz -> .map} (full elec. dens. map)
+## Write $1{.mtz -> .diff.map} (diff elec. dens. map)
+mtz2map () {
+    map_file=$(echo "$1" | sed 's/.mtz$/.map/')
+    map_diff_file=$(echo "$1" | sed 's/.mtz$/.diff.map/')
+    named_mtz2map "$1" "$map_file" "$map_diff_file"
+}

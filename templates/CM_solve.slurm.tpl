@@ -46,14 +46,15 @@ xml_tools="$CM_PATH/scripts/xmltools.sh"
 mtz_file_name=$(readlink -f "$1")
 results_file=$(readlink -f "results.txt")
 
-# Lock ###########################
-lock_file="$results_file.lock"   #
-lockfile -r-1 "$lock_file"       #
-
+# Lock #####################################
+lock_file="$results_file.lock"             #
+lockfile -r-1 "$lock_file"                 #
+                                           #
 line=$(sed -n "${SLURM_ARRAY_TASK_ID}p" "$results_file" \
-    | cut --delimiter=':' -f1)
-
-rm -f "$lock_file"               #
+    | cut --delimiter=':' -f1)             #
+                                           #
+rm -f "$lock_file"                         #
+############################################
 
 contaminant_id=$(printf "%s" "$line" | cut --delimiter='_' -f1)
 pack_number=$(printf "%s" "$line" | cut --delimiter='_' -f2)
@@ -141,9 +142,11 @@ exit_status=$?
 if [ $exit_status -eq 1 ] # job has been aborted
 then
     elaps_time=$(date -u -d @$timeout +"%Hh %2Mm %2Ss")
-    lockfile -r-1 "$lock_file"
+# Lock #####################################
+    lockfile -r-1 "$lock_file"             #
     sed -i "/$task_id:/c\\$task_id:aborted:$elaps_time" "$results_file"
-    rm -f "$lock_file"
+    rm -f "$lock_file"                     #
+############################################
 else
     xml_file=$resdir"/morda_solve.xml"
     log_file=$resdir"/morda_solve.log"
@@ -156,9 +159,11 @@ else
         )
     case $err in
     7)
-        lockfile -r-1 "$lock_file"
+# Lock #####################################
+        lockfile -r-1 "$lock_file"         #
         sed -i "/$task_id:/c\\$task_id:nosolution:$elaps_time" "$results_file"
-        rm -f "$lock_file"
+        rm -f "$lock_file"                 #
+############################################
         ;;
     0)
         # xmllpath outdated, no support of --xpath option...
@@ -166,9 +171,15 @@ else
         percent=$(getXpath "//percent/text()" "$xml_file")
 
         newline="$q_factor-$percent:$elaps_time"
-        lockfile -r-1 "$lock_file"
+# Lock #####################################
+        lockfile -r-1 "$lock_file"         #
         sed -i "/$task_id:/c\\$task_id:$newline" "$results_file"
-        rm -f "$lock_file"
+        rm -f "$lock_file"                 #
+############################################
+
+        # Convert MTZ file to MAP
+        mtz_filename="$resdir/final.mtz"
+        mtz2map "$mtz_filename"
 
         # If positive result
         if [ "$percent" -ge 99 ]
@@ -202,9 +213,11 @@ else
         fi
         ;;
     *)
-        lockfile -r-1 "$lock_file"
+# Lock #####################################
+        lockfile -r-1 "$lock_file"         #
         sed -i "/$task_id:/c\\$task_id:error:$elaps_time" "$results_file"
-        rm -f "$lock_file"
+        rm -f "$lock_file"                 #
+############################################
         ;;
     esac
 fi
