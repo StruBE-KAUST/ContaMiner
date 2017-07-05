@@ -43,6 +43,11 @@ xml_tools="$CM_PATH/scripts/xmltools.sh"
 # shellcheck source=../scripts/xmltools.sh
 . "$xml_tools"
 
+# Load conversion tools
+convert_path="$CM_PATH/scripts/convert.sh"
+# shellcheck source=../scripts/convert.sh
+. "$convert_path"
+
 mtz_file_name=$(readlink -f "$1")
 results_file=$(readlink -f "results.txt")
 
