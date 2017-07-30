@@ -16,6 +16,13 @@
 ##    with this program; if not, write to the Free Software Foundation, Inc.,
 ##    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-## Example script called when a job is completed
+## Remove the current data_base and execute a run a new initialization
 
-printf "Your job is completed : $1" | mail -s "Job completed" you@example.com
+# Remove ContaBase
+printf "Removing current database... "
+contabase_dir="$CM_PATH/data/contabase"
+rm -rf "$contabase_dir"
+printf "[OK]\n"
+
+# Initialize the ContaBase
+sh "$CM_PATH/scripts/initialize.sh"

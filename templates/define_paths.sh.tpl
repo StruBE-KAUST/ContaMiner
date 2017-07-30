@@ -16,6 +16,11 @@
 ##    with this program; if not, write to the Free Software Foundation, Inc.,
 ##    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-## Example script called when a job is completed
+# CCP4 and MoRDa paths
+SOURCE1=""
+SOURCE2=""
+SOURCE3=""
 
-printf "Your job is completed : $1" | mail -s "Job completed" you@example.com
+export SOURCE1
+export SOURCE2
+export SOURCE3

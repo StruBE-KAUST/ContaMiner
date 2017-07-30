@@ -1,6 +1,6 @@
 #!/bin/sh
 
-##    Copyright (C) 2016 King Abdullah University of Science and Technology
+##    Copyright (C) 2017 King Abdullah University of Science and Technology
 ##
 ##    This program is free software; you can redistribute it and/or modify
 ##    it under the terms of the GNU General Public License as published by
@@ -22,24 +22,39 @@
 # Parameters :
 # $1 : uniprot_id
 # $2 : location (create a directory inside the location)
-# $3 : directory where custom sequences are stores
-
 fasta_download () {
-    uni_id=$(printf "$1" | tr [:lower:] [:upper])
+    if [ $# -ne 2 ]
+    then
+        printf "Wrong number of arguments.\n"
+        return 1
+    fi
+
+    uni_id=$(printf "%s" "$1" | tr "[:lower:]" "[:upper]")
+
+    # Source xmltools
+    xml_tools="$CM_PATH/scripts/xmltools.sh"
+    # shellcheck source=xmltools.sh
+    . "$xml_tools"
+
     mkdir -p "$2/$uni_id"
-    cd "$2/$uni_id"
 
     if [ ! -f "$uni_id.fasta" ]
     then
-        if [ -f "$3/$uni_id.fasta" ]
+        contabase="$CM_PATH/init/contabase.xml"
+        sequence=$(getXpath \
+            "//contaminant[uniprot_id='$uni_id']/sequence/text()" \
+            "$contabase" \
+            | sed '/^$/d')
+        if [ -n "$sequence" ]
         then
-            cp "$3/$uni_id.fasta" ./
+            printf ">custom sequence\n%s\n" \
+                "$sequence" > "$2/$uni_id/$uni_id.fasta"
         else
-            fasta="http://www.uniprot.org/uniprot/"$uni_id".fasta"
-            wget -q $fasta
+            fasta_url="http://www.uniprot.org/uniprot/$uni_id.fasta"
+            wget -q "$fasta_url" -O "$2/$uni_id/$uni_id.fasta"
             if [ $? -ne 0 ]
             then
-                printf "$uni_id : error. Fasta file not downloaded.\n"
+                printf "%s : error. Fasta file not downloaded.\n" "$uni_id"
             fi
         fi
     fi

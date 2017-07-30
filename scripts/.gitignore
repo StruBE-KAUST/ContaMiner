@@ -1,0 +1,12 @@
+*
+!.gitignore
+!convert.sh
+!display.sh
+!download.sh
+!initialize.sh
+!posix_mode.sh
+!solve.sh
+!status.sh
+!job_status.sh
+!update.sh
+!xmltools.sh

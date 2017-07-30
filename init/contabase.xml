@@ -1,0 +1,825 @@
+<contabase>
+    <category>
+        <id>1</id>
+        <name>Proteins in E.Coli</name>
+        <default>true</default>
+        <contaminant>
+            <uniprot_id>P0ACJ8</uniprot_id>
+            <short_name>CRP_ECOLI</short_name>
+            <long_name>cAMP-activated global transcriptional regulator CRP</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P61517</uniprot_id>
+            <short_name>CAN_ECOLI</short_name>
+            <long_name>Carbonic anhydrase 2</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0A7A9</uniprot_id>
+            <short_name>IPYR_ECOLI</short_name>
+            <long_name>Inorganic pyrophosphatase</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
+            <suggestion>
+                <name>Jonathan Cooper</name>
+            </suggestion>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P27302</uniprot_id>
+            <short_name>TKT1_ECOLI</short_name>
+            <long_name>Transketolase 1</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>19887109</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0A715</uniprot_id>
+            <short_name>KDSA_ECOLI</short_name>
+            <long_name>2-dehydro-3-deoxyphosphooctonate aldolase</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>19887109</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0A9K9</uniprot_id>
+            <short_name>SLYD_ECOLI</short_name>
+            <long_name>FKBP-type peptidyl-prolyl cis-trans isomerase SlyD</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>false</exact_model>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P69054</uniprot_id>
+            <short_name>DHSC_ECOLI</short_name>
+            <long_name>Succinate dehydrogenase cytochrome b556 subunit</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>19162196</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P31224</uniprot_id>
+            <short_name>ACRB_ECOLI</short_name>
+            <long_name>Multidrug efflux pump subunit AcrB</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>19162196</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>18931428</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0AD61</uniprot_id>
+            <short_name>KPYK1_ECOLI</short_name>
+            <long_name>Pyruvate kinase I</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>19887109</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0A8N5</uniprot_id>
+            <short_name>SYK2_ECOLI</short_name>
+            <long_name>Lysine--tRNA ligase, heat inducible</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>19887109</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P00957</uniprot_id>
+            <short_name>SYA_ECOLI</short_name>
+            <long_name>Alanine--tRNA ligase</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>19887109</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P77398</uniprot_id>
+            <short_name>ARNA_ECOLI</short_name>
+            <long_name>Bifunctional polymyxin resistance protein ArnA</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0AGD1</uniprot_id>
+            <short_name>SODC_ECOLI</short_name>
+            <long_name>Superoxide dismutase [Cu-Zn]</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0A6U8</uniprot_id>
+            <short_name>GLGA_ECOLI</short_name>
+            <long_name>Glycogen synthase</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P13029</uniprot_id>
+            <short_name>KATG_ECOLI</short_name>
+            <long_name>Catalase-peroxidase</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>false</exact_model>
+            <reference>
+                <pubmed_id>19887109</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P76344</uniprot_id>
+            <short_name>ZINT_ECOLI</short_name>
+            <long_name>Metal-binding protein ZinT</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0ABD3</uniprot_id>
+            <short_name>BFR_ECOLI</short_name>
+            <long_name>Bacterioferritin</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <suggestion>
+                <name>Jonathan Cooper</name>
+            </suggestion>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0AEE3</uniprot_id>
+            <short_name>DEGS_ECOLI</short_name>
+            <long_name>Serine endoprotease DegS</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <suggestion>
+                <name>James Murray</name>
+            </suggestion>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0AFG6</uniprot_id>
+            <short_name>ODO2_ECOLI</short_name>
+            <long_name>Dihydrolipoyllysine-residue succinyltransferase component of 2-oxoglutarate dehydrogenase complex</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0A6F5</uniprot_id>
+            <short_name>CH60_ECOLI</short_name>
+            <long_name>60 kDa chaperonin</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0A858</uniprot_id>
+            <short_name>TPIS_ECOLI</short_name>
+            <long_name>Triosephosphate isomerase</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>19887109</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0A9S3</uniprot_id>
+            <short_name>GATD_ECOLI</short_name>
+            <long_name>Galactitol-1-phosphate 5-dehydrogenase</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>19887109</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P17169</uniprot_id>
+            <short_name>GLMS_ECOLI</short_name>
+            <long_name>Glutamine--fructose-6-phosphate aminotransferase [isomerizing]</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0A6X3</uniprot_id>
+            <short_name>HFQ_ECOLI</short_name>
+            <long_name>RNA-binding protein Hfq</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0A9Q1</uniprot_id>
+            <short_name>ARCA_ECOLI</short_name>
+            <long_name>Aerobic respiration control protein ArcA</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>19887109</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0AFG3</uniprot_id>
+            <short_name>ODO1_ECOLI</short_name>
+            <long_name>2-oxoglutarate dehydrogenase E1 component</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0A9A9</uniprot_id>
+            <short_name>FUR_ECOLI</short_name>
+            <long_name>Ferric uptake regulation protein</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P03023</uniprot_id>
+            <short_name>LACI_ECOLI</short_name>
+            <long_name>Lactose operon repressor</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <suggestion>
+                <name>Jonathan Cooper</name>
+            </suggestion>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0ADZ4</uniprot_id>
+            <short_name>RS15_ECOLI</short_name>
+            <long_name>30S ribosomal protein S15</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P62577</uniprot_id>
+            <short_name>CAT_ECOLX</short_name>
+            <long_name>Chloramphenicol acetyltransferase</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P06720</uniprot_id>
+            <short_name>AGAL_ECOLI</short_name>
+            <long_name>Alpha-galactosidase</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>false</exact_model>
+            <reference>
+                <pubmed_id>19887109</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0AC53</uniprot_id>
+            <short_name>G6PD_ECOLI</short_name>
+            <long_name>Glucose-6-phosphate 1-dehydrogenase</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>false</exact_model>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P23908</uniprot_id>
+            <short_name>ARGE_ECOLI</short_name>
+            <long_name>Acetylornithine deacetylase</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>false</exact_model>
+            <reference>
+                <pubmed_id>16814929</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P21367</uniprot_id>
+            <short_name>YCAC_ECOLI</short_name>
+            <long_name>Uncharacterized protein YcaC</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P02931</uniprot_id>
+            <short_name>OMPF_ECOLI</short_name>
+            <long_name>Outer membrane protein F</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>25517996</pubmed_id>
+            </reference>
+            <suggestion>
+                <name>Stephen MacMahon</name>
+            </suggestion>
+            <suggestion>
+                <name>Bert Van-Den-Berg</name>
+            </suggestion>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P21179</uniprot_id>
+            <short_name>CATE_ECOLI</short_name>
+            <long_name>Catalase HPII</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+             <suggestion>
+                <name>Jonathan Cooper</name>
+            </suggestion>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0A9B2</uniprot_id>
+            <short_name>G3P1_ECOLI</short_name>
+            <long_name>Glyceraldehyde-3-phosphate dehydrogenase A</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <suggestion>
+                <name>Rebekah Bjork</name>
+            </suggestion>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P08200</uniprot_id>
+            <short_name>IDH_ECOLI</short_name>
+            <long_name>Isocitrate dehydrogenase [NADP]</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <suggestion>
+                <name>Jonathan Cooper</name>
+            </suggestion>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>B1XB85</uniprot_id>
+            <short_name>TPIS_ECODH</short_name>
+            <long_name>Triosephosphate isomerase</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>23695562</pubmed_id>
+            </reference>
+        </contaminant>
+    </category>
+    <category>
+        <id>2</id>
+        <name>Proteins in yeast</name>
+        <default>false</default>
+        <contaminant>
+            <uniprot_id>P00330</uniprot_id>
+            <short_name>ADH1_YEAST</short_name>
+            <long_name>Alcohol dehydrogenase 1</long_name>
+            <organism>Saccharomyces cerevisiae</organism>
+            <exact_model>true</exact_model>
+            <suggestion>
+                <name>own data</name>
+            </suggestion>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P53184</uniprot_id>
+            <short_name>PNC1_YEAST</short_name>
+            <long_name>Nicotinamidase</long_name>
+            <organism>Saccharomyces cerevisiae</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>16511075</pubmed_id>
+            </reference>
+        </contaminant>
+    </category>
+    <category>
+        <id>3</id>
+        <name>Tags</name>
+        <default>false</default>
+        <contaminant>
+            <uniprot_id>P0AA25</uniprot_id>
+            <short_name>THIO_ECOLI</short_name>
+            <long_name>Thioredoxin-1</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P63165</uniprot_id>
+            <short_name>SUMO1_HUMAN</short_name>
+            <long_name>Small ubiquitin-related modifier 1</long_name>
+            <organism>Homo sapiens</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0ABD8</uniprot_id>
+            <short_name>BCCP_ECOLI</short_name>
+            <long_name>Biotin carboxyl carrier protein of acetyl-CoA carboxylase</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>24600443</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0AFG0</uniprot_id>
+            <short_name>NUSG_ECOLI</short_name>
+            <long_name>Transcription termination/antitermination protein NusG</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>false</exact_model>
+            <reference>
+                <pubmed_id>24600443</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P08515</uniprot_id>
+            <short_name>GST26_SCHJA</short_name>
+            <long_name>Glutathione S-transferase class-mu 26 kDa isozyme</long_name>
+            <organism>Schistosoma japonicum</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0AEY0</uniprot_id>
+            <short_name>MALE_ECO57</short_name>
+            <long_name>Maltose-binding periplasmic protein</long_name>
+            <organism>Escherichia coli</organism>
+            <sequence>
+                IEEGKLVIWINGDKGYNGLAEVGKKFEKDTGIKVTVEHPDKLEEKFPQVAATGDGPDIIF
+                WAHDRFGGYAQSGLLAEITPDKAFQDKLYPFTWDAVRYNGKLIAYPIAVEALSLIYNKDL
+                LPNPPKTWEEIPALDKELKAKGKSALMFNLQEPYFTWPLIAADGGYAFKYENGKYDIKDV
+                GVDNAGAKAGLTFLVDLIKNKHMNADTDYSIAEAAFNKGETAMTINGPWAWSNIDTSKVN
+                YGVTVLPTFKGQPSKPFVGVLSAGINAASPNKELAKEFLENYLLTDEGLEAVNKDKPLGA
+                VALKSYEEELAKDPRIAATMENAQKGEIMPNIPQMSAFWYAVRTAVINAASGRQTVDEAL
+                KDAQTRITK
+            </sequence>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0AFF6</uniprot_id>
+            <short_name>NUSA_ECOLI</short_name>
+            <long_name>Transcription termination/antitermination protein NusA</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>false</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0A3G3</uniprot_id>
+            <short_name>DHAA_RHOSO</short_name>
+            <long_name>Haloalkane dehalogenase</long_name>
+            <organism>Rhodococcus sp.</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+        </contaminant>
+    </category>
+    <category>
+        <id>4</id>
+        <name>Proteins used during purification or crystallization</name>
+        <default>false</default>
+        <contaminant>
+            <uniprot_id>P03303</uniprot_id>
+            <short_name>POLG_HRV14</short_name>
+            <long_name>Genome polyprotein</long_name>
+            <organism>Human rhinovirus 14</organism>
+            <sequence>
+                GPNTEFALSLLRKNIMTITTSKGEFTGLGIHDRVCVIPTHAQPGDDVLVNGQKIRVKDKY
+                KLVDPENINLELTVLTLDRNEKFRDIRGFISEDLEGVDATLVVHSNNFTNTILEVGPVTM
+                AGLINLSSTPTNRMIRYDYATKTGQCGGVLCATGKIFGIHVGGNGRQGFSAQLKKQYFVE
+                KQ
+            </sequence>
+            <exact_model>false</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P00698</uniprot_id>
+            <short_name>LYSC_CHICK</short_name>
+            <long_name>Lysozyme C</long_name>
+            <organism>Gallus gallus</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P04517</uniprot_id>
+            <short_name>POLG_TEV</short_name>
+            <long_name>Genome polyprotein</long_name>
+            <organism>Tobacco etch virus</organism>
+            <sequence>
+                GESLFKGPRDYNPISSTICHLTNESDGHTTSLYGIGFGPFIITNKHLFRRNNGTLLVQSL
+                HGVFKVKNTTTLQQHLIDGRDMIIIRMPKDFPPFPQKLKFREPQREERICLVTTNFQTKS
+                MSSMVSDTSCTFPSSDGIFWKHWIQTKDGQAGSPLVSTRDGFIVGIHSASNFTNTNNYFT
+                SVPKNFMELLTNQEAQQWVSGWRLNADSVLWGGHKVFMSKPEEPFQPVKEATQLMNELVY
+                SQ
+            </sequence>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P00742</uniprot_id>
+            <short_name>FA10_HUMAN</short_name>
+            <long_name>Coagulation factor X</long_name>
+            <organism>Homo sapiens</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>Q02724</uniprot_id>
+            <short_name>ULP1_YEAST</short_name>
+            <long_name>Ubiquitin-like-specific protease 1</long_name>
+            <organism>Saccharomyces cerevisiae</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P00735</uniprot_id>
+            <short_name>THRB_BOVIN</short_name>
+            <long_name>Prothrombin</long_name>
+            <organism>Bos taurus</organism>
+            <sequence>
+                TFGSGEADCGLRPLFEKKSLEDKTERELLESYIDGRIVEGSDAEIGMSPWQVMLFRKSPQ
+                ELLCGASLISDRWVLTAAHCLLYPPWDKNFTENDLLVRIGKHSRTRYERNIEKISMLEKI
+                YIHPRYNWRENLDRDIALMKLKKPVAFSDYIHPVCLPDRETAASLLQAGYKGRVTGWGNL
+                KETWTANVGKGQPSVLQVVNLPIVERPVCKDSTRIRITDNMFCAGYKPDEGKRGDACEGD
+                SGGPFVMKSPFNNRWYQMGIVSWGEGCDRDGKYGFYTHVFRLKKWIQKVIDQFGE
+            </sequence>
+            <exact_model>Bos taurus</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P98072</uniprot_id>
+            <short_name>ENTK_BOVIN</short_name>
+            <long_name>Enteropeptidase</long_name>
+            <organism>Bos taurus</organism>
+            <exact_model>false</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P00760</uniprot_id>
+            <short_name>TRY1_BOVIN</short_name>
+            <long_name>Cationic trypsin</long_name>
+            <organism>Bos taurus</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P00766</uniprot_id>
+            <short_name>CTRA_BOVIN</short_name>
+            <long_name>Chymotrypsinogen A</long_name>
+            <organism>Bos taurus</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P00800</uniprot_id>
+            <short_name>THER_BACTH</short_name>
+            <long_name>Thermolysin</long_name>
+            <organism>Bacillus thermoproteolyticus</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P06873</uniprot_id>
+            <short_name>PRTK_ENGAL</short_name>
+            <long_name>Proteinase K</long_name>
+            <organism>Engyodontium album</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P00791</uniprot_id>
+            <short_name>PEPA_PIG</short_name>
+            <long_name>Pepsin A</long_name>
+            <organism>Sus scrofa</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P08246</uniprot_id>
+            <short_name>ELNE_HUMAN</short_name>
+            <long_name>Neutrophil elastase</long_name>
+            <organism>Homo sapiens</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P81054</uniprot_id>
+            <short_name>PLMP_GRIFR</short_name>
+            <long_name>Peptidyl-Lys metalloendopeptidase</long_name>
+            <organism>Grifola frondosa</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>Q7M135</uniprot_id>
+            <short_name>LYSC_LYSEN</short_name>
+            <long_name>Lysyl endopeptidase</long_name>
+            <organism>Lysobacter enzymogenes</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P00639</uniprot_id>
+            <short_name>DNAS1_BOVIN</short_name>
+            <long_name>Deoxyribonuclease-1</long_name>
+            <organism>Bos taurus</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26660914</pubmed_id>
+            </reference>
+        </contaminant>
+    </category>
+    <category>
+        <id>5</id>
+        <name>Microbial contaminants of host cell and reagents</name>
+        <default>true</default>
+        <contaminant>
+            <uniprot_id>B4SL31</uniprot_id>
+            <short_name>B4SL31_STRM5</short_name>
+            <long_name>Alkaline phosphatase</long_name>
+            <organism>Stenotrophomonas maltophilia</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>27487824</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P85173</uniprot_id>
+            <short_name>PHBP_UNKP</short_name>
+            <long_name>Phosphate-binding protein</long_name>
+            <organism>Unknown prokaryotic organism</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>24121327</pubmed_id>
+            </reference>
+            <suggestion>
+                <name>Marcin Wojdyr</name>
+            </suggestion>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>A8GBZ7</uniprot_id>
+            <short_name>CYNS_SERP5</short_name>
+            <long_name>Cyanate hydratase</long_name>
+            <organism>Serratia proteamaculans</organism>
+            <exact_model>true</exact_model>
+            <suggestion>
+                <name>Christian Linke-Winnebeck</name>
+            </suggestion>
+            <reference>
+                <pubmed_id>25849512</pubmed_id>
+            </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>S0AKJ8</uniprot_id>
+            <short_name>S0AKJ8_SERPL</short_name>
+            <long_name>Glycerol dehydrogenase DhaD</long_name>
+            <organism>Serratia plymuthica</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>24637749</pubmed_id>
+            </reference>
+        </contaminant>
+    </category>
+    <category>
+        <id>6</id>
+        <name>From other expression systems</name>
+        <default>false</default>
+        <contaminant>
+            <uniprot_id>P83696</uniprot_id>
+            <short_name>P83696_ALCXX</short_name>
+            <long_name>Glyceraldehyde-3-phosphate dehydrogenase</long_name>
+            <organism>Alcaligenes xylosoxydans xylosoxydans</organism>
+            <exact_model>true</exact_model>
+            <suggestion>
+                <name>Marcin Wojdyr</name>
+            </suggestion>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>Q9I4D6</uniprot_id>
+            <short_name>Q9I4D6_PSEAE</short_name>
+            <long_name>Probable hydrolase</long_name>
+            <organism>Pseudomonas aeruginosa</organism>
+            <exact_model>true</exact_model>
+            <reference>
+                <pubmed_id>26184183</pubmed_id>
+            </reference>
+            <suggestion>
+                <name>Marcin Wojdyr</name>
+            </suggestion>
+        </contaminant>
+    </category>
+</contabase>
