@@ -160,29 +160,66 @@ ml_scores="$CM_PATH/data/ml_scores.xml"
 printf "%s\n" "$contaminants_list" \
     | while IFS= read -r contaminant_id
 do
-    contaminant_score=$( \
-        getXpath "//contaminant[uniprot_id=$contaminant_id]/score/text()" \
-            "$ml_scores" \
-            )
-    grep -v '^ *#' < "$contabase_dir/$contaminant_id/packs" \
-        | grep -v '^$' \
-        | while IFS= read -r pack_line
-    do
-        pack=$(printf "%s" "$pack_line" | cut --delimiter=':' -f1)
-        pack_score=$(printf "%s" "$pack_line" | cut --delimiter=':' -f2)
-        printf "%b" "$alt_space_groups" \
-            | while IFS= read -r alt_sg
-        do
-            alt_sg_slug=$(printf "%s" "$alt_sg" | sed "s/ /-/g")
-            task_id="${contaminant_id},${pack},${alt_sg_slug}"
-            sg_score=$( \
-                getXpath "//space_group[name='$alt_sg']/score/text()" \
-                    "$ml_scores" \
-                    )
-            task_score=$(( contaminant_score * pack_score * sg_score ))
-            printf "%s,%s\n" "$task_id" "$task_score"
-        done
-    done
+    case $contaminant_id in
+        /*|./*)
+	    # Custom contaminant
+	    # Check if custom file exists
+	    if [ -f "$contaminant_id"]
+	    then
+		# Create the custom models dir
+		model_dir="$(echo "$contaminant_id" | cut --delimiter="." -f1)"
+		mkdir -p "$model_dir"
+		cp "$contaminant_id" "$model_dir/custom.pdb"
+		cp "$CM_PATH/templates/model_prep.xml" "$model_dir"
+
+		# Create task
+		contaminant_score=1
+		pack=1
+		pack_score=1
+		printf "%b" "$alt_space_groups" \
+		    | while IFS= read -r alt_sg
+		do
+		    alt_sg_slug=$(print "%s" "$alt_sg" | sed "s/ /-/g")
+		    task_id="${model_dir},${pack},${alt_sg_slug}"
+		    sg_score=$( \
+			getXpath "//space_group[name='$alt_sg']/score/text()" \
+			"$ml_scores" \
+			)
+		    task_score=$(( contaminant_score * pack_score * sg_score ))
+		    printf "%s,%s\n" "$task_id" "$task_score"
+		done
+	    else
+		printf "Warning: %s does not exist." "$contaminant_id" \
+		   2> /dev/null
+	    done
+	    ;;
+	*)
+	    # ContaBase contaminant
+            contaminant_score=$( \
+		getXpath "//contaminant[uniprot_id=$contaminant_id]/score/text()" \
+		"$ml_scores" \
+		)
+            grep -v '^ *#' < "$contabase_dir/$contaminant_id/packs" \
+		| grep -v '^$' \
+		| while IFS= read -r pack_line
+            do
+		pack=$(printf "%s" "$pack_line" | cut --delimiter=':' -f1)
+		pack_score=$(printf "%s" "$pack_line" | cut --delimiter=':' -f2)
+		printf "%b" "$alt_space_groups" \
+                    | while IFS= read -r alt_sg
+		do
+                    alt_sg_slug=$(printf "%s" "$alt_sg" | sed "s/ /-/g")
+                    task_id="${contaminant_id},${pack},${alt_sg_slug}"
+                    sg_score=$( \
+			getXpath "//space_group[name='$alt_sg']/score/text()" \
+                        "$ml_scores" \
+                        )
+                    task_score=$(( contaminant_score * pack_score * sg_score ))
+                    printf "%s,%s\n" "$task_id" "$task_score"
+		done
+            done
+	    ;;
+    esac
 ## Then sort according to the score
 ## Then submit the jobs 
 done | sort -rk 4 -t ',' -g \

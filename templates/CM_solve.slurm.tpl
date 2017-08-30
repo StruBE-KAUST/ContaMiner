@@ -59,22 +59,34 @@ results_file=$(readlink -f "results.txt")
     exit 1
 }
 
-contaminant_id=$(printf "%s" "$line" | cut --delimiter=',' -f1)
+first_arg=$(printf "%s" "$task_id" | cut --delimiter=',' -f1)
+case $line in
+    /*)
+        # Custom contaminant (absolute path)
+        contaminant_id="$(printf "c_%s" "$(basename "$first_arg")")"
+	model_dir="$first_arg"
+	;;
+    *)
+	# ContaBase contaminant
+	contaminant_id="$first_arg"
+	model_dir="$CM_PATH/data/contabase/$contaminant_id/models"
+	;;
+esac
 pack_number=$(printf "%s" "$line" | cut --delimiter=',' -f2)
 alt_sg_slug=$(printf "%s" "$line" | cut --delimiter=',' -f3)
 alt_sg=$(printf "%s" "$alt_sg_slug" | sed 's/-/ /g')
-task_id="${contaminant_id}_${pack_number}_${alt_sg_slug}"
+work_dir="${contaminant_id}_${pack_number}_${alt_sg_slug}"
 {
-    mkdir -p "$task_id"
+    mkdir -p "$work_dir"
 } || {
-    printf "Error: Unable to create directory %s\n" "$task_id" >&2
+    printf "Error: Unable to create directory %s\n" "$work_dir" >&2
     exit 1
 }
-output_dir=$(readlink -f "$task_id")
+output_dir=$(readlink -f "$work_dir")
 resdir="$output_dir/results_solve"
 outdir="$output_dir/out_solve"
 scrdir="$output_dir/scr_solve"
-model_dir="$CM_PATH/data/contabase/$contaminant_id/models"
+
 {
     cd "$output_dir"
 } || {
@@ -185,8 +197,8 @@ else
         mtz_filename="$resdir/final.mtz"
         mtz2map "$mtz_filename"
 
-        # If positive result
-        if [ "$percent" -ge 99 ]
+        # If positive result and contaminant from ContaBase
+        if [ "$percent" -ge 99 ] && echo "$task_id" | grep -q "^[A-Z]"
         then
             # Increase score for this contaminant, model and space group
             ml_scores_file="$CM_PATH/data/ml_scores.xml"
