@@ -51,15 +51,8 @@ convert_path="$CM_PATH/scripts/convert.sh"
 mtz_file_name=$(readlink -f "$1")
 results_file=$(readlink -f "results.txt")
 
-# Lock #####################################
-lock_file="$results_file.lock"             #
-lockfile -r-1 "$lock_file"                 #
-                                           #
 line=$(sed -n "${SLURM_ARRAY_TASK_ID}p" "$results_file" \
-    | cut --delimiter=':' -f1)             #
-                                           #
-rm -f "$lock_file"                         #
-############################################
+    | cut --delimiter=':' -f1)
 
 contaminant_id=$(printf "%s" "$line" | cut --delimiter='_' -f1)
 pack_number=$(printf "%s" "$line" | cut --delimiter='_' -f2)
@@ -148,6 +141,7 @@ if [ $exit_status -eq 1 ] # job has been aborted
 then
     elaps_time=$(date -u -d @$timeout +"%Hh %2Mm %2Ss")
 # Lock #####################################
+    lock_file="$results_file.lock"         #
     lockfile -r-1 "$lock_file"             #
     sed -i "/$task_id:/c\\$task_id:aborted:$elaps_time" "$results_file"
     rm -f "$lock_file"                     #
