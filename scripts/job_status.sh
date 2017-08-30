@@ -84,7 +84,7 @@ is_error () {
     fi
 }
 
-if [ $# -lt 1 ]
+if [ $# -lt 2 ]
 then
     printf "Missing argument\n" >&2
     printf "Usage: contaminer job_status JOB_DIRECTORY\n" "$0" >&2
