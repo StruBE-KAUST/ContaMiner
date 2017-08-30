@@ -174,21 +174,21 @@ do
             | while IFS= read -r alt_sg
         do
             alt_sg_slug=$(printf "%s" "$alt_sg" | sed "s/ /-/g")
-            task_id="${contaminant_id}_${pack}_${alt_sg_slug}"
+            task_id="${contaminant_id},${pack},${alt_sg_slug}"
             sg_score=$( \
                 getXpath "//space_group[name='$alt_sg']/score/text()" \
                     "$ml_scores" \
                     )
             task_score=$(( contaminant_score * pack_score * sg_score ))
-            printf "%s_%s\n" "$task_id" "$task_score"
+            printf "%s,%s\n" "$task_id" "$task_score"
         done
     done
 ## Then sort according to the score
 ## Then submit the jobs 
-done | sort -rk 4 -t '_' -g \
+done | sort -rk 4 -t ',' -g \
     | while IFS= read -r line
 do
-    taskid=$(printf "%s" "$line" | cut --delimiter='_' -f1-3)
+    taskid=$(printf "%s" "$line" | cut --delimiter=',' -f1-3)
     printf "%s:cancelled:0h 00m 00s\n" "$taskid" >> "$result_file"
 done
 

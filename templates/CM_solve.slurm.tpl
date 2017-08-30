@@ -59,9 +59,9 @@ results_file=$(readlink -f "results.txt")
     exit 1
 }
 
-contaminant_id=$(printf "%s" "$line" | cut --delimiter='_' -f1)
-pack_number=$(printf "%s" "$line" | cut --delimiter='_' -f2)
-alt_sg_slug=$(printf "%s" "$line" | cut --delimiter='_' -f3)
+contaminant_id=$(printf "%s" "$line" | cut --delimiter=',' -f1)
+pack_number=$(printf "%s" "$line" | cut --delimiter=',' -f2)
+alt_sg_slug=$(printf "%s" "$line" | cut --delimiter=',' -f3)
 alt_sg=$(printf "%s" "$alt_sg_slug" | sed 's/-/ /g')
 task_id="${contaminant_id}_${pack_number}_${alt_sg_slug}"
 {
@@ -115,11 +115,11 @@ sleep "$random"
 
 # Core job
 morda_solve \
-    -f "$mtz_file_name" \
-    -m "$model_dir" \
-    -p "$pack_number" \
+    -f  "$mtz_file_name" \
+    -m  "$model_dir" \
+    -p  "$pack_number" \
     -sg "$alt_sg" \
-    -r "$resdir" \
+    -r  "$resdir" \
     -po "$outdir" \
     -ps "$scrdir" &
 job_PID=$!
