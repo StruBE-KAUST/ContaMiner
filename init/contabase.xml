@@ -1,7 +1,7 @@
 <contabase>
     <category>
         <id>1</id>
-        <name>Proteins in E.Coli</name>
+        <name>Proteins in E.coli</name>
         <default>true</default>
         <contaminant>
             <uniprot_id>P0ACJ8</uniprot_id>
