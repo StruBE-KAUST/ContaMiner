@@ -60,7 +60,7 @@ results_file=$(readlink -f "results.txt")
 }
 
 first_arg=$(printf "%s" "$task_id" | cut --delimiter=',' -f1)
-case $line in
+case $first_arg in
     /*)
         # Custom contaminant (absolute path)
         contaminant_id="$(printf "c_%s" "$(basename "$first_arg")")"

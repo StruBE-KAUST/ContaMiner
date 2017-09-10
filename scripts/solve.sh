@@ -20,6 +20,8 @@
 ## $1 : diffraction data file (.cif or .mtz)
 ## $2 : list of contaminants to test (optional txt file) (default is all)
 
+# TODO: Error on lockfile must stop the script
+
 # Check CM_PATH in env
 if [ -z "$CM_PATH" ] || [ ! -d "$CM_PATH" ]
 then
@@ -164,7 +166,7 @@ do
         /*|./*)
 	    # Custom contaminant
 	    # Check if custom file exists
-	    if [ -f "$contaminant_id"]
+	    if [ -f "$contaminant_id" ]
 	    then
 		# Create the custom models dir
 		model_dir="$(echo "$contaminant_id" | cut --delimiter="." -f1)"
@@ -179,7 +181,7 @@ do
 		printf "%b" "$alt_space_groups" \
 		    | while IFS= read -r alt_sg
 		do
-		    alt_sg_slug=$(print "%s" "$alt_sg" | sed "s/ /-/g")
+		    alt_sg_slug=$(printf "%s" "$alt_sg" | sed "s/ /-/g")
 		    task_id="${model_dir},${pack},${alt_sg_slug}"
 		    sg_score=$( \
 			getXpath "//space_group[name='$alt_sg']/score/text()" \
@@ -189,9 +191,8 @@ do
 		    printf "%s,%s\n" "$task_id" "$task_score"
 		done
 	    else
-		printf "Warning: %s does not exist." "$contaminant_id" \
-		   2> /dev/null
-	    done
+		printf "Warning: %s does not exist." "$contaminant_id" >&2
+	    fi
 	    ;;
 	*)
 	    # ContaBase contaminant
