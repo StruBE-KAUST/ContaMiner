@@ -27,6 +27,14 @@
 ## START
 ## END
 
+# Exit on error
+set -e
+abort () {
+    printf "Failure, exiting\n" >&2
+    exit 1
+}
+trap 'abort' EXIT
+
 # Source MoRDa and CCP4 paths
 define_paths="$CM_PATH/scripts/define_paths.sh"
 # shellcheck source=/dev/null
@@ -51,20 +59,15 @@ convert_path="$CM_PATH/scripts/convert.sh"
 mtz_file_name=$(readlink -f "$1")
 results_file=$(readlink -f "results.txt")
 
-{
-    task_id=$(sed -n "${SLURM_ARRAY_TASK_ID}p" "$results_file" \
-        | cut --delimiter=':' -f1)
-} || {
-    printf "Error: Unable to read results file" >&2
-    exit 1
-}
+task_id=$(sed -n "${SLURM_ARRAY_TASK_ID}p" "$results_file" \
+              | cut --delimiter=',' -f3)
 
 first_arg=$(printf "%s" "$task_id" | cut --delimiter=',' -f1)
 case $first_arg in
-    /*)
-        # Custom contaminant (absolute path)
+    c_*)
+        # Custom contaminant
         contaminant_id="$(printf "c_%s" "$(basename "$first_arg")")"
-	model_dir="$first_arg"
+	model_dir="$(readlink -f "$first_arg")"
 	;;
     *)
 	# ContaBase contaminant
@@ -76,23 +79,14 @@ pack_number=$(printf "%s" "$line" | cut --delimiter=',' -f2)
 alt_sg_slug=$(printf "%s" "$line" | cut --delimiter=',' -f3)
 alt_sg=$(printf "%s" "$alt_sg_slug" | sed 's/-/ /g')
 work_dir="${contaminant_id}_${pack_number}_${alt_sg_slug}"
-{
-    mkdir -p "$work_dir"
-} || {
-    printf "Error: Unable to create directory %s\n" "$work_dir" >&2
-    exit 1
-}
+mkdir -p "$work_dir"
+
 output_dir=$(readlink -f "$work_dir")
 resdir="$output_dir/results_solve"
 outdir="$output_dir/out_solve"
 scrdir="$output_dir/scr_solve"
 
-{
-    cd "$output_dir"
-} || {
-    printf "%s does not exist." "$output_dir"
-    exit 1
-}
+cd "$output_dir"
 
 # Define timeout
 slurm_time=$(squeue -j "$SLURM_JOBID" -h -o "%l" | head -n 1)

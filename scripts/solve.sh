@@ -145,6 +145,7 @@ results_content "$contaminants_ids" "$alt_space_groups" > "$results_file"
 printf "[OK]\n"
 
 printf "Submitting job to SLURM... "
+cd "$work_dir"
 sbatch --array=1-$(wc -l < "$results_file") \
        "$CM_PATH/scripts/CM_solve.slurm" \
        "$input_file_name" > /dev/null
