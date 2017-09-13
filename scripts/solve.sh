@@ -140,7 +140,7 @@ printf "[OK]\n"
 
 # Create results.txt file
 printf "Creating list of tasks... "
-results_file="$work_dir/results.txt"
+results_file="$(readlink -f "$work_dir/results.txt")"
 results_content "$contaminants_ids" "$alt_space_groups" > "$results_file"
 printf "[OK]\n"
 
@@ -152,4 +152,4 @@ sbatch --array=1-$(wc -l < "$results_file") \
 printf "[OK]\n"
 
 # Do not execute abort() if exit here
-trap EXIT
+trap - EXIT

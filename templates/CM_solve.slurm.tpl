@@ -243,4 +243,4 @@ else
 fi
 
 # Do not execute abort() if exit here
-trap EXIT
+trap - EXIT
