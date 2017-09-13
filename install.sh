@@ -67,7 +67,7 @@ then
 fi
 
 # Success if user sourced CCP4, or define_paths.sh is initialized
-ccp4_path=$(which --skip-alias --skip-functions molrep 2>/dev/null)
+ccp4_path=$(which molrep 2>/dev/null)
 
 # Try to find the setup scripts in common locations
 ccp4_name="bin/ccp4.setup-sh\$"
@@ -123,7 +123,7 @@ printf "Finding MoRDa installation... "
 morda_path=""
 
 # Try if the user sourced the script from morda
-morda_path=$(which --skip-alias --skip-functions morda 2>/dev/null)
+morda_path=$(which morda 2>/dev/null)
 if [ -n "$morda_path" ]
 then
     morda_path="$(dirname "$morda_path")"
