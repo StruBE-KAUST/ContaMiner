@@ -31,6 +31,16 @@
 set -e
 abort () {
     printf "Failure, exiting\n" >&2
+    printf "Trying to update results file\n" >&2
+    if [ ! -z "$results_file" ] && [ ! -z "$task_id" ]
+    then
+        lock_file="$results_file.lock"
+        # Lock #####################################
+        lockfile -r-1 "$lock_file"                 #
+        sed -i "/$task_id:/c\\$task_id,error,0,0,$elaps_time" "$results_file"
+        rm -f "$lock_file"                         #
+        ############################################
+    fi
     exit 1
 }
 trap 'abort' EXIT
@@ -154,7 +164,7 @@ then
 # Lock #####################################
     lock_file="$results_file.lock"         #
     lockfile -r-1 "$lock_file"             #
-    sed -i "/$task_id:/c\\$task_id:aborted:$elaps_time" "$results_file"
+    sed -i "/$task_id:/c\\$task_id,aborted,0,0,$elaps_time" "$results_file"
     rm -f "$lock_file"                     #
 ############################################
 else
@@ -171,7 +181,7 @@ else
     7)
 # Lock #####################################
         lockfile -r-1 "$lock_file"         #
-        sed -i "/$task_id:/c\\$task_id:nosolution:$elaps_time" "$results_file"
+        sed -i "/$task_id:/c\\$task_id,completed,0,0,$elaps_time" "$results_file"
         rm -f "$lock_file"                 #
 ############################################
         ;;
@@ -180,10 +190,10 @@ else
         q_factor=$(getXpath "//q_factor/text()" "$xml_file")
         percent=$(getXpath "//percent/text()" "$xml_file")
 
-        newline="$q_factor-$percent:$elaps_time"
+        newline="completed,$q_factor,$percent,$elaps_time"
 # Lock #####################################
         lockfile -r-1 "$lock_file"         #
-        sed -i "/$task_id:/c\\$task_id:$newline" "$results_file"
+        sed -i "/$task_id:/c\\$task_id,$newline" "$results_file"
         rm -f "$lock_file"                 #
 ############################################
 
@@ -225,9 +235,12 @@ else
     *)
 # Lock #####################################
         lockfile -r-1 "$lock_file"         #
-        sed -i "/$task_id:/c\\$task_id:error:$elaps_time" "$results_file"
+        sed -i "/$task_id:/c\\$task_id,error,0,0,$elaps_time" "$results_file"
         rm -f "$lock_file"                 #
 ############################################
         ;;
     esac
 fi
+
+# Do not execute abort() if exit here
+trap EXIT
