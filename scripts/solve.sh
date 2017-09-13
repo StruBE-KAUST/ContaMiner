@@ -149,3 +149,6 @@ sbatch --array=1-$(wc -l < "$results_file") \
        "$CM_PATH/scripts/CM_solve.slurm" \
        "$input_file_name" > /dev/null
 printf "[OK]\n"
+
+# Do not execute abort() if exit here
+trap EXIT
