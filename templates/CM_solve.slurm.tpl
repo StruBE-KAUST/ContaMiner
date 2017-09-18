@@ -165,7 +165,7 @@ exit_status=$?
 lock_file="${results_file}.lock"
 if [ $exit_status -eq 1 ] # job has been aborted
 then
-    elaps_time=$(date -u -d @$timeo ut +"%Hh %2Mm %2Ss")
+    elaps_time=$(date -u -d @$timeout +"%Hh %2Mm %2Ss")
 # Lock #####################################
     lockfile -r-1 "$lock_file"             #
     sed -i "/$task_id,/c\\$task_id,aborted,0,0,$elaps_time" "$results_file"
