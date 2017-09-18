@@ -32,18 +32,22 @@ set -e
 abort () {
     printf "Failure, exiting\n" >&2
     printf "Trying to update results file\n" >&2
-    if [ ! -z "$results_file" ] && [ ! -z "$task_id" ]
+    if [ ! -z "$1" ] && [ ! -z "$2" ]
     then
-        lock_file="$results_file.lock"
+        results_file="$1"
+        task_id="$2"
+        lock_file="${results_file}.lock"
         # Lock #####################################
         lockfile -r-1 "$lock_file"                 #
-        sed -i "/$task_id:/c\\$task_id,error,0,0,$elaps_time" "$results_file"
+        sed -i "/$task_id,/c\\$task_id,error,0,0,$elaps_time" "$results_file"
         rm -f "$lock_file"                         #
         ############################################
     fi
     exit 1
 }
-trap 'abort' EXIT
+results_file=""
+task_id=""
+trap 'abort "$results_file" "$task_id"' EXIT
 
 # Source MoRDa and CCP4 paths
 define_paths="$CM_PATH/scripts/define_paths.sh"
@@ -70,13 +74,13 @@ mtz_file_name=$(readlink -f "$1")
 results_file=$(readlink -f "results.txt")
 
 task_id=$(sed -n "${SLURM_ARRAY_TASK_ID}p" "$results_file" \
-              | cut --delimiter=',' -f3)
+              | cut --delimiter=',' -f-3)
 
 first_arg=$(printf "%s" "$task_id" | cut --delimiter=',' -f1)
 case $first_arg in
     c_*)
         # Custom contaminant
-        contaminant_id="$(printf "c_%s" "$(basename "$first_arg")")"
+        contaminant_id="$(printf "%s" "$(basename "$first_arg")")"
 	model_dir="$(readlink -f "$first_arg")"
 	;;
     *)
@@ -85,8 +89,8 @@ case $first_arg in
 	model_dir="$CM_PATH/data/contabase/$contaminant_id/models"
 	;;
 esac
-pack_number=$(printf "%s" "$line" | cut --delimiter=',' -f2)
-alt_sg_slug=$(printf "%s" "$line" | cut --delimiter=',' -f3)
+pack_number=$(printf "%s" "$task_id" | cut --delimiter=',' -f2)
+alt_sg_slug=$(printf "%s" "$task_id" | cut --delimiter=',' -f3)
 alt_sg=$(printf "%s" "$alt_sg_slug" | sed 's/-/ /g')
 work_dir="${contaminant_id}_${pack_number}_${alt_sg_slug}"
 mkdir -p "$work_dir"
@@ -158,13 +162,13 @@ kill -9 $watchdog_PID > /dev/null 2>&1
 exit_status=$?
 
 # Parse result
+lock_file="${results_file}.lock"
 if [ $exit_status -eq 1 ] # job has been aborted
 then
-    elaps_time=$(date -u -d @$timeout +"%Hh %2Mm %2Ss")
+    elaps_time=$(date -u -d @$timeo ut +"%Hh %2Mm %2Ss")
 # Lock #####################################
-    lock_file="$results_file.lock"         #
     lockfile -r-1 "$lock_file"             #
-    sed -i "/$task_id:/c\\$task_id,aborted,0,0,$elaps_time" "$results_file"
+    sed -i "/$task_id,/c\\$task_id,aborted,0,0,$elaps_time" "$results_file"
     rm -f "$lock_file"                     #
 ############################################
 else
@@ -181,7 +185,7 @@ else
     7)
 # Lock #####################################
         lockfile -r-1 "$lock_file"         #
-        sed -i "/$task_id:/c\\$task_id,completed,0,0,$elaps_time" "$results_file"
+        sed -i "/$task_id,/c\\$task_id,completed,0,0,$elaps_time" "$results_file"
         rm -f "$lock_file"                 #
 ############################################
         ;;
@@ -193,7 +197,7 @@ else
         newline="completed,$q_factor,$percent,$elaps_time"
 # Lock #####################################
         lockfile -r-1 "$lock_file"         #
-        sed -i "/$task_id:/c\\$task_id,$newline" "$results_file"
+        sed -i "/$task_id,/c\\$task_id,$newline" "$results_file"
         rm -f "$lock_file"                 #
 ############################################
 
@@ -235,7 +239,7 @@ else
     *)
 # Lock #####################################
         lockfile -r-1 "$lock_file"         #
-        sed -i "/$task_id:/c\\$task_id,error,0,0,$elaps_time" "$results_file"
+        sed -i "/$task_id,/c\\$task_id,error,0,0,$elaps_time" "$results_file"
         rm -f "$lock_file"                 #
 ############################################
         ;;
