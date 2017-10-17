@@ -84,10 +84,10 @@ is_error () {
     fi
 }
 
-if [ $# -lt 2 ]
+if [ $# -lt 1 ]
 then
     printf "Missing argument\n" >&2
-    printf "Usage: contaminer job_status JOB_DIRECTORY\n" "$0" >&2
+    printf "Usage: contaminer job_status JOB_DIRECTORY\n" >&2
     printf "\n" >&2
     printf "where JOB_DIRECTORY is the directory created by " >&2
     printf "contaminer when submitting a solve job.\n" >&2
