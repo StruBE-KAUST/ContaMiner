@@ -438,6 +438,26 @@
                 <pubmed_id>23695562</pubmed_id>
             </reference>
         </contaminant>
+        <contaminant>
+            <uniprot_id>P0A759</uniprot_id>
+            <short_name>NAGB_ECOLI</short_name>
+            <long_name>Glucosamine-6-phosphate deaminase</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <suggestion>
+                <name>Vincent Olieric</name>
+            </suggestion>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0ABT2</uniprot_id>
+            <short_name>DPS_ECOLI</short_name>
+            <long_name>DNA protection during starvation protein</long_name>
+            <organism>Escherichi coli</organism>
+            <exact_model>true</exact_model>
+            <suggestion>
+                <name>Zaineb Fourati</name>
+            </suggestion>
+        </contaminant>
     </category>
     <category>
         <id>2</id>
