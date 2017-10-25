@@ -23,12 +23,12 @@
 XMLshell () {
     if [ $# -ne 2 ]
     then
-        printf "Wrong number of arguments.\n"
+        printf "Wrong number of arguments.\n" >&2
         return 1
     fi
     if [ ! -f "$2" ]
     then
-        printf "%s does not exist.\n" "$2"
+        printf "%s does not exist.\n" "$2" >&2
         return 1
     fi
     printf "%b\n" "$1" | xmllint --shell "$2"
@@ -59,7 +59,7 @@ countXpath () {
     # Args check is made by XMLshell
     if [ -z "$1" ]
     then
-        printf "Wrong number of arguments.\n"
+        printf "Wrong number of arguments.\n" >&2
         return 1
     fi
     XMLshell "xpath count($1)" "$2" \

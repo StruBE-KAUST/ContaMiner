@@ -27,6 +27,28 @@
 ## START
 ## END
 
+# Exit on error
+set -e
+abort () {
+    printf "Failure, exiting\n" >&2
+    printf "Trying to update results file\n" >&2
+    if [ ! -z "$1" ] && [ ! -z "$2" ]
+    then
+        results_file="$1"
+        task_id="$2"
+        lock_file="${results_file}.lock"
+        # Lock #####################################
+        lockfile -r-1 "$lock_file"                 #
+        sed -i "/$task_id,/c\\$task_id,error,0,0,$elaps_time" "$results_file"
+        rm -f "$lock_file"                         #
+        ############################################
+    fi
+    exit 1
+}
+results_file=""
+task_id=""
+trap 'abort "$results_file" "$task_id"' EXIT
+
 # Source MoRDa and CCP4 paths
 define_paths="$CM_PATH/scripts/define_paths.sh"
 # shellcheck source=/dev/null
@@ -51,38 +73,34 @@ convert_path="$CM_PATH/scripts/convert.sh"
 mtz_file_name=$(readlink -f "$1")
 results_file=$(readlink -f "results.txt")
 
-# Lock #####################################
-lock_file="$results_file.lock"             #
-lockfile -r-1 "$lock_file"                 #
-                                           #
-line=$(sed -n "${SLURM_ARRAY_TASK_ID}p" "$results_file" \
-    | cut --delimiter=':' -f1)             #
-                                           #
-rm -f "$lock_file"                         #
-############################################
+task_id=$(sed -n "${SLURM_ARRAY_TASK_ID}p" "$results_file" \
+              | cut --delimiter=',' -f-3)
 
-contaminant_id=$(printf "%s" "$line" | cut --delimiter='_' -f1)
-pack_number=$(printf "%s" "$line" | cut --delimiter='_' -f2)
-alt_sg_slug=$(printf "%s" "$line" | cut --delimiter='_' -f3)
+first_arg=$(printf "%s" "$task_id" | cut --delimiter=',' -f1)
+case $first_arg in
+    c_*)
+        # Custom contaminant
+        contaminant_id="$(printf "%s" "$(basename "$first_arg")")"
+	model_dir="$(readlink -f "$first_arg")"
+	;;
+    *)
+	# ContaBase contaminant
+	contaminant_id="$first_arg"
+	model_dir="$CM_PATH/data/contabase/$contaminant_id/models"
+	;;
+esac
+pack_number=$(printf "%s" "$task_id" | cut --delimiter=',' -f2)
+alt_sg_slug=$(printf "%s" "$task_id" | cut --delimiter=',' -f3)
 alt_sg=$(printf "%s" "$alt_sg_slug" | sed 's/-/ /g')
-task_id="${contaminant_id}_${pack_number}_${alt_sg_slug}"
-{
-    mkdir -p "$task_id"
-} || {
-    printf "Error: Unable to create directory %s\n" "$task_id" >&2
-    exit 1
-}
-output_dir=$(readlink -f "$task_id")
+work_dir="${contaminant_id}_${pack_number}_${alt_sg_slug}"
+mkdir -p "$work_dir"
+
+output_dir=$(readlink -f "$work_dir")
 resdir="$output_dir/results_solve"
 outdir="$output_dir/out_solve"
 scrdir="$output_dir/scr_solve"
-model_dir="$CM_PATH/data/contabase/$contaminant_id/models"
-{
-    cd "$output_dir"
-} || {
-    printf "%s does not exist." "$output_dir"
-    exit 1
-}
+
+cd "$output_dir"
 
 # Define timeout
 slurm_time=$(squeue -j "$SLURM_JOBID" -h -o "%l" | head -n 1)
@@ -117,11 +135,11 @@ sleep "$random"
 
 # Core job
 morda_solve \
-    -f "$mtz_file_name" \
-    -m "$model_dir" \
-    -p "$pack_number" \
+    -f  "$mtz_file_name" \
+    -m  "$model_dir" \
+    -p  "$pack_number" \
     -sg "$alt_sg" \
-    -r "$resdir" \
+    -r  "$resdir" \
     -po "$outdir" \
     -ps "$scrdir" &
 job_PID=$!
@@ -144,12 +162,13 @@ kill -9 $watchdog_PID > /dev/null 2>&1
 exit_status=$?
 
 # Parse result
+lock_file="${results_file}.lock"
 if [ $exit_status -eq 1 ] # job has been aborted
 then
     elaps_time=$(date -u -d @$timeout +"%Hh %2Mm %2Ss")
 # Lock #####################################
     lockfile -r-1 "$lock_file"             #
-    sed -i "/$task_id:/c\\$task_id:aborted:$elaps_time" "$results_file"
+    sed -i "/$task_id,/c\\$task_id,aborted,0,0,$elaps_time" "$results_file"
     rm -f "$lock_file"                     #
 ############################################
 else
@@ -166,7 +185,7 @@ else
     7)
 # Lock #####################################
         lockfile -r-1 "$lock_file"         #
-        sed -i "/$task_id:/c\\$task_id:nosolution:$elaps_time" "$results_file"
+        sed -i "/$task_id,/c\\$task_id,completed,0,0,$elaps_time" "$results_file"
         rm -f "$lock_file"                 #
 ############################################
         ;;
@@ -175,10 +194,10 @@ else
         q_factor=$(getXpath "//q_factor/text()" "$xml_file")
         percent=$(getXpath "//percent/text()" "$xml_file")
 
-        newline="$q_factor-$percent:$elaps_time"
+        newline="completed,$q_factor,$percent,$elaps_time"
 # Lock #####################################
         lockfile -r-1 "$lock_file"         #
-        sed -i "/$task_id:/c\\$task_id:$newline" "$results_file"
+        sed -i "/$task_id,/c\\$task_id,$newline" "$results_file"
         rm -f "$lock_file"                 #
 ############################################
 
@@ -186,8 +205,8 @@ else
         mtz_filename="$resdir/final.mtz"
         mtz2map "$mtz_filename"
 
-        # If positive result
-        if [ "$percent" -ge 99 ]
+        # If positive result and contaminant from ContaBase
+        if [ "$percent" -ge 99 ] && echo "$task_id" | grep -q "^[A-Z]"
         then
             # Increase score for this contaminant, model and space group
             ml_scores_file="$CM_PATH/data/ml_scores.xml"
@@ -220,9 +239,12 @@ else
     *)
 # Lock #####################################
         lockfile -r-1 "$lock_file"         #
-        sed -i "/$task_id:/c\\$task_id:error:$elaps_time" "$results_file"
+        sed -i "/$task_id,/c\\$task_id,error,0,0,$elaps_time" "$results_file"
         rm -f "$lock_file"                 #
 ############################################
         ;;
     esac
 fi
+
+# Do not execute abort() if exit here
+trap - EXIT

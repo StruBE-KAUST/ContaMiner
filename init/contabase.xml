@@ -1,7 +1,7 @@
 <contabase>
     <category>
         <id>1</id>
-        <name>Proteins in E.Coli</name>
+        <name>Proteins in E.coli</name>
         <default>true</default>
         <contaminant>
             <uniprot_id>P0ACJ8</uniprot_id>
@@ -437,6 +437,26 @@
             <reference>
                 <pubmed_id>23695562</pubmed_id>
             </reference>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0A759</uniprot_id>
+            <short_name>NAGB_ECOLI</short_name>
+            <long_name>Glucosamine-6-phosphate deaminase</long_name>
+            <organism>Escherichia coli</organism>
+            <exact_model>true</exact_model>
+            <suggestion>
+                <name>Vincent Olieric</name>
+            </suggestion>
+        </contaminant>
+        <contaminant>
+            <uniprot_id>P0ABT2</uniprot_id>
+            <short_name>DPS_ECOLI</short_name>
+            <long_name>DNA protection during starvation protein</long_name>
+            <organism>Escherichi coli</organism>
+            <exact_model>true</exact_model>
+            <suggestion>
+                <name>Zaineb Fourati</name>
+            </suggestion>
         </contaminant>
     </category>
     <category>

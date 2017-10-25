@@ -20,10 +20,19 @@
 ## $1 : diffraction data file (.cif or .mtz)
 ## $2 : list of contaminants to test (optional txt file) (default is all)
 
+# Exit on error
+set -e
+abort () {
+    printf "[FAILED]\n"
+    exit 1
+}
+trap 'abort' EXIT
+
+printf "Checking environment and input... "
 # Check CM_PATH in env
 if [ -z "$CM_PATH" ] || [ ! -d "$CM_PATH" ]
 then
-    printf "Missing CM_PATH in env.\n" >&2
+    printf "\nMissing CM_PATH in env.\n" >&2
     exit 1
 fi
 
@@ -34,16 +43,15 @@ status="$CM_PATH/scripts/status.sh"
 . "$status" > /dev/null
 if ! is_prepared "$contabase_dir"
 then
-    printf "Warning: ContaBase is not ready. " >&2
-    printf "Some contaminants may not be tested.\n" >&2
+    printf "\nWarning: ContaBase is not ready. " >&2
+    printf "Some contaminants may not be tested. " >&2
 fi
-
 
 # Source MoRDa and CCP4 paths
 define_paths="$CM_PATH/scripts/define_paths.sh"
 if [ ! -f "$define_paths" ]
 then
-    printf "Error: Installation seems corrupted. " >&2
+    printf "\nError: Installation seems corrupted. " >&2
     printf "Please re-install ContaMiner.\n" >&2
     exit 1
 fi
@@ -56,86 +64,32 @@ fi
 # shellcheck source=/dev/null
 . "$SOURCE3"
 
-# Load XML tools
-xml_tools="$CM_PATH/scripts/xmltools.sh"
+# Load tools
 # shellcheck source=xmltools.sh
-. "$xml_tools"
+. "$CM_PATH/scripts/xmltools.sh"
+# shellcheck source=convert.sh
+. "$CM_PATH/scripts/convert.sh"
+# shellcheck source=mtztools.sh
+. "$CM_PATH/scripts/mtztools.sh"
+# shellcheck source=list_tasks.sh
+. "$CM_PATH/scripts/list_tasks.sh"
 
 # Check input
 if [ $# -lt 1 ] || printf "%s" "$1" | grep -vq ".*\.\(mtz\|cif\)"
 then
-    printf "Missing arguments\n" >&2
+    printf "\nMissing arguments\n" >&2
     exit 1
 fi
 if [ ! -f "$1" ]
 then
-    printf "File %s does not exist.\n" "$1" >&2
+    printf "\nFile %s does not exist.\n" "$1" >&2
     exit 1
 fi
 if [ $# -ge 2 ] && [ -n "$2" ] && [ ! -f "$2" ]
 then
-    printf "File %s does not exist.\n" "$2" >&2
+    printf "\nFile %s does not exist.\n" "$2" >&2
     exit 1
 fi
-
-# Prepare environment
-printf "Preparing environment... "
-# Create work_dir
-work_dir=$(basename "$1" | sed -r 's/\.mtz|\.cif//')
-{
-    mkdir "$work_dir"
-} || {
-    printf "Unable to create directory : %s\n" "$work_dir" >&2
-    exit 1
-}
-cp "$1" "$work_dir"
-input_file_name=$(readlink -f "$work_dir/$(basename "$1")")
-if [ $# -ge 2 ]
-then
-    cp "$2" "$work_dir"
-    list_file_name=$(readlink -f "$work_dir/$(basename "$2")")
-fi
-{
-    cd "$work_dir"
-} || {
-    printf "%s does not exist." "$work_dir"
-    exit 1
-}
-result_file="results.txt"
-printf "" > "$result_file"
-printf "[OK]\n"
-
-# Convert file to mtz if applicable
-# shellcheck source=../scripts/convert.sh
-. "$CM_PATH/scripts/convert.sh"
-if ! checkMtz "$input_file_name"
-then
-    printf "Converting file to MTZ... "
-    {
-        safeToMtz "$input_file_name"
-    } || {
-        printf "[FAILED]\n"
-        exit 1
-    }
-    printf "[OK]\n"
-fi
-mtz_file_name=$(printf "%s" "$input_file_name" | sed 's/\.cif$/\.mtz/')
-
-# Select alternative space group
-printf "Selecting alternative space groups... "
-# Current space group
-space_group=$(mtzdmp "$mtz_file_name" | grep "Space group" | 
-    sed "s/.*'\(.*\)'.*/\1/")
-
-alt_sg_commands="N\nSG $space_group\n\n"
-alt_space_groups=$(printf "%b" "$alt_sg_commands" | alt_sg_list)
-alt_space_groups=$(printf "%s" "$alt_space_groups" | 
-    tr -d '\n' | 
-    sed 's/.*-->\ *\(1.*\)/\1/' |
-    sed 's/"\ *[0-9]\ *"/\n/g' | 
-    sed 's/"$//' | sed 's/1\ *"//')
-# POSIX rule : TXT files must end with \n
-alt_space_groups="$alt_space_groups\n"
 printf "[OK]\n"
 
 # Select contaminants
@@ -144,7 +98,7 @@ contabase="$CM_PATH/init/contabase.xml"
 contaminants_list=""
 if [ $# -ge 2 ] && [ -n "$2" ]
 then
-    contaminants_list="$(cat "$list_file_name")"
+    contaminants_list="$(grep -v "^#" "$2" | grep -v "^ *$")"
 else
     contaminants_list="$(
         getXpath "//category[default='true']/contaminant/uniprot_id/text()" \
@@ -153,50 +107,49 @@ else
 fi
 printf "[OK]\n"
 
-# Submit solving jobs
-printf "Submitting jobs to SLURM... "
-ml_scores="$CM_PATH/data/ml_scores.xml"
-## First loop to generate variables
-printf "%s\n" "$contaminants_list" \
-    | while IFS= read -r contaminant_id
-do
-    contaminant_score=$( \
-        getXpath "//contaminant[uniprot_id=$contaminant_id]/score/text()" \
-            "$ml_scores" \
-            )
-    grep -v '^ *#' < "$contabase_dir/$contaminant_id/packs" \
-        | grep -v '^$' \
-        | while IFS= read -r pack_line
-    do
-        pack=$(printf "%s" "$pack_line" | cut --delimiter=':' -f1)
-        pack_score=$(printf "%s" "$pack_line" | cut --delimiter=':' -f2)
-        printf "%b" "$alt_space_groups" \
-            | while IFS= read -r alt_sg
-        do
-            alt_sg_slug=$(printf "%s" "$alt_sg" | sed "s/ /-/g")
-            task_id="${contaminant_id}_${pack}_${alt_sg_slug}"
-            sg_score=$( \
-                getXpath "//space_group[name='$alt_sg']/score/text()" \
-                    "$ml_scores" \
-                    )
-            task_score=$(( contaminant_score * pack_score * sg_score ))
-            printf "%s_%s\n" "$task_id" "$task_score"
-        done
-    done
-## Then sort according to the score
-## Then submit the jobs 
-done | sort -rk 4 -t '_' -g \
-    | while IFS= read -r line
-do
-    taskid=$(printf "%s" "$line" | cut --delimiter='_' -f1-3)
-    printf "%s:cancelled:0h 00m 00s\n" "$taskid" >> "$result_file"
-done
+# Prepare environment
+printf "Preparing environment... "
+# Create work_dir
+work_dir=$(basename "$1" | sed -r 's/\.mtz|\.cif//')
+mkdir "$work_dir" 2>/dev/null
 
-{
-    sbatch --array=1-$(wc -l < "$result_file") \
-        "$CM_PATH/scripts/CM_solve.slurm" \
-        "$input_file_name" > /dev/null
+# Copy files in work dir
+cp "$1" "$work_dir"
+input_file_name=$(readlink -f "$work_dir/$(basename "$1")")
+if [ $# -ge 2 ]
+then
+    cp "$2" "$work_dir"
+    list_file_name=$(readlink -f "$work_dir/$(basename "$2")")
+fi
+contaminants_ids="$(clean_contaminants "$contaminants_list" "$work_dir")"
+printf "[OK]\n"
+
+# Convert file to mtz if applicable
+if ! checkMtz "$input_file_name"
+then
+    printf "Converting file to MTZ... "
+    safeToMtz "$input_file_name"
     printf "[OK]\n"
-} || {
-    printf "[FAIL]\n"
-}
+fi
+mtz_filename=$(printf "%s" "$input_file_name" | sed 's/\.cif$/\.mtz/')
+
+# Select alternative space group
+printf "Selecting alternative space groups... "
+alt_space_groups="$(get_alternate_space_groups "$mtz_filename")"
+printf "[OK]\n"
+
+# Create results.txt file
+printf "Creating list of tasks... "
+results_file="$(readlink -f "$work_dir/results.txt")"
+results_content "$contaminants_ids" "$alt_space_groups" > "$results_file"
+printf "[OK]\n"
+
+printf "Submitting job to SLURM... "
+cd "$work_dir"
+sbatch --array=1-$(wc -l < "$results_file") \
+       "$CM_PATH/scripts/CM_solve.slurm" \
+       "$input_file_name" > /dev/null
+printf "[OK]\n"
+
+# Do not execute abort() if exit here
+trap - EXIT
