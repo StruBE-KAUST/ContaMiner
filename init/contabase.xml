@@ -841,5 +841,15 @@
                 <name>Marcin Wojdyr</name>
             </suggestion>
         </contaminant>
+        <contaminant>
+            <uniprot_id>Q9HNN4</uniprot_id>
+            <short_name>Y2021_HALSA</short_name>
+            <long_name>Putative heme-binding protein VNG_2021C</long_name>
+            <organism>Halobacterium salinarum</organism>
+            <exact_model>false</exact_model>
+            <suggestion>
+                <name>Stefan W. Grötzinger</name>
+            </suggestion>
+        </contaminant>
     </category>
 </contabase>
