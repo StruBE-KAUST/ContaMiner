@@ -458,6 +458,19 @@
                 <name>Zaineb Fourati</name>
             </suggestion>
         </contaminant>
+        <contaminant>
+            <uniprot_id>A0A140N6S1</uniprot_id>
+            <short_name>A0A140N6S1_ECOBD</short_name>
+            <long_name>Protein CsiD</long_name>
+            <organism>Escherichi coli</organism>
+            <exact_model>true</exact_model>
+            <suggestion>
+                <name>Berhard Lohkamp</name>
+            </suggestion>
+            <reference>
+                <pubmed_id>18391407</pubmed_id>
+            </reference>
+        </contaminant>
     </category>
     <category>
         <id>2</id>
