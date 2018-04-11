@@ -1,5 +1,7 @@
 data/**
 !data/.gitignore
-contaminer
 *~
 *#
+*.pyc
+*.egg-info
+venv
