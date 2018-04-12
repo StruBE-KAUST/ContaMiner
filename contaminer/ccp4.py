@@ -1,15 +1,12 @@
 """Provide wrappers for CCP4 tools and MoRDa."""
 
-import os
 import subprocess
-
-from contaminer.config import UserConfig
 
 
 class Morda():
     """Wrapper to execute MoRDa."""
 
-    def __init__(self, tool, *args, config_path=None):
+    def __init__(self, tool, *args):
         """Store tool and args."""
         if tool in ["solve", "prep"]:
             self.tool = tool
@@ -18,11 +15,13 @@ class Morda():
 
         self.tool = tool
         self.args = args
-        self.config = config_path
 
     def run(self):
-        """Build command line, then launch MoRDa with the args from init."""
+        """Build command line and launch MoRDa with the args from init."""
+        # Build command line
         command_line = self.parse_args()
+
+        # Run MoRDa
         popen = subprocess.Popen(command_line, stdout=subprocess.PIPE)
         popen.wait()
         output = popen.stdout.read()
@@ -30,12 +29,7 @@ class Morda():
 
     def parse_args(self):
         """Build command line according to config and given args."""
-        user_config = UserConfig(self.config).load()
-        morda_path = os.path.join(
-            user_config['PATH']['morda'],
-            'morda_' + self.tool)
-
-        command_line = [morda_path]
+        command_line = ['morda_' + self.tool]
         command_line.extend(self.args)
 
         return command_line
@@ -44,17 +38,16 @@ class Morda():
 class MordaPrep(Morda):
     """Wrapper to execute MoRDa prep."""
 
-    def __init__(self, fasta, nb_homologous=1, config_path=None):
+    def __init__(self, fasta, nb_homologous=1):
         """Build underlying wrapper according to arguments."""
-        super().__init__("prep", "-s", fasta, "-n", nb_homologous,
-                         config_path=config_path)
+        super().__init__("prep", "-s", fasta, "-n", nb_homologous)
 
 
 class MordaSolve(Morda):
     """Wrapper to execute MoRDa solve."""
 
     def __init__(self, mtz_file, model_dir, pack_number, space_group,
-                 res_dir=None, out_dir=None, scr_dir=None, config_path=None):
+                 res_dir=None, out_dir=None, scr_dir=None):
         """Build underlying wrapper according to arguments."""
         args = ["solve", '-f', mtz_file, '-m', model_dir, '-p', pack_number,
                 '-sg', space_group]
@@ -68,4 +61,4 @@ class MordaSolve(Morda):
         if scr_dir:
             args.extend(['-ps', scr_dir])
 
-        super().__init__(*args, config_path=config_path)
+        super().__init__(*args)
