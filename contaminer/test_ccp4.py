@@ -1,8 +1,6 @@
 """This module tests ccp4.py."""
 
 import os
-import tempfile
-import shutil
 import unittest
 
 import contaminer
