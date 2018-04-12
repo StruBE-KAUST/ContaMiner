@@ -7,21 +7,12 @@ import unittest
 
 import contaminer
 from contaminer.ccp4 import Morda
+from contaminer.ccp4 import MordaPrep
+from contaminer.ccp4 import MordaSolve
 
 
 class MordaTest(unittest.TestCase):
     """Test ccp4.Morda class."""
-
-    def setUp(self):
-        """Change $HOME directory to tmp directory."""
-        self.home_dir = tempfile.mkdtemp()
-        self.home_dir_orig = os.environ['HOME']
-        os.environ['HOME'] = self.home_dir
-
-    def tearDown(self):
-        """Remove test $HOME directory."""
-        shutil.rmtree(self.home_dir)
-        os.environ['HOME'] = self.home_dir_orig
 
     def test_parse_args(self):
         """Test if parse args gives proper command."""
@@ -30,7 +21,38 @@ class MordaTest(unittest.TestCase):
             'test_config',
             'config1.ini')
         command_line = Morda('prep', '-s', 'fasta.seq',
-                             config=config_path).parse_args()
+                             config_path=config_path).parse_args()
         self.assertEqual(
             command_line,
             ['/opt/morda/morda_prep', '-s', 'fasta.seq'])
+
+
+class MordaPrepTest(unittest.TestCase):
+    """Test ccp4.MordaPrep class."""
+
+    def test_parse_args(self):
+        """Test if parse args gives proper command."""
+        config_path = os.path.join(
+            os.path.dirname(contaminer.__file__),
+            'test_config',
+            'config1.ini')
+        command_line = MordaPrep("fasta.seq", 3,
+                                 config_path=config_path).parse_args()
+        self.assertEqual(command_line,
+                         ['/opt/morda/morda_prep', '-s', 'fasta.seq', '-n', 3])
+
+
+class MordaSolveTest(unittest.TestCase):
+    """Test ccp4.MordaSolve class."""
+
+    def test_parse_args(self):
+        """Test if parse args gives proper command."""
+        config_path = os.path.join(
+            os.path.dirname(contaminer.__file__),
+            'test_config',
+            'config1.ini')
+        command_line = MordaSolve("mtz_file", "model_dir", 3, "P-1-1-1",
+                                  config_path=config_path).parse_args()
+        self.assertEqual(command_line,
+                         ['/opt/morda/morda_solve', '-f', 'mtz_file', '-m', 'model_dir',
+                          '-p', 3, '-sg', 'P-1-1-1'])
