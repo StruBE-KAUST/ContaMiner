@@ -1,11 +1,11 @@
 {
   "contabase": {
-    "category": [
+    "categories": [
       {
         "id": 1,
         "name": "Proteins in E.coli",
         "default": true,
-        "contaminant": [
+        "contaminants": [
           {
             "uniprot_id": "P0ACJ8",
             "short_name": "CRP_ECOLI",
@@ -392,7 +392,7 @@
         "id": 2,
         "name": "Proteins in yeast",
         "default": false,
-        "contaminant": [
+        "contaminants": [
           {
             "uniprot_id": "P00330",
             "short_name": "ADH1_YEAST",
@@ -415,7 +415,7 @@
         "id": 3,
         "name": "Tags",
         "default": false,
-        "contaminant": [
+        "contaminants": [
           {
             "uniprot_id": "P0AA25",
             "short_name": "THIO_ECOLI",
@@ -495,7 +495,7 @@
         "id": 4,
         "name": "Proteins used during purification or crystallization",
         "default": false,
-        "contaminant": [
+        "contaminants": [
           {
             "uniprot_id": "P03303",
             "short_name": "POLG_HRV14",
@@ -650,7 +650,7 @@
         "id": 5,
         "name": "Microbial contaminants of host cell and reagents",
         "default": true,
-        "contaminant": [
+        "contaminants": [
           {
             "uniprot_id": "B4SL31",
             "short_name": "B4SL31_STRM5",
@@ -691,7 +691,7 @@
         "id": 6,
         "name": "From other expression systems",
         "default": false,
-        "contaminant": [
+        "contaminants": [
           {
             "uniprot_id": "P83696",
             "short_name": "P83696_ALCXX",
