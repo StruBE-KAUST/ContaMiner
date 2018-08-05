@@ -6,3 +6,6 @@ data/**
 *.egg-info
 venv
 flycheck_*
+CCP4
+MoRDa_DB
+ContaBase
