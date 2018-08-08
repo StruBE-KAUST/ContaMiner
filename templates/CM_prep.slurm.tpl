@@ -93,5 +93,6 @@ done
 # Clean environment
 find . -mindepth 1 -maxdepth 1 \
     ! -name models -and ! -name packs -and ! -name "*.fasta" \
+    ! -name "*.pdb" \
     -exec rm -r {} \;
 rm -f "../slurm-$SLURM_JOBID.out"
