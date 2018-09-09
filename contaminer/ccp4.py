@@ -108,7 +108,7 @@ class MordaPrep(Morda):
         models_dir = os.path.join(CONTABASE_DIR, fasta_name)
         args.extend(["-d", models_dir])
 
-        (_, self._temp_dir) = tempfile.mkstemp()
+        self._temp_dir = tempfile.mkdtemp()
         output_dir = os.path.join(self._temp_dir, "out_prep")
         scratch_dir = os.path.join(self._temp_dir, "scr_prep")
         args.extend(['-po', output_dir])
