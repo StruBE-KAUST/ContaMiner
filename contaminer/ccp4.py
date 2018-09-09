@@ -57,14 +57,18 @@ class Morda():
 
         popen.wait()
         if popen.returncode != 0:
-            print("Call to %s failed." % 'morda_' + self.tool, file=sys.stderr)
-            print('-' * 50)
+            print("Call to %s failed." % 'morda_' + self.tool,
+                  file=sys.stderr)
+            print('-' * 50,
+                  file=sys.stderr)
             print("Output: \n%s" % popen.stdout.read().decode('UTF-8'),
                   file=sys.stderr)
-            print('-' * 50)
+            print('-' * 50,
+                  file=sys.stderr)
             print("Error: %s" % popen.stderr.read().decode('UTF-8'),
                   file=sys.stderr)
-            print('-' * 50)
+            print('-' * 50,
+                  file=sys.stderr)
             raise RuntimeError("Call to morda_%s failed." % self.tool)
 
         self.output = popen.stdout.read()
