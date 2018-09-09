@@ -23,9 +23,14 @@ class Morda():
     tool: string
         Either "prep" or "solve" to run "morda_prep" or "morda_solve".
 
-    args: pack(string)
+    args: tuple(string)
         Arguments to give to the Morda tool.
-        Eg: ['-f', '/path/to/file', '-p', '3']
+        Eg: ('-f', '/path/to/file', '-p', '3')
+
+    See Also
+    --------
+    contaminer.ccp4.MordaSolve
+    contaminer.ccp4.MordaPrep
 
     """
 
