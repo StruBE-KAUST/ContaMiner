@@ -1,16 +1,25 @@
-"""Provide wrappers for CCP4 tools and MoRDa."""
+"""
+Provide wrappers for CCP4 tools and MoRDa.
 
+Classes
+-------
+Morda
+MordaPrep
+MordaSolve
+
+"""
+
+import logging
 import os
 import shutil
 import subprocess
 import sys
 import tempfile
+from xml.etree import ElementTree
+
+LOGGER = logging.getLogger(__name__)
 
 
-CONTABASE_DIR = os.environ['CONTABASE_DIR']
-
-
-# pylint: disable=too-few-public-methods
 class Morda():
     """
     Wrapper to execute MoRDa tools.
@@ -42,7 +51,7 @@ class Morda():
             raise ValueError("tool can be \"solve\" or \"prep\".")
 
         self.tool = tool
-        self.args = args
+        self.args = map(str, args)
         self.output = None
 
     def run(self):
@@ -51,6 +60,7 @@ class Morda():
         command_line = self._build_command()
 
         # Run MoRDa
+        LOGGER.debug("Run line: %s", command_line)
         try:
             popen = subprocess.Popen(command_line,
                                      stdout=subprocess.PIPE,
@@ -108,13 +118,13 @@ class MordaPrep(Morda):
 
     """
 
-    def __init__(self, fasta, nb_homologous=1):
+    def __init__(self, fasta, destination, nb_homologous=1):
         args = ["-s", fasta]
         args.extend(["-n", str(nb_homologous)])
         args.append('--alt')
 
         fasta_name = os.path.basename(os.path.splitext(fasta)[0])
-        models_dir = os.path.join(CONTABASE_DIR, fasta_name)
+        models_dir = os.path.join(destination, fasta_name)
         args.extend(["-d", models_dir])
 
         self._temp_dir = tempfile.mkdtemp()
@@ -139,21 +149,56 @@ class MordaSolve(Morda):
 
     """
 
-    def __init__(self, mtz_file, model_dir, pack_number, space_group,
-                 res_dir=None, out_dir=None, scr_dir=None):
+    def __init__(self, mtz_file, model_dir, pack_number, space_group):
         args = ["solve", '-f', mtz_file, '-m', model_dir, '-p', pack_number,
                 '-sg', space_group]
 
-        if res_dir:
-            args.extend(['-r', res_dir])
-        if out_dir:
-            args.extend(['-po', out_dir])
-        if scr_dir:
-            args.extend(['-ps', scr_dir])
+        pack_number = str(pack_number)
+        model_name = os.path.basename(os.path.normpath(model_dir))
+        self.res_dir = '_'.join([model_name, pack_number, space_group])
 
-        (_, self._temp_dir) = tempfile.mkstemp()
+        args.extend(['-r', self.res_dir])
+
+        self._temp_dir = tempfile.mkdtemp()
+        args.extend(['-po', os.path.join(self._temp_dir, "out_dir")])
+        args.extend(['-ps', os.path.join(self._temp_dir, "scr_dir")])
 
         super().__init__(*args)
+
+    def get_results(self):
+        """
+        Return the results from morda_solve.
+
+        Parse the generated files, and return the scores calculated
+        by the tool.
+
+        Return
+        ------
+        dict
+            Containing the following keys:
+                * percent: int
+                * q_factor: float
+
+        """
+        xml_file_path = os.path.join(self.res_dir, "morda_solve.xml")
+        result_tree = ElementTree.parse(xml_file_path).getroot()
+
+        # Check error
+        error_code = int(result_tree.find('./err_level').text)
+        if error_code != 0:
+            error_message = result_tree.find('./message')
+            raise RuntimeError(error_message)
+
+        results = {}
+        results['q_factor'] = float(result_tree.find('./q_factor').text)
+        results['percent'] = float(result_tree.find('./percent').text)
+        results['Z_score'] = float(result_tree.find('./Z_score').text)
+        results['r_init'] = float(result_tree.find('./r_init').text)
+        results['rf_init'] = float(result_tree.find('./rf_init').text)
+        results['r_fin'] = float(result_tree.find('./r_fin').text)
+        results['rf_fin'] = float(result_tree.find('./rf_fin').text)
+
+        return results
 
     def cleanup(self):
         """Remove temporary directory."""
