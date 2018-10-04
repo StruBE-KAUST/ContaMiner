@@ -6,6 +6,7 @@ import unittest
 from contaminer.ccp4 import Morda
 from contaminer.ccp4 import MordaPrep
 from contaminer.ccp4 import MordaSolve
+from contaminer.ccp4 import MtzDmp
 
 
 TEST_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -79,6 +80,18 @@ class MordaSolveTest(unittest.TestCase):
                 'q_factor': 0.905,
                 'percent': 99.0
             })
+
+
+class MtzDmpTest(unittest.TestCase):
+    """Test ccp4.MtzDmp class."""
+
+    def test_get_space_group(self):
+        """Running on the example input file gives the expected space group."""
+        os.chdir(os.path.join(TEST_DIR, "data"))
+        mtzdmp = MtzDmp("5jk4-sf.mtz")
+        mtzdmp.run()
+        result = mtzdmp.get_space_group()
+        self.assertEqual(result, "P 1 21 1")
 
 
 if __name__ == "__main__":

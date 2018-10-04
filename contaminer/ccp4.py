@@ -11,6 +11,7 @@ MordaSolve
 
 import logging
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -204,3 +205,80 @@ class MordaSolve(Morda):
     def cleanup(self):
         """Remove temporary directory."""
         shutil.rmtree(self._temp_dir)
+
+
+class MtzDmp():
+    """
+    Wrapper for mtzdmp tool.
+
+    This class only provides the space group as dumped by mtzdmp.
+
+    Methods
+    -------
+    run
+        Run the tool mtzdmp.
+
+    get_space_group
+        Return the space group of an MTZ file.
+
+    Attributes
+    ----------
+    output: string
+        The raw output of mtzdmp.
+
+    """
+
+    def __init__(self, file_path):
+        self.file_path = file_path
+        self.output = None
+
+    def run(self):
+        """Run mtzdmp on an MTZ file."""
+        command_line = ['mtzdmp', self.file_path]
+
+        try:
+            popen = subprocess.Popen(command_line,
+                                     stdout=subprocess.PIPE,
+                                     stderr=subprocess.PIPE)
+        except FileNotFoundError:
+            print(("Please make CCP4 available in your $PATH before using "
+                   "ContaMiner."),
+                  file=sys.stderr)
+            raise RuntimeError("mtzdmp cannot be found.")
+
+        stdout, stderr = popen.communicate()
+
+        if popen.returncode != 0:
+            print("Call to mtzdmp failed.",
+                  file=sys.stderr)
+            print("-" * 50,
+                  file=sys.stderr)
+            print("Output: \n%s" % stdout.decode('UTF-8'),
+                  file=sys.stderr)
+            print("Error: \n%s" % stderr.decode('UTF-8'),
+                  file=sys.stderr)
+            print("-" * 50,
+                  file=sys.stderr)
+            raise RuntimeError("Call to mtzdmp failed.")
+
+        self.output = stdout.decode('UTF-8')
+
+    def get_space_group(self):
+        """
+        Return the space group of the MTZ file.
+
+        Return
+        ------
+        string
+            The space group, space " " separated.
+
+        """
+        output_list = self.output.split('\n')
+        regexp = r'\* Space group = \'([A-Z0-9 ]+)\''
+
+        for line in output_list:
+            match = re.search(regexp, line)
+            if match:
+                return match.group(1)
+
+        raise RuntimeError("No space group found in mtzdmp output.")
