@@ -282,3 +282,89 @@ class MtzDmp():
                 return match.group(1)
 
         raise RuntimeError("No space group found in mtzdmp output.")
+
+
+class AltSgList():
+    """
+    Wrapper for alt_sg_list.
+
+    Attributes
+    ----------
+    space_group: string
+        The space " " separated space group for which we want the alternatives.
+
+    Methods
+    -------
+    run
+        Run alt_sg_list with the given arguments.
+
+    get_alt_sg
+        Return the alternative space groups.
+
+    """
+
+    def __init__(self, space_group):
+        self.space_group = space_group
+        self.output = None
+
+    def run(self):
+        """Run alt_sg_list."""
+        # Cannot rely on $PATH, because CCP4 and MoRDa both provide a
+        # binary named alt_sg_list
+        try:
+            morda_prog = os.environ['MRD_PROG']
+        except KeyError:
+            print("Please source morda_env_sh before using ContaMiner.",
+                  file=sys.stderr)
+            raise RuntimeError("MoRDa tools cannot be found.")
+
+        binary_path = os.path.join(morda_prog, "alt_sg_list")
+        command_line = [binary_path, '-sg', self.space_group]
+
+        try:
+            popen = subprocess.Popen(command_line,
+                                     stdout=subprocess.PIPE,
+                                     stderr=subprocess.PIPE)
+        except FileNotFoundError:
+            print(("Please make CCP4 available in your $PATH before using "
+                   "ContaMiner."),
+                  file=sys.stderr)
+            raise RuntimeError("alt_sg_list cannot be found.")
+
+        stdout, stderr = popen.communicate()
+
+        if popen.returncode != 0:
+            print("Call to alt_sg_list failed.",
+                  file=sys.stderr)
+            print("-" * 50,
+                  file=sys.stderr)
+            print("Output: \n%s" % stdout.decode('UTF-8'),
+                  file=sys.stderr)
+            print("Error: \n%s" % stderr.decode('UTF-8'),
+                  file=sys.stderr)
+            print("-" * 50,
+                  file=sys.stderr)
+            raise RuntimeError("Call to alt_sg_list failed.")
+
+        self.output = stdout.decode('UTF-8')
+
+    def get_alt_space_groups(self):
+        """
+        Return the list of alternative space groups.
+
+        Return
+        ------
+        list(string)
+            The list of alternative space groups, space ' ' separated.
+
+        """
+        # Take everything after --> --> (should only contain results)
+        output_list = self.output.split('\n')
+
+        sg_regex = r' *[0-9]+ +\"([A-Z0-9 ]+)\"'
+        space_groups_lines = [re.match(sg_regex, res_line)
+                              for res_line in output_list]
+        space_groups = [match.group(1)
+                        for match in space_groups_lines
+                        if match]
+        return space_groups

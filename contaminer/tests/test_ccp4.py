@@ -3,6 +3,7 @@
 import os
 import unittest
 
+from contaminer.ccp4 import AltSgList
 from contaminer.ccp4 import Morda
 from contaminer.ccp4 import MordaPrep
 from contaminer.ccp4 import MordaSolve
@@ -92,6 +93,19 @@ class MtzDmpTest(unittest.TestCase):
         mtzdmp.run()
         result = mtzdmp.get_space_group()
         self.assertEqual(result, "P 1 21 1")
+
+
+class AltSgListTest(unittest.TestCase):
+    """Test alt_sg_list wrapper."""
+
+    def test_get_alt_space_groups(self):
+        """Return expected alternate space groupes."""
+        alt_sg_process = AltSgList("P 1 21 1")
+        alt_sg_process.run()
+        alt_sg = alt_sg_process.get_alt_space_groups()
+        self.assertListEqual(
+            alt_sg,
+            ['P 1 21 1', 'P 1 2 1'])
 
 
 if __name__ == "__main__":
