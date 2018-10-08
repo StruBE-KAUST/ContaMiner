@@ -306,6 +306,7 @@ class AltSgList():
     def __init__(self, space_group):
         self.space_group = space_group
         self.output = None
+        self._temp_dir = tempfile.mkdtemp()
 
     def run(self):
         """Run alt_sg_list."""
@@ -319,7 +320,10 @@ class AltSgList():
             raise RuntimeError("MoRDa tools cannot be found.")
 
         binary_path = os.path.join(morda_prog, "alt_sg_list")
-        command_line = [binary_path, '-sg', self.space_group]
+        command_line = [binary_path,
+                        '-sg', self.space_group,
+                        '-po', self._temp_dir,
+                        '-ps', self._temp_dir]
 
         try:
             popen = subprocess.Popen(command_line,
@@ -368,3 +372,7 @@ class AltSgList():
                         for match in space_groups_lines
                         if match]
         return space_groups
+
+    def cleanup(self):
+        """Remove temporary directory."""
+        shutil.rmtree(self._temp_dir)
