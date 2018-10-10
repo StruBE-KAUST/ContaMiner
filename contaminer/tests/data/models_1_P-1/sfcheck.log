@@ -1,0 +1,357 @@
+
+ --- SFCHECK -- /Vers 7.04.09; 15.11.2017/
+
+ WARNING: reflection with SIGMA=99.99 is not accepted
+ WARNING: reflection with SIGMA=99.99 is not accepted
+ WARNING: reflection with SIGMA=99.99 is not accepted
+WARNING: Number of refls with sigma=99.99 :       3
+ ANGSTR:0.0   0.5   1.0   1.5   2.0   2.5   3.0   3.5   4.0   4.5   5.0   5.5
+ Nacent      0     0     0     0     0     0  2340  1318   797   515   355
+
+ Test    0.000 0.000 0.000 0.000 0.000 0.000 2.047 1.986 2.248 2.036 2.166
+
+ ANGSTR:5.5   6.0   6.5   7.0   7.5   8.0   8.5   9.0   9.5  10.0  10.5  11.0
+ Nacent    238   170   124   104    73    56    47    38    27    25   154
+
+ Test    2.127 1.830 1.960 2.122 1.775 2.032 1.884 2.071 2.419 1.657 2.437
+
+ ----------------------------------------------
+
+   --- Crystal ---
+
+ PDB_code : XXXX
+ Name : XXXXXXXX    ?
+ Date :XX-XXX-XX
+ Cell:     37.73    77.86    56.29  90.00 102.08  90.00
+ Space group : P 1
+ No symmetry operators :    1
+
+ ----------------------------------------------
+
+   --- Structure factors ---
+
+ Resolution /input data/ :  38.93 -  1.10
+ Number of reflections :  120751 ( in_file :  120751)
+ Number of reflections with I > sigma(I) :       19
+ Number of reflections with I > 3sigma(I):        2
+ R_stand(I) = <sig(I)>/<I> :    6.643
+ Number of acceptable reflections:  120751
+ for resolution :  38.93 -  1.10
+ Optical Resolution:   1.03
+ Boveral,Effres,Padd:        0.000       0.000       0.000
+ Expected Optical Resolution for complete data set:   1.03
+   / Optical resolution - expected minimal distance between
+             two resolved peaks in the electron density map./
+ Resmax_used(opt):  1.27
+ Number of max possible refls :  255160 actual :  120751
+ Completeness : 47.3 %
+ R_stand(F) = <sig(F)>/<F> :3.256
+ Boverall /estimated by Patterson/       :   14.83
+ Minimal estimated error :  0.4833
+ Pseudo-translation is not detected.
+ Minimal estimated error :  0.4833
+
+ Perfect twinning test <I^2>/<I>^2 :  2.0704
+
+
+ Anisotropic distribution of Structure Factors:
+ Ratio of Eigen values :  0.8807  0.9470  1.0000
+
+   Distributions:
+ Rs - resolution /angstroms/
+ sd/F - R_stand(F)
+ Comp - completeness
+
+
+Rs 38.929 14.306  8.763  6.316  4.937  4.053  3.437  2.984  2.636  2.36
+  ----------------------------------------------
+
+ --- Create PostScript file         ---
+ XXXX
+ * Plotfile: scr_solve/sfcheck_XXXX.ps
+ SYMINFO file set to /cbrc/software/ccp4/v4-7.0.app/lib/data/syminfo.lib 
+
+ WRITTEN OUTPUT MTZ FILE 
+ Logical Name: scr_solve/sfcheck_fob.mtz   Filename: scr_solve/sfcheck_fob.mtz 
+
+   2.7    2.2    2.0    2.2    2.2    2.0    2.1    2.0    2.0    2.0
+
+Rs  2.138  1.953  1.798  1.665  1.551  1.452  1.364  1.287  1.217  1.155  1.099
+<F>     49.4   38.5   31.0   26.2   22.1   18.5   16.5   15.4   13.7   11.9
+N     5259.  6279.  7299.  8365.  9516. 10823. 12051. 13330. 14768. 15671.
+Comp    49.0   49.0   48.3   48.1   47.9   47.4   47.1   46.7   46.1   44.2
+sd/F   2.625  2.359  2.237  2.369  2.695  3.214  3.740  4.240  5.065  6.424
+Twin     2.0    2.1    2.0    2.1    2.1    2.1    2.0    2.1    2.1    2.1
+ ----------------------------------------------
+
+   ---  Wilson plot---
+
+ Boverall /estimated by Wilson plot/     :   10.88
+ --------------------------------
+   N   Resolution     (*) <F>     (+) <F>*EXP(-Bover*S**2)
+                0                                            max=      113.35
+ ----------------------------------------------------------------------
+    58   26.62  .         .         .         .         . *  +    .         .
+   208   11.53  .         .         .         .         .    +    . *       .
+   434    7.54  .         .         .         .         .  #      .         .
+   761    5.63  .         .         .         .         . +  *    .         .
+  1158    4.50  .         .         .         .         +         .         *
+  1651    3.74  .         .         .         .      +  .         .    *    .
+  2217    3.21  .         .         .         .    +    .      *  .         .
+  2872    2.81  .         .         .         . +    *  .         .         .
+  3606    2.50  .         .         .        +. *       .         .         .
+  4425    2.25  .         .         .     +   *         .         .         .
+  5259    2.05  .         .         .   + *   .         .         .         .
+  6279    1.88  .         .         *+        .         .         .         .
+  7299    1.73  .         .     * + .         .         .         .         .
+  8365    1.61  .         .  *  +   .         .         .         .         .
+  9516    1.50  .         .* +      .         .         .         .         .
+ 10823    1.41  .        *.+        .         .         .         .         .
+ 12051    1.33  .       *+.         .         .         .         .         .
+ 13330    1.25  .       # .         .         .         .         .         .
+ 14768    1.19  .     +*  .         .         .         .         .         .
+ 15671    1.13  .    +*   .         .         .         .         .         .
+ ----------------------------------------------------------------------
+ ----------------------------------------------
+
+ -- Res_eff and Res_eff for atom with B :   0.000 --
+
+  min:     1.030
+ ----------------------------------------------------------------------
+ Ratio Resolution  (*) Res_eff    (+) Res_eff for SC*EXP(-Bover*S^2)
+             0.00        0.42        0.84        1.26        1.68        2.10
+ ----------------------------------------------------------------------
+   -     38.93  #           .           .           .           .           .
+   -     14.31  #           .           .           .           .           .
+   -      8.76  #           .           .           .           .           .
+   -      6.32  #           .           .           .           .           .
+0.9462    4.94  o           .           .           .           .       *  +.
+0.8297    4.05  o           .           .           .           .*+         .
+0.7541    3.44  o           .           .           .       #   .           .
+0.7029    2.98  o           .           .           .   +*      .           .
+0.6587    2.64  o           .           .           +  *        .           .
+0.6164    2.36  o           .           .        +  *           .           .
+0.5843    2.14  o           .           .     +   * .           .           .
+0.5628    1.95  o           .           .   +    *  .           .           .
+0.5473    1.80  o           .           . +     *   .           .           .
+0.5347    1.67  o           .           .+     *    .           .           .
+0.5248    1.55  o           .           +      *    .           .           .
+0.5172    1.45  o           .          +.     *     .           .           .
+0.5108    1.36  o           .          +.     *     .           .           .
+0.5050    1.29  o           .         + .    *      .           .           .
+0.5002    1.22  o           .         + .    *      .           .           .
+0.4968    1.16  o           .        +  .    *      .           .           .
+ ----------------------------------------------------------------------
+#Res,Dopt --------
+#Res,Dopt:    1    14.3063    0.0000
+#Res,Dopt:    2     8.7634    0.0000
+#Res,Dopt:    3     6.3162    0.0000
+#Res,Dopt:    4     4.9374    0.0000
+#Res,Dopt:    5     4.0528    1.9612
+#Res,Dopt:    6     3.4369    1.7198
+#Res,Dopt:    7     2.9836    1.5630
+#Res,Dopt:    8     2.6359    1.4569
+#Res,Dopt:    9     2.3608    1.3653
+#Res,Dopt:   10     2.1377    1.2777
+#Res,Dopt:   11     1.9531    1.2111
+#Res,Dopt:   12     1.7978    1.1666
+#Res,Dopt:   13     1.6655    1.1343
+#Res,Dopt:   14     1.5512    1.1082
+#Res,Dopt:   15     1.4517    1.0877
+#Res,Dopt:   16     1.3641    1.0721
+#Res,Dopt:   17     1.2865    1.0588
+#Res,Dopt:   18     1.2173    1.0467
+#Res,Dopt:   19     1.1551    1.0369
+#Res,Dopt:   20     1.0990    1.0297
+#Res,Dopt: Resmax_used(opt):  1.27
+#Res,Dopt --------
+
+ --- sig(r) - expected min coordinate error ---
+  min :    0.4833
+
+ ----------------------------------------------------------------------
+ Ratio Resolution     (*) min_sig(r)
+             0.00        1.94        3.88        5.82        7.76        9.70
+ ----------------------------------------------------------------------
+   -      0.00  o           .           .           .           .           *
+   -      0.00  o           .           .           .           .           *
+   -      0.00  o           .           .           .           .           *
+   -      0.00  o           .           .           .           .           *
+   -      0.00  o           .           .           .           .           *
+1.0000    0.00  o           .           .           .           .          *.
+0.6537    0.00  o           .           .           .  *        .           .
+0.4431    0.00  o           .           . *         .           .           .
+0.3148    0.00  o           .     *     .           .           .           .
+0.2337    0.00  o           . *         .           .           .           .
+0.1813    0.00  o         * .           .           .           .           .
+0.1447    0.00  o       *   .           .           .           .           .
+0.1185    0.00  o      *    .           .           .           .           .
+0.0987    0.00  o    *      .           .           .           .           .
+0.0842    0.00  o    *      .           .           .           .           .
+0.0733    0.00  o   *       .           .           .           .           .
+0.0649    0.00  o  *        .           .           .           .           .
+0.0581    0.00  o  *        .           .           .           .           .
+0.0531    0.00  o  *        .           .           .           .           .
+0.0499    0.00  o *         .           .           .           .           .
+ ----------------------------------------------------------------------
+
+ --- Stereogram of averaged radial completeness ---
+
+ Coordinates of axis:
+
+ H  theta,phi:   77.924   0.000
+ K  theta,phi:   90.000  90.000
+ L  theta,phi:    0.000   0.000
+
+           45       90      135      180      225      270      315
+            !        !        !        !        !        !        !  Phi
+   -------------------------------------------------------------------------
+   !****************************************............................****!
+10 !***************************************..............................***!
+   !***************************************..............................***!
+20 !**************************************................................**!
+   !**************************************................................**!
+30 !*************************************..................................*!
+   !*************************************..................................*!
+40 !************************************....................................!
+   !************************************....................................!
+50 !************************************....................................!
+   !************************************....................................!
+60 !************************************....................................!
+   !*********************************976....................................!
+70 !********************************9643....................................!
+   !99******************************6321....................................!
+80 !4579***************************85211...............................12211!
+   !1.....144679*******************84211........................24577***8532!
+90 !1............3579**************84211...................2468********96321!
+   -------------------------------------------------------------------------
+Theta            Completeness:
+         *  - means         compl = 100%
+         9  - means  90% =< compl < 100%
+         8  - means  80% =< compl <  90%
+              . . . . . . . .
+         0  - means   0%  < compl <  10%
+         .  - means         compl = 0%
+        " " - can not be data in this place
+
+
+ ----------------------------------------------
+
+
+ =============  NOTES ==================
+
+Ropt   - optical resolution - expected minimal distance
+         between two resolved peaks in the electron density which is
+         twice the standard deviation "sigma", or the width of the atomic
+         peak W which equals 2 sigma.
+         Expected width of atomic peak W is computed as
+
+      Ropt = W = sqrt ( 2 (sigma_patt^2 + sigma_res^2) )
+
+         where sigma_patt - standard deviation of the Gaussian corresponded
+                            to the Patterson origin peak.
+               sigma_res  - standard deviation of the Gaussian corresponded
+                            to the origin peak of spherical interference
+                            function which is Fourier transform of the sphere
+                            in the reciprocal space with radius 1/d_min.
+                            sigma_res = 0.356 d_min.  d_min is minimum
+                            d-spacing, or the "nominal resolution"
+
+Ropt_C - optical resolution for complete  data  set computed using
+         average value !F! for missing data in corresponding resolution bin
+         Plot of Optical resolution for  an  atom with B=0 shows behavior
+         of the part of Optical  resolution  corresponded on the termination.
+
+Boff   - program uses all data applying the "soft" resolution cut-off
+
+         Fnew = Fold (1-exp(-Boff*s^2)) , where Boff = 4dmax^2
+
+Scaling - Program scales Fobs and Fcalc by the Patterson origin peak.
+
+          Fcalc_scaled = Fcalc * scale * exp(-Badd*s^2)
+
+                     where
+          Badd = Boverall_obs - Boverall_calc
+                           sum(Fobs^2*(1-exp(-Boff*s^2)))
+
+          scale = sqrt(----------------------------------------------)
+                       sum(Fcalc**exp(-Badd*s^2)*(1-exp(-Boff*s^2)))
+
+        The program computes R-factor and Correlation coefficient for
+        the reported resolution range and reported sigma cut-off without
+        applying Boff.
+
+sig(r)min   - expected minimal error in coordinates estimated
+              by experimental sigmas(F).
+sig(r) =sqrt(3)*(sig(Ah)/Ahh)  (in A)
+   sig(Ah) = (2pi*sqrt(sum(h^2*(sigF)^2)))/(VOL*A)
+   Ahh     = (2pi^2*sum(h^2*F))/(VOL*A^2)
+   VOL - volume of cell, A - cell parameter, summation over all refls.
+
+    If there is no experimental sigma for observaed data, the program
+    uses  sigma = Fobs * 0.04 for all reflections.
+
+sig(r)max   - upper estimation erorr in coordinates by
+              difference between !Fobs! and !Fcalc!.
+
+sig(r) =sqrt(3)*(sig(Ah)/Ahh)  (in A)
+   sig(Ah) = (2pi*sqrt(sum(h^2*(F1-F2)^2)))/(VOL*A)
+   Ahh     = (2pi^2*sum(h^2*F))/(VOL*A^2)
+   VOL - volume of cell, A - cell parameter, summation over all refls.
+
+    For missing reflections the program uses the average value of
+    sigma(Fobs) for the corresponding resolution shell instead
+    of (Fobs-Fcalc).
+
+DPI(sig(x)) - DPI Cruckshank"s diffraction-data precision indicator.
+          (the Refinement of Macromolecular structure
+           Proceedingof CCP4 Study weekend. pp11-22. 1996)
+
+    sig(x) = sqr(Natoms/(Nobs-4Natoms)) C^-1/3 Resmax Rfact
+
+    where C - fractional completeness.
+
+    If Rfree flags are specified, the program uses the Murshudov"s
+    approach to calculate DPI:
+
+    sig(x) = sqr(Natoms/Nobs) C^-1/3 dmin Rfree
+
+Solvent content -  is the fraction of the unit cell volume not occ
+       upied by the model. The model consists of ALL atoms present in the
+       coordinate file.
+
+Local error estimation
+
+Displacement of atoms from electron density is estimated from the
+       difference (Fobs - Fcal) map. The displacement vector is the ratio of
+       the gradient of difference density to the curvature.
+
+The density correlation coefficient is calculated for each residue
+       from atomic densities of (2Fobs-Fcalc) map - "Robs" and the model
+       map (Fcalc) - "Rcalc" :
+
+    D_corr =  <Robs><Rcalc>/sqrt(<Robs**2><Rcalc**2>)
+
+    where <Robs> is the mean of "obsereved" densities of atoms of residue
+                 (backbone or side chain).
+           <Rcalc> is the mean of "calculateded" densities of atoms of residue.
+    Value of density for some atom from map R(x) is:
+
+             sum_i ( R(xi) * Ratom(xi - xa) )
+    Dens =  ----------------------------------
+                sum_i ( Ratom(xi - xa) )
+
+    where  Ratom(x) is atomic electron density for x-th point of grid.
+           xa - vector of the centre of atom.
+           xi - vector of the i-th point of grid.
+           Sum is taken over all grid points which have distance
+           from the centre of atom less than Radius_limit.
+           For all atoms Radius_limit = 2.5 A.
+
+Index of density is the product of the (2Fobs-Fcal) electron
+     density values for the backbone atoms (or side chain), i.e. the
+     geometric mean value for these atoms.
+     The index of connectivity is a similar indicator which is calculated
+     for backbone atoms N, CA and C of a given residue.
+     (or for atoms P,O5",C5",C3",O3")
+ **** END //////// sfcheck ///////// END ****
