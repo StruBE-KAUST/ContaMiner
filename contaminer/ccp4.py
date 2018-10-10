@@ -151,10 +151,10 @@ class MordaSolve(Morda):
 
     """
 
-    def __init__(self, mtz_file, model_dir, pack_number, space_group):
+    def __init__(self, input_file, model_dir, pack_number, space_group):
         space_group = space_group.replace('-', ' ')
         dashed_space_group = space_group.replace(' ', '-')
-        args = ["solve", '-f', mtz_file, '-m', model_dir, '-p', pack_number,
+        args = ["solve", '-f', input_file, '-m', model_dir, '-p', pack_number,
                 '-sg', space_group]
 
         pack_number = str(pack_number)
