@@ -190,8 +190,20 @@ class MordaSolve(Morda):
         # Check error
         error_code = int(result_tree.find('./err_level').text)
         if error_code != 0:
-            error_message = result_tree.find('./message')
-            raise RuntimeError(error_message)
+            if error_code != 7:  # No solution
+                error_message = result_tree.find('./message')
+                raise RuntimeError(error_message.text)
+            else:
+                results = {
+                    'q_factor': 0.0,
+                    'percent': 0.0,
+                    'Z_score': 0.0,
+                    'r_init': 0.0,
+                    'rf_init': 0.0,
+                    'r_fin': 0.0,
+                    'rf_fin': 0.0
+                }
+                return results
 
         results = {}
         results['q_factor'] = float(result_tree.find('./q_factor').text)

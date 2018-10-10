@@ -67,19 +67,37 @@ class MordaSolveTest(unittest.TestCase):
     def test_get_results(self):
         """get_results should return the scores from the results file."""
         os.chdir(os.path.join(TEST_DIR, "data"))
-        morda_solve = MordaSolve("5jk4-sf.cif", "models", 1, "P1")
+        morda_solve = MordaSolve("5jk4-sf.cif", "models", 1, "P 1 21 1")
         # morda_solve.run() # Disabled as the dir is provided with the project.
         results = morda_solve.get_results()
         self.assertDictEqual(
             results,
             {
                 'r_init': 0.548,
-                'rf_init': 0.542,
-                'rf_fin': 0.253,
-                'r_fin': 0.231,
-                'Z_score': 34.067,
-                'q_factor': 0.905,
+                'rf_init': 0.552,
+                'rf_fin': 0.25,
+                'r_fin': 0.235,
+                'Z_score': 33.454,
+                'q_factor': 0.907,
                 'percent': 99.0
+            })
+
+    def test_get_no_solution(self):
+        """get_results returns scores if morda_solve reports no result."""
+        os.chdir(os.path.join(TEST_DIR, "data"))
+        morda_solve = MordaSolve("5jk4-sf.cif", "models", 1, "P 1")
+        # morda_solve.run() # Disabled as the dir is provided with the project.
+        results = morda_solve.get_results()
+        self.assertDictEqual(
+            results,
+            {
+                'r_init': 0.0,
+                'rf_init': 0.0,
+                'rf_fin': 0.0,
+                'r_fin': 0.0,
+                'Z_score': 0.0,
+                'q_factor': 0.0,
+                'percent': 0
             })
 
 
