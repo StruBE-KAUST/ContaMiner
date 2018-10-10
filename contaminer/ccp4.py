@@ -152,12 +152,14 @@ class MordaSolve(Morda):
     """
 
     def __init__(self, mtz_file, model_dir, pack_number, space_group):
+        space_group = space_group.replace('-', ' ')
+        dashed_space_group = space_group.replace(' ', '-')
         args = ["solve", '-f', mtz_file, '-m', model_dir, '-p', pack_number,
                 '-sg', space_group]
 
         pack_number = str(pack_number)
         model_name = os.path.basename(os.path.normpath(model_dir))
-        self.res_dir = '_'.join([model_name, pack_number, space_group])
+        self.res_dir = '_'.join([model_name, pack_number, dashed_space_group])
 
         args.extend(['-r', self.res_dir])
 
