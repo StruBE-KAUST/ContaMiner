@@ -390,3 +390,83 @@ class AltSgList():
     def cleanup(self):
         """Remove temporary directory."""
         shutil.rmtree(self._temp_dir)
+
+
+class Cif2Mtz():
+    """
+    Smart wrapper for cif2mtz.
+
+    Attributes
+    ----------
+    input_file: string
+        The path to the input file to convert to MTZ.
+
+    Methods
+    -------
+    run
+        Run cif2mtz if input file is not yet MTZ.
+
+    get_output_file
+        Get the path to the output file.
+
+    Warning
+    -------
+    MoRDa does not give the same results when used with a CIF file or with
+    its corresponding converted MTZ file. Bug in MoRDa or in cif2mtz?
+    Do not use the converted file to feed MoRDa, but the original CIF file
+    instead.
+
+    """
+
+    def __init__(self, input_file):
+        self.input_file = input_file
+        self.output_file = None
+
+    def run(self):
+        """Run cif2mtz if input file is not yet MTZ."""
+        filename, ext = os.path.splitext(self.input_file)
+
+        # If input file is already MTZ, stop here.
+        if ext.lower() == "mtz":
+            self.output_file = self.input_file
+            return
+
+        self.output_file = filename + '.mtz'
+        command_line = ['cif2mtz', 'HKLIN', self.input_file,
+                        'HKLOUT', self.output_file]
+
+        try:
+            popen = subprocess.Popen(command_line,
+                                     stdin=subprocess.PIPE,
+                                     stdout=subprocess.PIPE,
+                                     stderr=subprocess.PIPE)
+            popen.stdin.close()
+            popen.wait()
+            stdout = popen.stdout.read()
+            stderr = popen.stdout.read()
+        except FileNotFoundError:
+            print(("Please make CCP4 available in your $PATH before using "
+                   "ConteMiner."),
+                  file=sys.stderr)
+            raise RuntimeError("cif2mtz cannot be found.")
+
+        finally:
+            popen.stdout.close()
+            popen.stderr.close()
+
+        if popen.returncode != 0:
+            print("Call to mtzdmp failed.",
+                  file=sys.stderr)
+            print("-" * 50,
+                  file=sys.stderr)
+            print("Output: \n%s" % stdout.decode('UTF-8'),
+                  file=sys.stderr)
+            print("Error: \n%s" % stderr.decode('UTF-8'),
+                  file=sys.stderr)
+            print("-" * 50,
+                  file=sys.stderr)
+            raise RuntimeError("Call to mtzdmp failed.")
+
+    def get_output_file(self):
+        """Return the path to the converted file."""
+        return self.output_file

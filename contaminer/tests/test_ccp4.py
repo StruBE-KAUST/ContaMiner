@@ -4,6 +4,7 @@ import os
 import unittest
 
 from contaminer.ccp4 import AltSgList
+from contaminer.ccp4 import Cif2Mtz
 from contaminer.ccp4 import Morda
 from contaminer.ccp4 import MordaPrep
 from contaminer.ccp4 import MordaSolve
@@ -124,6 +125,29 @@ class AltSgListTest(unittest.TestCase):
         self.assertListEqual(
             alt_sg,
             ['P 1 21 1', 'P 1 2 1'])
+
+
+class Cif2MtzTest(unittest.TestCase):
+    """Test cif2mtz wrapper."""
+
+    def test_convert_mtz(self):
+        """Properly convert a CIF file."""
+        os.chdir(os.path.join(TEST_DIR, "data"))
+        cif2mtz_process = Cif2Mtz("5jk4-sf.2.cif")
+        cif2mtz_process.run()
+
+        output_file = cif2mtz_process.get_output_file()
+
+        try:
+            # Check with MtzDmp
+            mtzdmp = MtzDmp(output_file)
+            mtzdmp.run()
+            space_group = mtzdmp.get_space_group()
+
+            self.assertEqual(space_group, "P 1 21 1")
+
+        finally:
+            os.remove(output_file)
 
 
 if __name__ == "__main__":
