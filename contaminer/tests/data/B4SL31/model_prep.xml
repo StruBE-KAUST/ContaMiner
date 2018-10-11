@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="ASCII" standalone="yes"?>
+<!--     model_prep output   -->
+<model_prep>
+error <err_level>         0 </err_level>
+message <err_message> normal termination </err_message>
+job <job>model_prep</job>
+vers <vers> --- MODEL_PREP --- /Vers 2.3.03; 27.05.2017/</vers>
+<sequence>
+nres_seq <nres_seq>    397 </nres_seq>
+n_structure <n_structure>      2 </n_structure>
+<structure>
+  PDB_code <PDB_code> 5jk4A </PDB_code>
+  <model>
+    complex <complex> 100 </complex>
+    chain <chain> A </chain>
+    domain <domain> 0 </domain>
+    n_residues <nres>        372 </nres>
+    similarity <similarity>   1.000 </similarity>
+    similarity_ens <similarity_ens>   1.000 </similarity_ens>
+    number of monomers <nmon>     0 </nmon>
+    <coordinates file_crd="mod_5jk4A_mono.pdb"/>
+    <coordinates file_ens="mod_5jk4A_mono_ens.pdb"/>
+  </model>
+  <model>
+    complex <complex> 100 </complex>
+    chain <chain> A </chain>
+    domain <domain>  1 </domain>
+    n_residues <nres>        170 </nres>
+    similarity <similarity>   1.000 </similarity>
+    similarity_ens <similarity_ens>   1.000 </similarity_ens>
+    number of monomers <nmon>     0 </nmon>
+    <coordinates file_crd="mod_5jk4A_1dom.pdb"/>
+    <coordinates file_ens="mod_5jk4A_1dom_ens.pdb"/>
+  </model>
+  <model>
+    complex <complex> 100 </complex>
+    chain <chain> A </chain>
+    domain <domain>  2 </domain>
+    n_residues <nres>        146 </nres>
+    similarity <similarity>   1.000 </similarity>
+    similarity_ens <similarity_ens>   1.000 </similarity_ens>
+    number of monomers <nmon>     0 </nmon>
+    <coordinates file_crd="mod_5jk4A_2dom.pdb"/>
+    <coordinates file_ens="mod_5jk4A_2dom_ens.pdb"/>
+  </model>
+</structure>
+<structure>
+  PDB_code <PDB_code> MDOM </PDB_code>
+  <model>
+    complex <complex> 100 </complex>
+    chain <chain> A </chain>
+    domain <domain>  1 </domain>
+    domain_code <domain_code> 5jk4A_1 </domain_code>
+    n_residues <nres>        170 </nres>
+    similarity <similarity>   1.000 </similarity>
+    similarity_ens <similarity_ens>   1.000 </similarity_ens>
+    number of monomers <nmon>     0 </nmon>
+    <coordinates file_crd="mod_5jk4A_1_1dom.pdb"/>
+    <coordinates file_ens="mod_5jk4A_1_1dom_ens.pdb"/>
+  </model>
+  <model>
+    complex <complex> 100 </complex>
+    chain <chain> A </chain>
+    domain <domain>  2 </domain>
+    domain_code <domain_code> 5jk4A_2 </domain_code>
+    n_residues <nres>        146 </nres>
+    similarity <similarity>   1.000 </similarity>
+    similarity_ens <similarity_ens>   1.000 </similarity_ens>
+    number of monomers <nmon>     0 </nmon>
+    <coordinates file_crd="mod_5jk4A_2_2dom.pdb"/>
+    <coordinates file_ens="mod_5jk4A_2_2dom_ens.pdb"/>
+  </model>
+  <model>
+    complex <complex> 100 </complex>
+    chain <chain> A </chain>
+    domain <domain>  3 </domain>
+    domain_code <domain_code> 2ipxA_1 </domain_code>
+    n_residues <nres>         39 </nres>
+    similarity <similarity>   0.128 </similarity>
+    similarity_ens <similarity_ens>   0.500 </similarity_ens>
+    number of monomers <nmon>     0 </nmon>
+    <coordinates file_crd="mod_2ipxA_1_3dom.pdb"/>
+    <coordinates file_ens="mod_2ipxA_1_3dom_ens.pdb"/>
+  </model>
+</structure>
+</sequence>
+</model_prep>
