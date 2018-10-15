@@ -10,6 +10,7 @@ ArgumentsListManager
 """
 
 import json
+import logging
 import os
 
 from contaminer.ccp4 import AltSgList
@@ -17,6 +18,7 @@ from contaminer.ccp4 import Cif2Mtz
 from contaminer.ccp4 import MtzDmp
 
 CONTABASE_DIR = os.path.expanduser("~/.contaminer/ContaBase")
+LOG = logging.getLogger(__name__)
 
 
 class ArgumentsListManager():
@@ -54,6 +56,7 @@ class ArgumentsListManager():
             str_nb_packs = pack_file.read()
 
         nb_packs = int(str_nb_packs)
+        LOG.debug("Get %s packs for model %s.", nb_packs, model)
         return nb_packs
 
     def create(self, input_file, models=None):
@@ -70,20 +73,24 @@ class ArgumentsListManager():
             if given, use the default list of contaminants.
 
         """
+        LOG.info("Create arguments for %s, %s.", input_file, models)
         # Have an MTZ file to get the space group
         cif2mtz_task = Cif2Mtz(input_file)
         cif2mtz_task.run()
         mtz_file = cif2mtz_task.get_output_file()
+        LOG.debug("mtz_file: %s.", mtz_file)
 
         # Get space group
         mtz_dmp_task = MtzDmp(mtz_file)
         mtz_dmp_task.run()
         input_space_group = mtz_dmp_task.get_space_group()
+        LOG.debug("Input space group: %s.", input_space_group)
 
         # Get alternate space groups
         alt_sg_task = AltSgList(input_space_group)
         alt_sg_task.run()
         alt_space_groups = alt_sg_task.get_alt_space_groups()
+        LOG.debug("Alt space groups: %s.", alt_space_groups)
 
         self._args_list = []
 
@@ -114,6 +121,7 @@ class ArgumentsListManager():
             Path to the save file to write.
 
         """
+        LOG.debug("Save arguments to %s.", save_filepath)
         with open(save_filepath, 'w') as save_file:
             save_file.write(json.dumps(self._args_list))
 
@@ -127,5 +135,6 @@ class ArgumentsListManager():
             Path to the save file to load.
 
         """
+        LOG.debug("Load arguments from %s.", save_filepath)
         with open(save_filepath, 'r') as save_file:
             self._args_list = json.loads(save_file.read())

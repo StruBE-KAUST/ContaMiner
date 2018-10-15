@@ -18,7 +18,7 @@ import sys
 import tempfile
 from xml.etree import ElementTree
 
-LOGGER = logging.getLogger(__name__)
+LOG = logging.getLogger(__name__)
 
 
 class Morda():
@@ -61,7 +61,7 @@ class Morda():
         command_line = self._build_command()
 
         # Run MoRDa
-        LOGGER.debug("Run line: %s", command_line)
+        LOG.debug("Run line: %s", command_line)
         try:
             popen = subprocess.Popen(command_line,
                                      stdout=subprocess.PIPE,
@@ -73,6 +73,7 @@ class Morda():
 
         stdout, stderr = popen.communicate()
 
+        LOG.debug("Return code: %s.", popen.returncode)
         if popen.returncode != 0:
             print("Call to %s failed." % 'morda_' + self.tool,
                   file=sys.stderr)
@@ -104,6 +105,7 @@ class Morda():
         command_line = [tool_path]
         command_line.extend(self.args)
 
+        LOG.debug("Command built: %s.", command_line)
         return command_line
 
     def cleanup(self):
@@ -139,6 +141,7 @@ class MordaPrep(Morda):
 
     def cleanup(self):
         """Remove temporary directory."""
+        LOG.debug("Remove %s.", self._temp_dir)
         shutil.rmtree(self._temp_dir)
 
 
@@ -185,15 +188,17 @@ class MordaSolve(Morda):
 
         """
         xml_file_path = os.path.join(self.res_dir, "morda_solve.xml")
+        LOG.debug("Get results from %s.", xml_file_path)
         result_tree = ElementTree.parse(xml_file_path).getroot()
 
         # Check error
         error_code = int(result_tree.find('./err_level').text)
-        if error_code != 0:
-            if error_code != 7:  # No solution
+        LOG.debug("Err code: %s.", error_code)
+        if error_code != 0:  # Something unexpected happened
+            if error_code != 7:  # Not a "no solution"
                 error_message = result_tree.find('./message')
                 raise RuntimeError(error_message.text)
-            else:
+            else:  # err_code == 7 (ie no solution)
                 results = {
                     'q_factor': 0.0,
                     'percent': 0.0,
@@ -205,6 +210,7 @@ class MordaSolve(Morda):
                 }
                 return results
 
+        # err_code == 0 (ie no error)
         results = {}
         results['q_factor'] = float(result_tree.find('./q_factor').text)
         results['percent'] = float(result_tree.find('./percent').text)
@@ -218,6 +224,7 @@ class MordaSolve(Morda):
 
     def cleanup(self):
         """Remove temporary directory."""
+        LOG.debug("Remove %s.", self._temp_dir)
         shutil.rmtree(self._temp_dir)
 
 
@@ -249,12 +256,14 @@ class MtzDmp():
     def run(self):
         """Run mtzdmp on an MTZ file."""
         command_line = ['mtzdmp', self.file_path]
+        LOG.debug("Run %s.", command_line)
 
         try:
             popen = subprocess.Popen(command_line,
                                      stdout=subprocess.PIPE,
                                      stderr=subprocess.PIPE)
         except FileNotFoundError:
+            LOG.error("mtzdmp not found.")
             print(("Please make CCP4 available in your $PATH before using "
                    "ContaMiner."),
                   file=sys.stderr)
@@ -262,6 +271,7 @@ class MtzDmp():
 
         stdout, stderr = popen.communicate()
 
+        LOG.debug("Return code: %s.", popen.returncode)
         if popen.returncode != 0:
             print("Call to mtzdmp failed.",
                   file=sys.stderr)
@@ -288,6 +298,7 @@ class MtzDmp():
 
         """
         output_list = self.output.split('\n')
+        LOG.debug("Get space group from %s.", output_list)
         regexp = r'\* Space group = \'([A-Z0-9 ]+)\''
 
         for line in output_list:
@@ -338,12 +349,14 @@ class AltSgList():
                         '-sg', self.space_group,
                         '-po', self._temp_dir,
                         '-ps', self._temp_dir]
+        LOG.debug("Run %s.", command_line)
 
         try:
             popen = subprocess.Popen(command_line,
                                      stdout=subprocess.PIPE,
                                      stderr=subprocess.PIPE)
         except FileNotFoundError:
+            LOG.error("alt_sg_list not found.")
             print(("Please make CCP4 available in your $PATH before using "
                    "ContaMiner."),
                   file=sys.stderr)
@@ -351,6 +364,7 @@ class AltSgList():
 
         stdout, stderr = popen.communicate()
 
+        LOG.debug("Return code: %s.", popen.returncode)
         if popen.returncode != 0:
             print("Call to alt_sg_list failed.",
                   file=sys.stderr)
@@ -389,6 +403,7 @@ class AltSgList():
 
     def cleanup(self):
         """Remove temporary directory."""
+        LOG.debug("Remove %s.", self._temp_dir)
         shutil.rmtree(self._temp_dir)
 
 
@@ -434,6 +449,7 @@ class Cif2Mtz():
         self.output_file = filename + '.mtz'
         command_line = ['cif2mtz', 'HKLIN', self.input_file,
                         'HKLOUT', self.output_file]
+        LOG.debug("Run %s.", command_line)
 
         try:
             popen = subprocess.Popen(command_line,
@@ -445,8 +461,9 @@ class Cif2Mtz():
             stdout = popen.stdout.read()
             stderr = popen.stdout.read()
         except FileNotFoundError:
+            LOG.error("cif2mtz not found.")
             print(("Please make CCP4 available in your $PATH before using "
-                   "ConteMiner."),
+                   "ContaMiner."),
                   file=sys.stderr)
             raise RuntimeError("cif2mtz cannot be found.")
 
@@ -454,6 +471,7 @@ class Cif2Mtz():
             popen.stdout.close()
             popen.stderr.close()
 
+        LOG.debug("Return code: %s.", popen.returncode)
         if popen.returncode != 0:
             print("Call to mtzdmp failed.",
                   file=sys.stderr)
