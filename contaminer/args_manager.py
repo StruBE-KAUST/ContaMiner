@@ -9,6 +9,7 @@ ArgumentsListManager
 
 """
 
+import json
 import os
 
 from contaminer.ccp4 import AltSgList
@@ -100,3 +101,31 @@ class ArgumentsListManager():
                         'pack_number': pack_number,
                         'space_group': alt_sg
                     })
+
+    def save(self, save_filepath):
+        """
+        Save the list of arguments in a file.
+
+        Dump the arguments in json format in a file located in filepath.
+
+        Parameters
+        ----------
+        save_filepath: string
+            Path to the save file to write.
+
+        """
+        with open(save_filepath, 'w') as save_file:
+            save_file.write(json.dumps(self._args_list))
+
+    def load(self, save_filepath):
+        """
+        Load a list of arguments from a save file.
+
+        Parameters
+        ----------
+        save_filepath: string
+            Path to the save file to load.
+
+        """
+        with open(save_filepath, 'r') as save_file:
+            self._args_list = json.loads(save_file.read())
