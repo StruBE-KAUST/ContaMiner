@@ -456,10 +456,6 @@ class Cif2Mtz():
                                      stdin=subprocess.PIPE,
                                      stdout=subprocess.PIPE,
                                      stderr=subprocess.PIPE)
-            popen.stdin.close()
-            popen.wait()
-            stdout = popen.stdout.read()
-            stderr = popen.stdout.read()
         except FileNotFoundError:
             LOG.error("cif2mtz not found.")
             print(("Please make CCP4 available in your $PATH before using "
@@ -467,6 +463,11 @@ class Cif2Mtz():
                   file=sys.stderr)
             raise RuntimeError("cif2mtz cannot be found.")
 
+        try:
+            popen.stdin.close()
+            popen.wait()
+            stdout = popen.stdout.read()
+            stderr = popen.stdout.read()
         finally:
             popen.stdout.close()
             popen.stderr.close()
