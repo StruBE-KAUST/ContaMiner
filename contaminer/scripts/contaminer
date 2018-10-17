@@ -1,0 +1,42 @@
+#!/usr/bin/env python
+"""Command line interface for ContaMiner."""
+
+import argh
+from argh import arg
+from contaminer import contaminer
+
+
+def init():
+    """
+    Initialize the ContaBase.
+
+    """
+    raise NotImplementedError("Implementation in progress.")
+
+
+@arg('diffraction_file', help="MTZ or CIF file.")
+@arg('models', nargs='*', help="List of contaminants to test.")
+def prepare(diffraction_file, models):
+    """
+    Prepare a task.
+
+    Generate arguments file and put all files in the right place.
+
+    """
+    contaminer.prepare(diffraction_file, models)
+
+
+def solve():
+    """
+    Run the solving task.
+
+    """
+    raise NotImplementedError("Implementation in progress.")
+
+
+if __name__ == "__main__":
+    argh.dispatch_commands([
+        init,
+        prepare,
+        solve,
+    ])

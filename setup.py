@@ -13,4 +13,11 @@ REQUIREMENTS = open(os.path.join(os.path.dirname(__file__),
 setup(name='contaminer',
       version='1.0.1',
       install_requires=REQUIREMENTS,
-      packages=find_packages())
+      packages=find_packages(),
+      scripts=['contaminer/scripts/contaminer'],
+      author="Arnaud Hungler",
+      description=("Rapid automated large-scale detection of contaminant "
+                   "crystals"),
+      author_email="arnaud.hungler@kaust.edu.sa",
+      url="https://github.com/StruBE-KAUST/ContaMiner",
+      )
