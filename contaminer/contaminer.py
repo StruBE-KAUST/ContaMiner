@@ -1,5 +1,7 @@
 """Provide entry point commands for ContaMiner."""
 
+import os
+import shutil
 import sys
 import time
 from mpi4py import MPI
@@ -9,6 +11,7 @@ from contaminer.ccp4 import MordaSolve
 
 MASTER_RANK = 0
 MRD_RESULTS_TAG = 11
+ARGS_FILENAME = "args.json"
 
 
 def prepare(diffraction_file, models):
@@ -21,29 +24,40 @@ def prepare(diffraction_file, models):
         Path to MTZ or CIF file
 
     models: list(string)
-        List of contaminants to test with diffraciton file.
+        List of contaminants to test with diffraction file.
 
     """
 
+    # Create working directory
+    file_name = os.path.basename(diffraction_file)
+    dir_name = os.path.splitext(file_name)[0]
+    os.mkdir(dir_name)
+
+    diffraction_file = os.path.abspath(diffraction_file)
+    os.chdir(dir_name)
+    shutil.copyfile(diffraction_file, file_name)
+
     tasks_manager = TasksManager()
-    tasks_manager.create(diffraction_file, models)
-    tasks_manager.save("args.json")
+    tasks_manager.create(file_name, models)
+    tasks_manager.save(ARGS_FILENAME)
 
     # Number of workers + 1 master
     print("Need %s processes."
           % str(len(tasks_manager.get_arguments()) + 1))
 
 
-def solve(args_file):
+def solve(prep_dir):
     """
     Run the morda_solve processes for the given arguments file.
 
     Parameters
     ----------
-    args_file: string
-        Path to the arguments file generated during the prepare step.
+    prep_dir: string
+        Path to the directory generated during the prepare step.
 
     """
+
+    os.chdir(prep_dir)
 
     mpi_comm = MPI.COMM_WORLD
     mpi_size = mpi_comm.Get_size()
@@ -53,7 +67,7 @@ def solve(args_file):
     # Load args on master rank.
     if mpi_rank == MASTER_RANK:
         tasks_manager = TasksManager()
-        tasks_manager.load(args_file)
+        tasks_manager.load(ARGS_FILENAME)
         args_list = tasks_manager.get_arguments()
 
         # Add an empty space for master as it does not need args.
@@ -99,4 +113,4 @@ def solve(args_file):
                 results=new_result['results'],
                 status="complete")
             tasks_manager.display_progress()
-            tasks_manager.save("args.json")
+            tasks_manager.save(ARGS_FILENAME)
