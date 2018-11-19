@@ -99,3 +99,4 @@ def solve(args_file):
                 index,
                 results=new_result['results'],
                 status="complete")
+            tasks_manager.save("args.json")
