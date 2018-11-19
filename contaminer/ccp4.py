@@ -11,6 +11,7 @@ MordaSolve
 
 import logging
 import os
+import pathlib
 import re
 import shutil
 import subprocess
@@ -161,7 +162,7 @@ class MordaSolve(Morda):
                 '-sg', space_group]
 
         pack_number = str(pack_number)
-        model_name = os.path.basename(os.path.normpath(model_dir))
+        model_name = pathlib.Path(model_dir).parent.name
         self.res_dir = '_'.join([model_name, pack_number, dashed_space_group])
 
         args.extend(['-r', self.res_dir])
