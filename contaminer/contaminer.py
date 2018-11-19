@@ -83,9 +83,8 @@ def solve(args_file):
 
     # Receive results on rank #0
     else:
+        tasks_manager.display_progress()
         while not tasks_manager.complete:
-            tasks_manager.display_progress()
-
             # Get results sent on tag = MRD_RESULTS_TAG a few lines before.
             new_result = mpi_comm.recv(
                 source=MPI.ANY_SOURCE, tag=MRD_RESULTS_TAG)
@@ -99,4 +98,5 @@ def solve(args_file):
                 index,
                 results=new_result['results'],
                 status="complete")
+            tasks_manager.display_progress()
             tasks_manager.save("args.json")
