@@ -9,6 +9,7 @@ TasksManager
 
 """
 
+import copy
 import json
 import logging
 import os
@@ -149,7 +150,7 @@ class TasksManager():
             The list of arguments for morda_solve.
 
         """
-        return self._args
+        return copy.deepcopy(self._args)
 
     def save(self, save_filepath):
         """
