@@ -490,3 +490,84 @@ class Cif2Mtz():
     def get_output_file(self):
         """Return the path to the converted file."""
         return self.output_file
+
+class Mtz2Map():
+    """
+    Wrapper for sftools to convert a MTZ file into 2 MAP files.
+
+    One file contains the electronic density map. The second file is the
+    difference between the experimental and the computed electronic density
+    map.
+
+    Attributes
+    ----------
+    input_file: string
+        The path to the MTZ file to convert to MAP.
+
+    Methods
+    -------
+    run
+        Run sftools to convert the file to MAP.
+
+    get_output_file
+        Get the path to the output MAP files.
+
+    """
+
+    def __init__(self, input_file):
+        self.input_file = input_file
+        self.output_map_file = None
+        self.output_diff_file = None
+
+    def run(self):
+        """Run sftools and give the proper commands to convert to MAP."""
+        filename, ext = os.path.splitext(self.input_file)
+        self.output_map_file = filename + '.map'
+        self.output_diff_file = filename + '_diff.map'
+
+        command_line = ['sftools']
+        input_command = "read %s\n" % (self.input_file)
+        input_command += "fft col FWT PHWT\n"
+        input_command += "mapout %s\n" % (self.output_map_file)
+        input_command += "delete map\n"
+        input_command += "fft col DELFWT PHDELWT\n"
+        input_command += "mapout %s\n" % (self.output_diff_file)
+
+        try:
+            popen = subprocess.Popen(command_line,
+                                     stdin=subprocess.PIPE,
+                                     stdout=subprocess.PIPE,
+                                     stderr=subprocess.PIPE)
+        except FileNotFoundError:
+            LOG.error("sftools not found.")
+            print(("Please make CCP4 available in your $PATH before using "
+                   "ContaMiner."),
+                  file=sys.stderr)
+            raise RuntimeError("sftools cannot be found.")
+
+        (stdout, stderr) = popen.communicate(
+            input=bytes(input_command, 'UTF-8'))
+
+        LOG.debug("Return code: %s.", popen.returncode)
+        if popen.returncode != 0:
+            print("Call to sftools failed.",
+                  file=sys.stderr)
+            print("-" * 50,
+                  file=sys.stderr)
+            print("Output: \n%s" % stdout.decode('UTF-8'),
+                  file=sys.stderr)
+            print("Error: \n%s" % stderr.decode('UTF-8'),
+                  file=sys.stderr)
+            print("-" * 50,
+                  file=sys.stderr)
+            raise RuntimeError("Call to sftools failed.")
+
+    def get_output_file(self):
+        """
+        Return the path to the electronic density files.
+
+        The first one is the computed density map, while the second is the
+        difference between the real and the computed.
+
+        """
+        return (self.output_map_file, self.output_diff_file)
