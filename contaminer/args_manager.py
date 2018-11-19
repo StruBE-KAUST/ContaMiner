@@ -3,7 +3,7 @@ Provide the tools to manage the list of arguments.
 
 Classes
 -------
-ArgumentsListManager
+TasksManager
     Use this class to create the list of arguments, get the parameters for
     a job, ...
 
@@ -21,19 +21,44 @@ CONTABASE_DIR = os.path.expanduser("~/.contaminer/ContaBase")
 LOG = logging.getLogger(__name__)
 
 
-class ArgumentsListManager():
+class TasksManager():
     """
-    Get the arguments.
+    Manage the tasks arguments, status and results.
+
+    Attributes
+    ----------
+    complete: boolean
+        True if all tasks are all complete.
 
     Methods
     -------
     create
         Create the list, and add the list of tasks parameters.
 
+    save
+        Save the list of arguments in a file.
+
+    load
+        Load the list of arguments from a file.
+
+    get_arguments
+        Return the list of arguments as a list. Each item is a dicitonary
+        of kwargs to give to morda_solve.
+
+    update
+        Update the status of one or more jobs and optionaly add results.
+
+    Warning
+    -------
+    This class is NOT thread-safe. It should be used only in the master
+    process to avoid racing conditions to the args file when saving.
+
     """
 
     def __init__(self):
-        self._args_list = []
+        self._args = []
+        self._results = []
+        self._status = []
 
     @staticmethod
     def _get_nb_packs(model):
@@ -92,7 +117,7 @@ class ArgumentsListManager():
         alt_space_groups = alt_sg_task.get_alt_space_groups()
         LOG.debug("Alt space groups: %s.", alt_space_groups)
 
-        self._args_list = []
+        self._args = []
 
         # Build arguments
         for model in models:
@@ -101,13 +126,30 @@ class ArgumentsListManager():
 
             for pack_number in range(1, nb_packs+1):
                 for alt_sg in alt_space_groups:
-                    self._args_list.append({
+                    self._args.append({
                         'input_file': input_file,
                         'model_dir': os.path.join(
                             CONTABASE_DIR, model, 'models'),
                         'pack_number': pack_number,
                         'space_group': alt_sg
                     })
+
+        self._results = [None for i in range(len(self._args))]
+        self._status = ["new" for i in range(len(self._args))]
+
+    def get_arguments(self):
+        """
+        Return the list of arguments for the tasks.
+
+        Each item is a dictionary of kwargs to give to morda_solve.
+
+        Return
+        ------
+        list(dictionary)
+            The list of arguments for morda_solve.
+
+        """
+        return self._args
 
     def save(self, save_filepath):
         """
@@ -122,8 +164,14 @@ class ArgumentsListManager():
 
         """
         LOG.debug("Save arguments to %s.", save_filepath)
+
+        data = {
+            'args': self._args,
+            'results': self._results,
+            'status': self._status
+        }
         with open(save_filepath, 'w') as save_file:
-            save_file.write(json.dumps(self._args_list))
+            save_file.write(json.dumps(data))
 
     def load(self, save_filepath):
         """
@@ -137,4 +185,45 @@ class ArgumentsListManager():
         """
         LOG.debug("Load arguments from %s.", save_filepath)
         with open(save_filepath, 'r') as save_file:
-            self._args_list = json.loads(save_file.read())
+            data = json.loads(save_file.read())
+
+        self._args = data['args']
+        self._results = data['results']
+        self._status = data['status']
+
+    def update(self, *ranks, results=None, status=None):
+        """
+        Update the status and results for some tasks.
+
+        If given, change the results and status of the selected tasks.
+
+        Parameters
+        ----------
+        ranks: pack
+            The rank of the tasks to update.
+
+        results: dictionary
+            The result to set for the given ranks. By default, do not change.
+
+        status: dictionary
+            The status to set for the given ranks. By default, do not change.
+
+        """
+
+        for rank in ranks:
+            if status:
+                self._status[rank] = status
+            if results:
+                self._results[rank] = results
+
+    @property
+    def complete(self):
+        """Return True if all Tasks are complete. False otherwise."""
+        return all([item == "complete" for item in self._status])
+
+    def display_progress(self):
+        """Print the task progress."""
+        total = len(self._args)
+        done = len([status for status in self._status if status == "complete"])
+
+        print("%s/%s" % (done, total))
