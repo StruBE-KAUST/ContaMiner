@@ -90,7 +90,12 @@ def solve(args_file):
             new_result = mpi_comm.recv(
                 source=MPI.ANY_SOURCE, tag=MRD_RESULTS_TAG)
 
+            # Convert rank to array index
+            index = new_result['rank']
+            if index > MASTER_RANK:
+                index -= 1
+
             tasks_manager.update(
-                new_result['rank'],
+                index,
                 results=new_result['results'],
                 status="complete")
