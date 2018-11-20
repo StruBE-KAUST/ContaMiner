@@ -9,9 +9,15 @@ from mpi4py import MPI
 from contaminer.args_manager import TasksManager
 from contaminer.ccp4 import MordaSolve
 
+# Configuration
 MASTER_RANK = 0
 MRD_RESULTS_TAG = 11
 ARGS_FILENAME = "tasks.json"
+
+# Const par process
+MPI_COMM = MPI.COMM_WORLD
+MPI_SIZE = MPI_COMM.Get_size()
+MPI_RANK= MPI_COMM.Get_rank()
 
 
 def prepare(diffraction_file, models):
@@ -59,13 +65,10 @@ def solve(prep_dir):
 
     os.chdir(prep_dir)
 
-    mpi_comm = MPI.COMM_WORLD
-    mpi_size = mpi_comm.Get_size()
-    mpi_rank = mpi_comm.Get_rank()
 
     args_list = None
     # Load args on master rank.
-    if mpi_rank == MASTER_RANK:
+    if MPI_RANK == MASTER_RANK:
         tasks_manager = TasksManager()
         tasks_manager.load(ARGS_FILENAME)
         args_list = tasks_manager.get_arguments()
@@ -73,34 +76,28 @@ def solve(prep_dir):
         # Add an empty space for master as it does not need args.
         args_list.insert(MASTER_RANK, None)
 
-        if mpi_size < len(args_list):
+        if MPI_SIZE < len(args_list):
             print("Not enough MPI sockets", file=sys.stderr)
-            mpi_comm.Abort(1)
+            MPI_COMM.Abort(1)
 
         # Change tasks status to "running".
-        tasks_manager.update(*range(mpi_size-1), status="running")
+        tasks_manager.update(*range(MPI_SIZE-1), status="running")
 
     # Send args to all ranks.
-    arguments = mpi_comm.scatter(args_list, root=MASTER_RANK)
+    arguments = MPI_COMM.scatter(args_list, root=MASTER_RANK)
 
     # Compute on all worker ranks.
-    if mpi_rank != MASTER_RANK:
-        mrds = MordaSolve(**arguments)
-        mrds.run()
-        results = mrds.get_results()
-        ranked_results = {
-            'rank': mpi_rank,
-            'results': results
-        }
+    if MPI_RANK != MASTER_RANK:
+        ranked_results = _run(arguments)
         # Send results tag = MRD_RESULTS_TAG
-        mpi_comm.send(ranked_results, dest=MASTER_RANK, tag=MRD_RESULTS_TAG)
+        MPI_COMM.send(ranked_results, dest=MASTER_RANK, tag=MRD_RESULTS_TAG)
 
     # Receive results on rank #0
     else:
         tasks_manager.display_progress()
         while not tasks_manager.complete:
             # Get results sent on tag = MRD_RESULTS_TAG a few lines before.
-            new_result = mpi_comm.recv(
+            new_result = MPI_COMM.recv(
                 source=MPI.ANY_SOURCE, tag=MRD_RESULTS_TAG)
 
             # Convert rank to array index
@@ -114,3 +111,28 @@ def solve(prep_dir):
                 status="complete")
             tasks_manager.display_progress()
             tasks_manager.save(ARGS_FILENAME)
+
+def _run(arguments):
+    """
+    Run one instance of morda_solve, then post-process.
+
+    Parameters
+    ----------
+    arguments: dictionary
+        The arguments to give to MordaSolve.
+
+    Return
+    ------
+    dictionary
+        The results to send back to the master process.
+
+    """
+    mrds = MordaSolve(**arguments)
+    mrds.run()
+    results = mrds.get_results()
+    ranked_results = {
+        'rank': MPI_RANK,
+        'results': results
+    }
+
+    return ranked_results
