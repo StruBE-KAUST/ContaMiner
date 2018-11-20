@@ -8,6 +8,7 @@ from mpi4py import MPI
 
 from contaminer.args_manager import TasksManager
 from contaminer.ccp4 import MordaSolve
+from contaminer.ccp4 import Mtz2Map
 
 # Configuration
 MASTER_RANK = 0
@@ -130,9 +131,16 @@ def _run(arguments):
     mrds = MordaSolve(**arguments)
     mrds.run()
     results = mrds.get_results()
+    results['available_final'] = False
     ranked_results = {
         'rank': MPI_RANK,
         'results': results
     }
 
+    final_mtz_path = os.path.join(mrds.res_dir, "final.mtz")
+    if os.path.exists(final_mtz_path):
+        map_converter = Mtz2Map(final_mtz_path)
+        map_converter.run()
+        results['available_final'] = True
+    
     return ranked_results
