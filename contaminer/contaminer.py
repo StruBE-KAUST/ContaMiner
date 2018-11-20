@@ -11,7 +11,7 @@ from contaminer.ccp4 import MordaSolve
 
 MASTER_RANK = 0
 MRD_RESULTS_TAG = 11
-ARGS_FILENAME = "args.json"
+ARGS_FILENAME = "tasks.json"
 
 
 def prepare(diffraction_file, models):
