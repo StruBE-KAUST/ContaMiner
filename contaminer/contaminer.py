@@ -6,6 +6,7 @@ import sys
 import time
 from mpi4py import MPI
 
+from contaminer.args_manager import CONTABASE_DIR
 from contaminer.args_manager import TasksManager
 from contaminer.ccp4 import MordaSolve
 from contaminer.ccp4 import Mtz2Map
@@ -34,6 +35,10 @@ def prepare(diffraction_file, models):
         List of contaminants to test with diffraction file.
 
     """
+
+    # Convert models to real list
+    if models == ["all"]:
+        models = _get_all_models()
 
     # Create working directory
     file_name = os.path.basename(diffraction_file)
@@ -112,6 +117,18 @@ def solve(prep_dir):
                 status="complete")
             tasks_manager.display_progress()
             tasks_manager.save(ARGS_FILENAME)
+
+def _get_all_models():
+    """
+    Return the list of all models available in the ContaBase.
+
+    Return
+    ------
+    list(string)
+        List of contaminants in the ContaBase
+
+    """
+    return os.listdir(CONTABASE_DIR)
 
 def _run(arguments):
     """
