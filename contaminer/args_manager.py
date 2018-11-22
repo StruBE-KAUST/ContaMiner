@@ -17,8 +17,8 @@ import os
 from contaminer.ccp4 import AltSgList
 from contaminer.ccp4 import Cif2Mtz
 from contaminer.ccp4 import MtzDmp
+from contaminer.config import *
 
-CONTABASE_DIR = os.path.expanduser("~/.contaminer/ContaBase")
 LOG = logging.getLogger(__name__)
 
 

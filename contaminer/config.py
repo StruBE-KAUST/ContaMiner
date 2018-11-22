@@ -4,6 +4,15 @@ import configparser
 import errno
 import os
 
+# Hard configuration until we move everything to config file.
+MASTER_RANK = 0
+MRD_RESULTS_TAG = 11
+ARGS_FILENAME = "tasks.json"
+TEMPLATE_PATH = os.path.expanduser("~/.contaminer/job_template.sh")
+SCHEDULER_COMMAND = "sbatch"
+JOB_SCRIPT = "solve.sbatch"
+CONTABASE_DIR = os.path.expanduser("~/.contaminer/ContaBase")
+
 
 class UserConfig():
     """
