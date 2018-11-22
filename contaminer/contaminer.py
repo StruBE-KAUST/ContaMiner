@@ -131,6 +131,7 @@ def submit(prep_dir):
     """
 
     prep_dir = os.path.abspath(prep_dir)
+    prep_name = os.path.basename(prep_dir)
     os.chdir(prep_dir)
 
     nb_procs = _get_number_procs(prep_dir)
@@ -140,7 +141,8 @@ def submit(prep_dir):
 
     script_content = template_content.replace(
         "%NB_PROCS%", str(nb_procs)).replace(
-            "%PREP_DIR%", prep_dir)
+            "%PREP_DIR%", prep_dir).replace(
+                "%PREP_NAME%", prep_name)
 
     with open(JOB_SCRIPT, 'w') as job_script:
         job_script.write(script_content)
