@@ -34,10 +34,21 @@ def solve(prep_dir):
     """
     contaminer.solve(prep_dir)
 
+@arg('prep_dir', help="Directory created by prepare step.")
+def submit(prep_dir):
+    """
+    Submit the job to a scheduler.
+
+    Fill in a template, and use the provided command to submit the script
+    to a job scheduler.
+
+    """
+    contaminer.submit(prep_dir)
 
 if __name__ == "__main__":
     argh.dispatch_commands([
         init,
         prepare,
         solve,
+        submit,
     ])

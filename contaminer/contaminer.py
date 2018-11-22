@@ -2,6 +2,7 @@
 
 import os
 import shutil
+import subprocess
 import sys
 import time
 from mpi4py import MPI
@@ -15,6 +16,9 @@ from contaminer.ccp4 import Mtz2Map
 MASTER_RANK = 0
 MRD_RESULTS_TAG = 11
 ARGS_FILENAME = "tasks.json"
+TEMPLATE_PATH = os.path.expanduser("~/.contaminer/job_template.sh")
+SCHEDULER_COMMAND = "sbatch"
+JOB_SCRIPT = "solve.sbatch"
 
 # Const par process
 MPI_COMM = MPI.COMM_WORLD
@@ -71,7 +75,6 @@ def solve(prep_dir):
 
     os.chdir(prep_dir)
 
-
     args_list = None
     # Load args on master rank.
     if MPI_RANK == MASTER_RANK:
@@ -118,6 +121,38 @@ def solve(prep_dir):
             tasks_manager.display_progress()
             tasks_manager.save(ARGS_FILENAME)
 
+def submit(prep_dir):
+    """
+    Submit the job to a scheduler.
+
+    Fill in a template, and use the provided command to submit the script
+    to a job scheduler.
+
+    """
+
+    prep_dir = os.path.abspath(prep_dir)
+    os.chdir(prep_dir)
+
+    nb_procs = _get_number_procs(prep_dir)
+
+    with open(TEMPLATE_PATH, 'r') as template_file:
+        template_content = template_file.read()
+
+    script_content = template_content.replace(
+        "%NB_PROCS%", str(nb_procs)).replace(
+            "%PREP_DIR%", prep_dir)
+
+    with open(JOB_SCRIPT, 'w') as job_script:
+        job_script.write(script_content)
+
+    # Submit newly written script
+    command = [SCHEDULER_COMMAND, JOB_SCRIPT]
+    popen = subprocess.Popen(command,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+    stdout, stderr = popen.communicate()
+    print(stdout.decode('UTF-8'))
+
 def _get_all_models():
     """
     Return the list of all models available in the ContaBase.
@@ -161,3 +196,20 @@ def _run(arguments):
         results['available_final'] = True
     
     return ranked_results
+
+def _get_number_procs(prep_dir):
+    """
+    Return the number of processes required to run the task.
+
+    Return
+    ------
+    integer
+        The number of processes required to run the task.
+
+    """
+    os.chdir(prep_dir)
+
+    tasks_manager = TasksManager()
+    tasks_manager.load(ARGS_FILENAME)
+    args_list = tasks_manager.get_arguments()
+    return len(args_list) + 1
