@@ -44,6 +44,7 @@ def solve(prep_dir):
 
         # Change tasks status to "running".
         tasks_manager.update(*range(MPI_SIZE-1), status="running")
+        tasks_manager.save(ARGS_FILENAME)
 
     # Send args to all ranks.
     arguments = MPI_COMM.scatter(args_list, root=MASTER_RANK)
