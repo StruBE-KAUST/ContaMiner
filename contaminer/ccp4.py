@@ -485,7 +485,7 @@ class Cif2Mtz():
                   file=sys.stderr)
             print("-" * 50,
                   file=sys.stderr)
-            raise RuntimeError("Call to mtzdmp failed.")
+            raise RuntimeError("Call to cif2mtz failed.")
 
     def get_output_file(self):
         """Return the path to the converted file."""
