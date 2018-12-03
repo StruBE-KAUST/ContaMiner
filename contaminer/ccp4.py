@@ -443,7 +443,7 @@ class Cif2Mtz():
         filename, ext = os.path.splitext(self.input_file)
 
         # If input file is already MTZ, stop here.
-        if ext.lower() == "mtz":
+        if ext.lower() == ".mtz":
             self.output_file = self.input_file
             return
 
