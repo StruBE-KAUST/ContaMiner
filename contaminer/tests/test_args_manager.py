@@ -19,10 +19,10 @@ class ArgumentsListManagerTest(unittest.TestCase):
     def test_create(self):
         """Create proper arguments list."""
         os.chdir(os.path.join(TEST_DIR, "data"))
-        manager = args_manager.ArgumentsListManager()
+        manager = args_manager.TasksManager()
         manager.create('5jk4-sf.cif', ['B4SL31'])
 
-        args_list = manager._args_list
+        args_list = manager.get_arguments()
 
         self.assertEqual(len(args_list), 10)
         self.assertIn(
@@ -39,7 +39,7 @@ class ArgumentsListManagerTest(unittest.TestCase):
         os.chdir(os.path.join(TEST_DIR, "data"))
 
         # Save a list of args.
-        saver = args_manager.ArgumentsListManager()
+        saver = args_manager.TasksManager()
         saver.create('5jk4-sf.cif', ['B4SL31'])
         temp_save_file = tempfile.mktemp()
 
@@ -47,11 +47,11 @@ class ArgumentsListManagerTest(unittest.TestCase):
             saver.save(temp_save_file)
 
             # Load saved args.
-            loader = args_manager.ArgumentsListManager()
+            loader = args_manager.TasksManager()
             loader.load(temp_save_file)
 
             # Args should be the same
-            self.assertEqual(saver._args_list, loader._args_list)
+            self.assertEqual(saver.get_arguments(), loader.get_arguments())
         finally:
             os.remove(temp_save_file)
 

@@ -78,7 +78,10 @@ class MordaSolveTest(unittest.TestCase):
     def test_get_results(self):
         """get_results should return the scores from the results file."""
         os.chdir(os.path.join(TEST_DIR, "data"))
-        morda_solve = MordaSolve("5jk4-sf.cif", "models", 1, "P 1 21 1")
+        morda_solve = MordaSolve("5jk4-sf.cif",
+                                 "B4SL31/models",
+                                 1,
+                                 "P 1 21 1")
         # morda_solve.run() # Disabled as the dir is provided with the project.
         results = morda_solve.get_results()
         self.assertDictEqual(
@@ -96,7 +99,10 @@ class MordaSolveTest(unittest.TestCase):
     def test_get_no_solution(self):
         """get_results returns scores if morda_solve reports no result."""
         os.chdir(os.path.join(TEST_DIR, "data"))
-        morda_solve = MordaSolve("5jk4-sf.cif", "models", 1, "P 1")
+        morda_solve = MordaSolve("5jk4-sf.cif",
+                                 "B4SL31/models",
+                                 1,
+                                 "P 1")
         # morda_solve.run() # Disabled as the dir is provided with the project.
         results = morda_solve.get_results()
         self.assertDictEqual(
@@ -165,8 +171,10 @@ class Mtz2MapTest(unittest.TestCase):
 
     def test_convert_map(self):
         """Properly convert a MTZ file."""
-        os.chdir(os.path.join(TEST_DIR, "data"))
-        mtz2map_process = Mtz2Map("5jk4-sf.mtz")
+        os.chdir(os.path.join(
+            os.path.join(TEST_DIR, "data"),
+            "B4SL31_1_P-1-21-1"))
+        mtz2map_process = Mtz2Map("final.mtz")
 
         mtz2map_process.run()
 
@@ -175,7 +183,7 @@ class Mtz2MapTest(unittest.TestCase):
         try:
             self.assertEqual(
                 output_files,
-                ("5jk4-sf.map", "5jk4-sf_diff.map"))
+                ("final.map", "final_diff.map"))
             for file in output_files:
                 self.assertTrue(os.path.isfile(file))
         finally:

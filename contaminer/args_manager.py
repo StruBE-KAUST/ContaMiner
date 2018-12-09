@@ -95,7 +95,7 @@ class TasksManager():
             The path to the input file to give as is to morda_solve.
 
         models: list(string)
-            The list of models to try to put in the mtz_file. If nothing
+            The list of contaminants to try to put in the mtz_file. If nothing
             if given, use the default list of contaminants.
 
         """
