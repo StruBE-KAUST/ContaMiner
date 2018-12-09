@@ -9,7 +9,7 @@ from contaminer.ccp4 import MordaSolve
 from contaminer.ccp4 import Mtz2Map
 from contaminer.config import *
 
-# Const par process
+# Const per process
 MPI_COMM = MPI.COMM_WORLD
 MPI_SIZE = MPI_COMM.Get_size()
 MPI_RANK= MPI_COMM.Get_rank()

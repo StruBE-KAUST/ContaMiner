@@ -475,7 +475,7 @@ class Cif2Mtz():
 
         LOG.debug("Return code: %s.", popen.returncode)
         if popen.returncode != 0:
-            print("Call to mtzdmp failed.",
+            print("Call to cif2mtz failed.",
                   file=sys.stderr)
             print("-" * 50,
                   file=sys.stderr)
@@ -562,12 +562,17 @@ class Mtz2Map():
                   file=sys.stderr)
             raise RuntimeError("Call to sftools failed.")
 
-    def get_output_file(self):
+    def get_output_files(self):
         """
         Return the path to the electronic density files.
 
         The first one is the computed density map, while the second is the
         difference between the real and the computed.
+
+        Return
+        ------
+        2-tuple:
+            String paths to the output files.
 
         """
         return (self.output_map_file, self.output_diff_file)
