@@ -1,4 +1,13 @@
-"""This module tests ccp4.py."""
+"""
+Test contaminer.ccp4.
+
+Classes
+-------
+MordaTest
+MordaPrepTest
+
+
+"""
 
 import os
 import unittest
@@ -8,6 +17,7 @@ from contaminer.ccp4 import Cif2Mtz
 from contaminer.ccp4 import Morda
 from contaminer.ccp4 import MordaPrep
 from contaminer.ccp4 import MordaSolve
+from contaminer.ccp4 import Mtz2Map
 from contaminer.ccp4 import MtzDmp
 
 
@@ -148,6 +158,29 @@ class Cif2MtzTest(unittest.TestCase):
 
         finally:
             os.remove(output_file)
+
+
+class Mtz2MapTest(unittest.TestCase):
+    """Test mtz2map wrapper."""
+
+    def test_convert_map(self):
+        """Properly convert a MTZ file."""
+        os.chdir(os.path.join(TEST_DIR, "data"))
+        mtz2map_process = Mtz2Map("5jk4-sf.mtz")
+
+        mtz2map_process.run()
+
+        output_files = mtz2map_process.get_output_files()
+
+        try:
+            self.assertEqual(
+                output_files,
+                ("5jk4-sf.map", "5jk4-sf_diff.map"))
+            for file in output_files:
+                self.assertTrue(os.path.isfile(file))
+        finally:
+            for file in output_files:
+                os.remove(file)
 
 
 if __name__ == "__main__":
