@@ -13,11 +13,13 @@ import copy
 import json
 import logging
 import os
+import shutil
 
 from contaminer.ccp4 import AltSgList
 from contaminer.ccp4 import Cif2Mtz
 from contaminer.ccp4 import MtzDmp
 from contaminer.config import *
+from contaminer.data.custom_template import XML_TEMPLATE
 
 LOG = logging.getLogger(__name__)
 
@@ -85,6 +87,43 @@ class TasksManager():
         LOG.debug("Get %s packs for model %s.", nb_packs, model)
         return nb_packs
 
+    def _prepare_custom_dir(self, parent_dir, custom_file):
+        """
+        Create the directory to use a user-provided PDB model.
+
+        Parameters
+        ----------
+        parent_dir: string
+            Absolute path to the working directory.
+
+        custom_file: string
+            Absolute path to the user-provided PDB model.
+
+        Return
+        ------
+        string
+            The absolute path to the created model directory.
+
+        """
+        filename = os.path.basename(custom_file)
+        model_name, _ = os.path.splitext(filename)
+        model_dir = os.path.join(parent_dir, model_name)
+        os.mkdir(model_dir)
+
+        # Write XML file
+        xml_content = XML_TEMPLATE.replace(
+            "%PDB_CODE%", model_name).replace(
+                "%FILE_NAME%", filename)
+        
+        xml_path = os.path.join(model_dir, "model_prep.xml")
+        with open(xml_path, 'w') as xml_file:
+            xml_file.write(xml_content)
+
+        # Copy PDB file to proper location
+        shutil.copy(custom_file, model_dir)
+
+        return model_dir
+        
     def create(self, input_file, models=None):
         """
         Create the list of arguments for morda_solve.
@@ -97,6 +136,8 @@ class TasksManager():
         models: list(string)
             The list of contaminants to try to put in the mtz_file. If nothing
             if given, use the default list of contaminants.
+            If a model name finishes by .pdb, do not search the ContaBase, but
+            use the model name as custom model path.
 
         """
         LOG.info("Create arguments for %s, %s.", input_file, models)
@@ -122,18 +163,34 @@ class TasksManager():
 
         # Build arguments
         for model in models:
-            # Get number of packs
-            nb_packs = self._get_nb_packs(model)
-
-            for pack_number in range(1, nb_packs+1):
+            if ".pdb" in model:
+                if not os.path.isfile(model):
+                    raise FileNotFoundError(model)
+                
+                # Custom model
+                model_dir = self._prepare_custom_dir(os.getcwd(), model)
+                nb_packs = 1
                 for alt_sg in alt_space_groups:
                     self._args.append({
                         'input_file': input_file,
-                        'model_dir': os.path.join(
-                            CONTABASE_DIR, model, 'models'),
-                        'pack_number': pack_number,
+                        'model_dir': model_dir,
+                        'pack_number': 1,
                         'space_group': alt_sg
                     })
+
+            else:
+                # Contaminant from ContaBase
+                # Get number of packs
+                nb_packs = self._get_nb_packs(model)
+                for pack_number in range(1, nb_packs+1):
+                    for alt_sg in alt_space_groups:
+                        self._args.append({
+                            'input_file': input_file,
+                            'model_dir': os.path.join(
+                                CONTABASE_DIR, model, 'models'),
+                            'pack_number': pack_number,
+                            'space_group': alt_sg
+                        })
 
         self._results = [None for i in range(len(self._args))]
         self._status = ["new" for i in range(len(self._args))]

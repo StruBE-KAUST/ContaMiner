@@ -22,6 +22,13 @@ def prepare(diffraction_file, models):
 
     """
 
+    # Convert relative path to custom models in absolute
+    for index in range(len(models)):
+        if ".pdb" in models[index]:
+            models[index] = os.path.join(
+                os.getcwd(),
+                models[index])
+
     # Convert models to real list
     if models == ["all"]:
         models = _get_all_models()
