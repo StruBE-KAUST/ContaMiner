@@ -27,12 +27,14 @@ def prepare(diffraction_file, models):
 
 
 @arg('prep_dir', help="Directory created by prepare step.")
-def solve(prep_dir):
+@arg('rank', type=int, help="Rank of the process to run.")
+def solve(prep_dir, rank):
     """
     Run the solving task.
 
     """
-    contaminer.solve(prep_dir)
+    contaminer.solve(prep_dir, rank)
+
 
 @arg('prep_dir', help="Directory created by prepare step.")
 def submit(prep_dir):
@@ -44,6 +46,7 @@ def submit(prep_dir):
 
     """
     contaminer.submit(prep_dir)
+
 
 if __name__ == "__main__":
     argh.dispatch_commands([

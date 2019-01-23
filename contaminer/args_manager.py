@@ -15,10 +15,12 @@ import logging
 import os
 import shutil
 
+from contaminer import config
 from contaminer.ccp4 import AltSgList
 from contaminer.ccp4 import Cif2Mtz
+from contaminer.ccp4 import MordaSolve
+from contaminer.ccp4 import Mtz2Map
 from contaminer.ccp4 import MtzDmp
-from contaminer.config import *
 from contaminer.data.custom_template import XML_TEMPLATE
 
 LOG = logging.getLogger(__name__)
@@ -45,7 +47,7 @@ class TasksManager():
         Load the list of arguments from a file.
 
     get_arguments
-        Return the list of arguments as a list. Each item is a dicitonary
+        Return the list of arguments as a list. Each item is a dictionary
         of kwargs to give to morda_solve.
 
     update
@@ -53,7 +55,7 @@ class TasksManager():
 
     Warning
     -------
-    This class is NOT thread-safe. It should be used only in the master
+    TasksManager.save is NOT thread-safe. It should be used only in the master
     process to avoid racing conditions to the args file when saving.
 
     """
@@ -62,11 +64,12 @@ class TasksManager():
         self._args = []
         self._results = []
         self._status = []
+        self._mrds = None
 
     @staticmethod
     def _get_nb_packs(model):
         """
-        Get the number of packas available for the model.
+        Get the number of packs available for the model.
 
         Parameters
         ----------
@@ -79,7 +82,7 @@ class TasksManager():
             The number of packs available for this model.
 
         """
-        pack_file_path = os.path.join(CONTABASE_DIR, model, 'nbpacks')
+        pack_file_path = os.path.join(config.CONTABASE_DIR, model, 'nbpacks')
         with open(pack_file_path) as pack_file:
             str_nb_packs = pack_file.read()
 
@@ -87,7 +90,8 @@ class TasksManager():
         LOG.debug("Get %s packs for model %s.", nb_packs, model)
         return nb_packs
 
-    def _prepare_custom_dir(self, parent_dir, custom_file):
+    @staticmethod
+    def _prepare_custom_dir(parent_dir, custom_file):
         """
         Create the directory to use a user-provided PDB model.
 
@@ -114,7 +118,7 @@ class TasksManager():
         xml_content = XML_TEMPLATE.replace(
             "%PDB_CODE%", model_name).replace(
                 "%FILE_NAME%", filename)
-        
+
         xml_path = os.path.join(model_dir, "model_prep.xml")
         with open(xml_path, 'w') as xml_file:
             xml_file.write(xml_content)
@@ -123,7 +127,7 @@ class TasksManager():
         shutil.copy(custom_file, model_dir)
 
         return model_dir
-        
+
     def create(self, input_file, models=None):
         """
         Create the list of arguments for morda_solve.
@@ -166,7 +170,7 @@ class TasksManager():
             if ".pdb" in model:
                 if not os.path.isfile(model):
                     raise FileNotFoundError(model)
-                
+
                 # Custom model
                 model_dir = self._prepare_custom_dir(os.getcwd(), model)
                 nb_packs = 1
@@ -187,7 +191,7 @@ class TasksManager():
                         self._args.append({
                             'input_file': input_file,
                             'model_dir': os.path.join(
-                                CONTABASE_DIR, model, 'models'),
+                                config.CONTABASE_DIR, model, 'models'),
                             'pack_number': pack_number,
                             'space_group': alt_sg
                         })
@@ -195,11 +199,17 @@ class TasksManager():
         self._results = [None for i in range(len(self._args))]
         self._status = ["new" for i in range(len(self._args))]
 
-    def get_arguments(self):
+    def get_arguments(self, rank=None):
         """
-        Return the list of arguments for the tasks.
+        Return the list of arguments for some tasks.
 
         Each item is a dictionary of kwargs to give to morda_solve.
+
+        Parameters
+        ----------
+        rank: integer
+            The rank of the task to get the arguments for. By default, return
+            all arguments.
 
         Return
         ------
@@ -207,6 +217,9 @@ class TasksManager():
             The list of arguments for morda_solve.
 
         """
+        if rank:
+            return copy.deepcopy(self._args[rank])
+
         return copy.deepcopy(self._args)
 
     def save(self, save_filepath):
@@ -219,6 +232,11 @@ class TasksManager():
         ----------
         save_filepath: string
             Path to the save file to write.
+
+        Warning
+        -------
+        This method is NOT thread-safe. It can lead to race conditions when
+        writing the save file.
 
         """
         LOG.debug("Save arguments to %s.", save_filepath)
@@ -248,6 +266,61 @@ class TasksManager():
         self._args = data['args']
         self._results = data['results']
         self._status = data['status']
+
+    def run(self, prep_dir, rank):
+        """
+        Start the process of given rank.
+
+        Parameters
+        ----------
+        prep_dir: string
+            Path to the directory generated during the prepare step.
+
+        ranks: integer
+            The rank of the current process.
+
+        """
+        os.chdir(prep_dir)
+
+        # Load args.
+        tasks_manager = TasksManager()
+        tasks_manager.load(config.ARGS_FILENAME)
+
+        arguments = tasks_manager.get_arguments(rank)
+
+        self._mrds = MordaSolve(**arguments)
+        self._mrds.run()
+
+    @staticmethod
+    def _run_morda(arguments):
+        """
+        Run one instance of morda_solve, then post-process.
+
+        Parameters
+        ----------
+        arguments: dictionary
+        The arguments to give to MordaSolve.
+
+        Return
+        ------
+        dictionary
+        The results to send back to the master process.
+
+        """
+        raise DeprecationWarning
+
+        mrds = MordaSolve(**arguments)
+        mrds.run()
+        results = mrds.get_results()
+        results['available_final'] = False
+
+        final_mtz_path = os.path.join(mrds.res_dir, "final.mtz")
+        if os.path.exists(final_mtz_path):
+            map_converter = Mtz2Map(final_mtz_path)
+            map_converter.run()
+            results['available_final'] = True
+
+        return results
 
     def update(self, *ranks, results=None, status=None):
         """

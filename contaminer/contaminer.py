@@ -5,7 +5,7 @@ import shutil
 import subprocess
 
 from contaminer.args_manager import TasksManager
-from contaminer.config import *
+from contaminer import config
 
 
 def prepare(diffraction_file, models):
@@ -44,14 +44,14 @@ def prepare(diffraction_file, models):
 
     tasks_manager = TasksManager()
     tasks_manager.create(file_name, models)
-    tasks_manager.save(ARGS_FILENAME)
+    tasks_manager.save(config.ARGS_FILENAME)
 
     # Number of workers + 1 master
     print("Need %s processes."
           % str(len(tasks_manager.get_arguments()) + 1))
 
 
-def solve(prep_dir):
+def solve(prep_dir, rank):
     """
     Run the morda_solve processes for the given arguments file.
 
@@ -60,10 +60,15 @@ def solve(prep_dir):
     prep_dir: string
         Path to the directory generated during the prepare step.
 
+    rank: integer
+        Rank of the process to run.
+
     """
 
-    from contaminer import solver
-    solver.solve(prep_dir)
+    task_manager = TasksManager()
+    task_manager.load(os.path.join(prep_dir, config.ARGS_FILENAME))
+    task_manager.run(prep_dir, rank)
+
 
 def submit(prep_dir):
     """
@@ -80,7 +85,7 @@ def submit(prep_dir):
 
     nb_procs = _get_number_procs(prep_dir)
 
-    with open(TEMPLATE_PATH, 'r') as template_file:
+    with open(config.TEMPLATE_PATH, 'r') as template_file:
         template_content = template_file.read()
 
     script_content = template_content.replace(
@@ -88,16 +93,17 @@ def submit(prep_dir):
             "%PREP_DIR%", prep_dir).replace(
                 "%PREP_NAME%", prep_name)
 
-    with open(JOB_SCRIPT, 'w') as job_script:
+    with open(config.JOB_SCRIPT, 'w') as job_script:
         job_script.write(script_content)
 
     # Submit newly written script
-    command = [SCHEDULER_COMMAND, JOB_SCRIPT]
+    command = [config.SCHEDULER_COMMAND, config.JOB_SCRIPT]
     popen = subprocess.Popen(command,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
     stdout, stderr = popen.communicate()
     print(stdout.decode('UTF-8'))
+
 
 def _get_all_models():
     """
