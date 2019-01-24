@@ -119,7 +119,7 @@ def display(prep_dir):
     task_manager.compile_results()
     task_manager.save(save_file)
     with open(save_file, 'r') as results:
-        print(results)
+        print(results.read())
 
 
 def _get_all_models():
