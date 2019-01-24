@@ -2,7 +2,6 @@
 """Command line interface for ContaMiner."""
 
 import argh
-from argh import arg
 from contaminer import contaminer
 
 
@@ -14,8 +13,8 @@ def init():
     raise NotImplementedError("Implementation in progress.")
 
 
-@arg('diffraction_file', help="MTZ or CIF file.")
-@arg('models', nargs='*', help="List of contaminants to test.")
+@argh.arg('diffraction_file', help="MTZ or CIF file.")
+@argh.arg('models', nargs='*', help="List of contaminants to test.")
 def prepare(diffraction_file, models):
     """
     Prepare a task.
@@ -26,8 +25,8 @@ def prepare(diffraction_file, models):
     contaminer.prepare(diffraction_file, models)
 
 
-@arg('prep_dir', help="Directory created by prepare step.")
-@arg('rank', type=int, help="Rank of the process to run.")
+@argh.arg('prep_dir', help="Directory created by prepare step.")
+@argh.arg('rank', type=int, help="Rank of the process to run.")
 def solve(prep_dir, rank):
     """
     Run the solving task.
@@ -36,7 +35,7 @@ def solve(prep_dir, rank):
     contaminer.solve(prep_dir, rank)
 
 
-@arg('prep_dir', help="Directory created by prepare step.")
+@argh.arg('prep_dir', help="Directory created by prepare step.")
 def submit(prep_dir):
     """
     Submit the job to a scheduler.
@@ -46,6 +45,18 @@ def submit(prep_dir):
 
     """
     contaminer.submit(prep_dir)
+
+
+@argh.arg('prep_dir', help="Directory created by prepare step.")
+def display(prep_dir):
+    """
+    Compile all results of a job into the tasks file and print it.
+
+    Consult each task, retrieve the results if available, and write all
+    of them in the tasks.json file, then display the content of the file.
+
+    """
+    contaminer.display(prep_dir)
 
 
 if __name__ == "__main__":

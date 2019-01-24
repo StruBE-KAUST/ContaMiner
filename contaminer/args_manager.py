@@ -196,8 +196,8 @@ class TasksManager():
                             'space_group': alt_sg
                         })
 
-        self._results = [None for i in range(len(self._args))]
-        self._status = ["new" for i in range(len(self._args))]
+        self._results = [None for i in self._args]
+        self._status = ["new" for i in self._args]
 
     def get_arguments(self, rank=None):
         """
@@ -291,36 +291,32 @@ class TasksManager():
         self._mrds = MordaSolve(**arguments)
         self._mrds.run()
 
-    @staticmethod
-    def _run_morda(arguments):
+    def compile_results(self):
         """
-        Run one instance of morda_solve, then post-process.
+        Read results of all task instances, and compile the complete ones.
 
-        Parameters
-        ----------
-        arguments: dictionary
-        The arguments to give to MordaSolve.
-
-        Return
-        ------
-        dictionary
-        The results to send back to the master process.
+        Warning
+        -------
+        This method is NOT thread-safe.
 
         """
-        raise DeprecationWarning
+        for index in range(len(self._args)):
+            arguments = self._args[index]
+            self._mrds = MordaSolve(**arguments)
+            try:
+                results = self._mrds.get_results()
+            except FileNotFoundError:
+                self.update(index, status="running")
+                continue
 
-        mrds = MordaSolve(**arguments)
-        mrds.run()
-        results = mrds.get_results()
-        results['available_final'] = False
+            results['available_final'] = False
+            final_mtz_path = os.path.join(self._mrds.res_dir, "final.mtz")
+            if os.path.exists(final_mtz_path):
+                map_converter = Mtz2Map(final_mtz_path)
+                map_converter.run()
+                results['available_final'] = True
 
-        final_mtz_path = os.path.join(mrds.res_dir, "final.mtz")
-        if os.path.exists(final_mtz_path):
-            map_converter = Mtz2Map(final_mtz_path)
-            map_converter.run()
-            results['available_final'] = True
-
-        return results
+            self.update(index, results=results, status="complete")
 
     def update(self, *ranks, results=None, status=None):
         """

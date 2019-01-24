@@ -47,7 +47,7 @@ def prepare(diffraction_file, models):
     tasks_manager.save(config.ARGS_FILENAME)
 
     # Number of workers + 1 master
-    print("Need %s processes."
+    print("Need %s cores."
           % str(len(tasks_manager.get_arguments()) + 1))
 
 
@@ -105,6 +105,23 @@ def submit(prep_dir):
     print(stdout.decode('UTF-8'))
 
 
+def display(prep_dir):
+    """
+    Compile all results of a job into a the tasks file.
+
+    Consult each task, retrieve the results if available, and write all
+    of them in the tasks.json file, then display the content of the file.
+
+    """
+    task_manager = TasksManager()
+    save_file = os.path.join(prep_dir, config.ARGS_FILENAME)
+    task_manager.load(save_file)
+    task_manager.compile_results()
+    task_manager.save(save_file)
+    with open(save_file, 'r') as results:
+        print(results)
+
+
 def _get_all_models():
     """
     Return the list of all models available in the ContaBase.
@@ -115,7 +132,7 @@ def _get_all_models():
         List of contaminants in the ContaBase
 
     """
-    return os.listdir(CONTABASE_DIR)
+    return os.listdir(config.CONTABASE_DIR)
 
 
 def _get_number_procs(prep_dir):
@@ -131,6 +148,6 @@ def _get_number_procs(prep_dir):
     os.chdir(prep_dir)
 
     tasks_manager = TasksManager()
-    tasks_manager.load(ARGS_FILENAME)
+    tasks_manager.load(config.ARGS_FILENAME)
     args_list = tasks_manager.get_arguments()
     return len(args_list) + 1
