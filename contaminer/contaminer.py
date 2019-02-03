@@ -86,12 +86,18 @@ def submit(prep_dir):
     nb_procs = _get_number_procs(prep_dir)
 
     with open(config.TEMPLATE_PATH, 'r') as template_file:
-        template_content = template_file.read()
+        script_content = template_file.read()
 
-    script_content = template_content.replace(
-        "%NB_PROCS%", str(nb_procs)).replace(
-            "%PREP_DIR%", prep_dir).replace(
-                "%PREP_NAME%", prep_name)
+    replacement_patterns = {
+        "%NB_PROCS%": str(nb_procs),
+        "%PREP_DIR%": prep_dir,
+        "%PREP_NAME%": prep_name,
+        "%MIN_ARRAY%": str(0),
+        "%MAX_ARRAY%": str(nb_procs-1)
+    }
+
+    for pattern, value in replacement_patterns.items():
+        script_content = script_content.replace(pattern, value)
 
     with open(config.JOB_SCRIPT, 'w') as job_script:
         job_script.write(script_content)
