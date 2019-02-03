@@ -217,7 +217,7 @@ class TasksManager():
             The list of arguments for morda_solve.
 
         """
-        if rank:
+        if isinstance(rank, int):
             return copy.deepcopy(self._args[rank])
 
         return copy.deepcopy(self._args)
