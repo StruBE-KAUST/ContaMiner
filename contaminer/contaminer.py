@@ -120,11 +120,11 @@ def display(prep_dir):
 
     """
     task_manager = TasksManager()
-    save_file = os.path.join(prep_dir, config.ARGS_FILENAME)
-    task_manager.load(save_file)
+    os.chdir(prep_dir)
+    task_manager.load(config.ARGS_FILENAME)
     task_manager.compile_results()
-    task_manager.save(save_file)
-    with open(save_file, 'r') as results:
+    task_manager.save(config.ARGS_FILENAME)
+    with open(config.ARGS_FILENAME, 'r') as results:
         print(results.read())
 
 
