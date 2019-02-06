@@ -46,9 +46,8 @@ def prepare(diffraction_file, models):
     tasks_manager.create(file_name, models)
     tasks_manager.save(config.ARGS_FILENAME)
 
-    # Number of workers + 1 master
-    print("Need %s cores."
-          % str(len(tasks_manager.get_arguments()) + 1))
+    # Number of arguments
+    print("Need %s cores." % str(len(tasks_manager.get_arguments())))
 
 
 def solve(prep_dir, rank):
@@ -156,4 +155,4 @@ def _get_number_procs(prep_dir):
     tasks_manager = TasksManager()
     tasks_manager.load(config.ARGS_FILENAME)
     args_list = tasks_manager.get_arguments()
-    return len(args_list) + 1
+    return len(args_list)
