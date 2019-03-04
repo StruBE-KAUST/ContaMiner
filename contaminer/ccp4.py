@@ -215,7 +215,14 @@ class MordaSolve(Morda):
         results = {}
         results['q_factor'] = float(result_tree.find('./q_factor').text)
         results['percent'] = float(result_tree.find('./percent').text)
-        results['Z_score'] = float(result_tree.find('./Z_score').text)
+        z_score = result_tree.find('./Z_score').text
+        try:
+            results['Z_score'] = float(z_score)
+        except ValueError:
+            if z_score == ' ****** ': # Too large to be represented.
+                results['Z_score'] = 9999
+            else:
+                raise
         results['r_init'] = float(result_tree.find('./r_init').text)
         results['rf_init'] = float(result_tree.find('./rf_init').text)
         results['r_fin'] = float(result_tree.find('./r_fin').text)
