@@ -300,8 +300,7 @@ class TasksManager():
         This method is NOT thread-safe.
 
         """
-        for index in range(len(self._args)):
-            arguments = self._args[index]
+        for index, arguments in enumerate(self._args):
             self._mrds = MordaSolve(**arguments)
             try:
                 results = self._mrds.get_results()
