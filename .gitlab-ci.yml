@@ -1,0 +1,15 @@
+---
+stages:
+  - build
+  - test
+  - deploy
+  - clean
+
+create-image:
+  stage: build
+  tags:
+    - cbrc-dev
+  before_script:
+    - singularity --version
+  script:
+    - singularity build contaminer.simg contaminer.def
