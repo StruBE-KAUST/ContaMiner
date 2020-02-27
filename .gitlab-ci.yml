@@ -13,3 +13,10 @@ create-image:
     - singularity --version
   script:
     - singularity build contaminer.simg contaminer.def
+
+test-image:
+  stage: test
+  tags:
+    - cbrc-dev
+  script:
+    - singularity exec contaminer.simg python -m unittest
