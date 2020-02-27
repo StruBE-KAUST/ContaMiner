@@ -11,3 +11,4 @@ MoRDa_DB
 ContaBase
 models/
 contaminer.simg
+Dockerfile
