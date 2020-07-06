@@ -308,6 +308,7 @@ class TasksManager():
                 self.update(index, status="running")
                 continue
 
+            self._mrds.cleanup()
             results['available_final'] = False
             final_mtz_path = os.path.join(self._mrds.res_dir, "final.mtz")
             if os.path.exists(final_mtz_path):
