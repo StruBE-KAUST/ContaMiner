@@ -306,6 +306,7 @@ class TasksManager():
                 results = self._mrds.get_results()
             except FileNotFoundError:
                 self.update(index, status="running")
+                self._mrds.cleanup()
                 continue
 
             self._mrds.cleanup()
