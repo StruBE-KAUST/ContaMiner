@@ -472,16 +472,14 @@
             </reference>
         </contaminant>
         <contaminant>
-          <uniprot_id>P76116</uniprot_id>
-          <short_name>YNCE_ECOLI</short_name>
-          <long_name>Uncharacterized protein YncE</long_name>
-          <organism>Escherichi coli</organism>
-          <exact_model>true</exact_model>
-          <suggestion>
-            <name>Qun Liu</name>
-          </suggestion>
-          <reference>
-            <pubmed_id>
+            <uniprot_id>P76116</uniprot_id>
+            <short_name>YNCE_ECOLI</short_name>
+            <long_name>Uncharacterized protein YncE</long_name>
+            <organism>Escherichi coli</organism>
+            <exact_model>true</exact_model>
+            <suggestion>
+                <name>Qun Liu</name>
+            </suggestion>
         </contaminant>
     </category>
     <category>
