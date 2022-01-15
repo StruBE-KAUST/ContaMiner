@@ -874,5 +874,12 @@
                 <name>Stefan W. Grötzinger</name>
             </suggestion>
         </contaminant>
+        <contaminant>
+            <uniprot_id>A0A5Q0TYV1</uniprot_id>
+            <short_name>A0A5Q0TYV1_SPOFR</short_name>
+            <long_name>Glutathione S-transferase GST sigma</long_name>
+            <organism>Spodoptera frugiperda (Fall armyworm)</organism>
+            <exact_model>false</exact_model>
+        </contaminant>
     </category>
 </contabase>
