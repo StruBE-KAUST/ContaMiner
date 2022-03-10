@@ -4,13 +4,6 @@ import configparser
 import errno
 import os
 
-# Hard configuration until we move everything to config file.
-ARGS_FILENAME = "tasks.json"
-TEMPLATE_PATH = os.path.expanduser("~/.contaminer/job_template.sh")
-SCHEDULER_COMMAND = "sbatch"
-JOB_SCRIPT = "solve.sbatch"
-CONTABASE_DIR = os.path.expanduser("~/.contaminer/ContaBase")
-
 
 class UserConfig():
     """
@@ -83,10 +76,22 @@ class UserConfig():
         config.add_section('PATH')
         config['PATH']['ccp4'] = ''
         config['PATH']['morda'] = ''
-
-        config.add_section('RUN')
-        config['RUN']['loop_on_error'] = 'False'
+        config['PATH']['args_filename'] = "tasks.json"
+        config['PATH']['template_path'] = os.path.expanduser(
+            "~/.contaminer/job_template.sh")
+        config['PATH']['scheduler_command'] = "sbatch"
+        config['PATH']['contabase_dir'] = os.path.expanduser(
+            "~/.contaminer/ContaBase")
 
         # Write file
         with open(self.config_path, 'w') as config_file:
             config.write(config_file)
+
+
+CONFIG = UserConfig().load()
+ARGS_FILENAME = CONFIG['PATH']['args_filename']
+TEMPLATE_PATH = CONFIG['PATH']['template_path']
+SCHEDULER_COMMAND = CONFIG['PATH']['scheduler_command']
+CONTABASE_DIR = CONFIG['PATH']['contabase_dir']
+# No need to move that to user config, as it's only used internally
+JOB_SCRIPT = "solve.sbatch"
