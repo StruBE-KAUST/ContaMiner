@@ -218,6 +218,38 @@ def init_task(rank):
     morda_prep.cleanup()
 
 
+def _is_contabase_ready():
+    """
+    Return True if the ContaBase initialization is complete.
+
+    Return False otherwise.
+
+    """
+    contabase_dir = config.CONTABASE_DIR
+
+    if not os.path.isdir(contabase_dir):
+        return False
+
+    contaminants = _get_all_contaminants()
+    for contaminant in contaminants:
+        nbpacks_path = os.path.join(
+            contabase_dir,
+            contaminant['uniprot_id'],
+            "nbpacks")
+        if not os.path.isfile(nbpacks_path):
+            return False
+
+        if contaminant['alpha_fold']:
+            nbpacks_path = os.path.join(
+                contabase_dir,
+                "AF_" + contaminant['uniprot_id'],
+                "nbpacks")
+            if not os.path.isfile(nbpacks_path):
+                return False
+
+    return True
+
+
 def init_status():
     """
     Show the status of ContaBase initialization.
