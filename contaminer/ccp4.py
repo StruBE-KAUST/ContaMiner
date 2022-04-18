@@ -123,13 +123,15 @@ class MordaPrep(Morda):
 
     """
 
-    def __init__(self, fasta, destination, nb_homologous=1):
+    def __init__(self, fasta, destination, nb_homologous=1, pdb_model=None):
         args = ["-s", fasta]
         args.extend(["-n", str(nb_homologous)])
-        args.append('--alt')
+        args.append('-alt')
 
-        fasta_name = os.path.basename(os.path.splitext(fasta)[0])
-        models_dir = os.path.join(destination, fasta_name)
+        if pdb_model:
+            args.extend(['-p', pdb_model])
+
+        models_dir = os.path.join(destination, "models")
         args.extend(["-d", models_dir])
 
         self._temp_dir = tempfile.mkdtemp()
@@ -138,7 +140,7 @@ class MordaPrep(Morda):
         args.extend(['-po', output_dir])
         args.extend(['-ps', scratch_dir])
 
-        super().__init__("prep", "-s", fasta, "-n", str(nb_homologous))
+        super().__init__("prep", *args)
 
     def cleanup(self):
         """Remove temporary directory."""
@@ -158,7 +160,7 @@ class MordaSolve(Morda):
     def __init__(self, input_file, model_dir, pack_number, space_group):
         space_group = space_group.replace('-', ' ')
         dashed_space_group = space_group.replace(' ', '-')
-        args = ["solve", '-f', input_file, '-m', model_dir, '-p', pack_number,
+        args = ['-f', input_file, '-m', model_dir, '-p', pack_number,
                 '-sg', space_group]
 
         pack_number = str(pack_number)
@@ -171,7 +173,7 @@ class MordaSolve(Morda):
         args.extend(['-po', os.path.join(self._temp_dir, "out_dir")])
         args.extend(['-ps', os.path.join(self._temp_dir, "scr_dir")])
 
-        super().__init__(*args)
+        super().__init__("solve", *args)
 
     def get_results(self):
         """
