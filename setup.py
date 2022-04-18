@@ -21,6 +21,6 @@ setup(name='contaminer',
       author="Arnaud Hungler",
       description=("Rapid automated large-scale detection of contaminant "
                    "crystals"),
-      author_email="arnaud.hungler@kaust.edu.sa",
+      author_email="arnaud@hungler-consulting.ch",
       url="https://github.com/StruBE-KAUST/ContaMiner",
       )
