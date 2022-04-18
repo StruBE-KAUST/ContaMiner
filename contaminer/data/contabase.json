@@ -385,6 +385,14 @@
             "exact_model": true,
             "suggestion": { "name": "Berhard Lohkamp" },
             "reference": { "pubmed_id": 18391407 }
+          },
+          {
+              "uniprot_id": "P76116",
+              "short_name": "YNCE_ECOLI",
+              "long_name": "Uncharacterized protein YncE",
+              "organism": "Escherichi coli",
+              "exact_model": true,
+              "suggestion": { "name": "Qun Liu" }
           }
         ]
       },
@@ -716,6 +724,13 @@
             "organism": "Halobacterium salinarum",
             "exact_model": false,
             "suggestion": { "name": "Stefan W. Grötzinger" }
+          },
+          {
+            "uniprot_id": "A0A5Q0TYV1",
+            "short_name": "A0A5Q0TYV1_SPOFR",
+            "long_name": "Glutathione S-transferase GST sigma",
+            "organism": "Spodoptera frugiperda (fall armyworm)",
+            "exact_model": false
           }
         ]
       }
