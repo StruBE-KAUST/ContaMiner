@@ -235,7 +235,7 @@ class MordaSolve(Morda):
         try:
             results['Z_score'] = float(z_score)
         except ValueError:
-            if z_score == ' ****** ': # Too large to be represented.
+            if z_score == ' ****** ':  # Too large to be represented.
                 results['Z_score'] = 9999
             else:
                 raise
@@ -513,6 +513,7 @@ class Cif2Mtz():
     def get_output_file(self):
         """Return the path to the converted file."""
         return self.output_file
+
 
 class Mtz2Map():
     """
