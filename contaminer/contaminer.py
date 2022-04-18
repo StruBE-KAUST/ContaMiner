@@ -1,11 +1,221 @@
 """Provide entry point commands for ContaMiner."""
 
+from importlib import resources
+import logging
 import os
 import shutil
 import subprocess
+from urllib.request import urlretrieve
+import yaml
 
 from contaminer.args_manager import TasksManager
 from contaminer import config
+from contaminer import data as contaminer_data
+from contaminer.ccp4 import MordaPrep
+
+
+LOG = logging.getLogger(__name__)
+
+
+def _get_all_contaminants():
+    """
+    Return a flat list of contaminants in the ContaBase.
+
+    The contaminants are not sorted in catefories, but each item (contaminant)
+    in the list contains details about the contaminant.
+
+    """
+    contabase_text = resources.read_text(contaminer_data, "contabase.yaml")
+    contabase_yaml = yaml.safe_load(contabase_text)['contabase']
+    contaminants = []
+    for category in contabase_yaml:
+        contaminants.extend(category['contaminants'])
+
+    LOG.debug("%s contaminants found.", len(contaminants))
+    return contaminants
+
+
+def init():
+    """
+    Initialize the ContaBase.
+
+    Create the ContaBase directory structure, launches the morda_prep
+    processes, and compile results for ContaMiner.
+
+    """
+    # Parse data file
+    LOG.info("Reading ContaBase.")
+    contaminants = _get_all_contaminants()
+
+    # Create contabase directories
+    contabase_dir = config.CONTABASE_DIR
+    try:
+        os.mkdir(contabase_dir)
+    except FileExistsError:
+        LOG.critical("Contabase directory %s already exists. Stopping here.",
+                     contabase_dir)
+        raise
+
+    for contaminant in contaminants:
+        LOG.info("Creating model directory for contaminant %s.",
+                 contaminant['uniprot_id'])
+        _create_model_dir(contaminant)
+
+        # For some models, add AlphaFold model.
+        if contaminant['alpha_fold']:
+            _create_model_dir(contaminant, alpha_model=True)
+
+    # Prepare job script
+    _create_prepare_job_script(contaminants)
+
+    # Submit newly written script
+    LOG.info("Starting preparation job.")
+    job_script_path = os.path.join(
+        config.CONTABASE_DIR,
+        config.JOB_SCRIPT)
+    command = [config.SCHEDULER_COMMAND, job_script_path]
+    popen = subprocess.Popen(command,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+    stdout, stderr = popen.communicate()
+    if stdout:
+        LOG.info(stdout.decode('UTF-8'))
+    LOG.info(("Depending on your job template, the ContaBase may still be "
+              "initializing. Please check check the initialization status "
+              "with `contaminer status` before submitting a solve task."))
+
+
+def _create_model_dir(contaminant, alpha_model=False):
+    """
+    Create the directory where the information for a contaminants are stored.
+
+    Create the directory itself, write or download the sequence, and
+    if required, download the PDB file from AlphaFold.
+
+    """
+    contabase_dir = config.CONTABASE_DIR
+    uniprot_id = contaminant['uniprot_id']
+    sequence = contaminant.get("sequence", None)
+    if alpha_model:
+        model_dir = os.path.join(contabase_dir, "AF_" + uniprot_id)
+    else:
+        model_dir = os.path.join(contabase_dir, uniprot_id)
+
+    # Create ContaBase structure
+    os.mkdir(model_dir)
+
+    # Download or create fasta file
+    sequence_file_path = os.path.join(model_dir, "sequence.fasta")
+    if sequence:
+        with open(sequence_file_path, 'w') as sequence_file:
+            sequence_file.write('>lcl|%s' % uniprot_id)
+            sequence_file.write(sequence)
+    else:
+        fasta_url = "http://www.uniprot.org/uniprot/%s.fasta" % uniprot_id
+        urlretrieve(fasta_url, sequence_file_path)
+
+    if alpha_model:
+        model_url = "https://alphafold.ebi.ac.uk/files/AF-%s-F1-model_v2.pdb" \
+            % uniprot_id
+        model_file_path = os.path.join(model_dir, "AF_model.pdb")
+        urlretrieve(model_url, model_file_path)
+
+
+def _create_prepare_job_script(contaminants):
+    """
+    Render a job template to submit preparation tasks to a scheduler.
+
+    Read the job template, replace patterns with generated values, and
+    write the resulting script.
+
+    """
+    nb_procs = len(contaminants)
+    nb_procs += len([contaminant
+                     for contaminant in contaminants
+                     if contaminant['alpha_fold']])
+
+    with open(config.JOB_TEMPLATE_PATH, 'r') as template_file:
+        script_content = template_file.read()
+    replacement_patterns = {
+        "%NB_PROCS%": str(nb_procs),
+        "%MIN_ARRAY%": str(0),
+        "%MAX_ARRAY%": str(nb_procs-1),
+        "%COMMAND%": "init-task",
+    }
+    for pattern, value in replacement_patterns.items():
+        script_content = script_content.replace(pattern, value)
+    job_script_path = os.path.join(
+        config.CONTABASE_DIR,
+        config.JOB_SCRIPT)
+    with open(job_script_path, 'w') as job_script:
+        job_script.write(script_content)
+
+
+def init_task(rank):
+    """
+    Run the morda_prep process for the given rank.
+
+    Parameters
+    ----------
+    rank: integer
+        Rank of the process to run.
+
+    """
+    # Parse data file,
+    LOG.info("Reading ContaBase.")
+    contaminants = _get_all_contaminants()
+
+    # Flatten models list.
+    models = []
+    for contaminant in contaminants:
+        models.append(
+            {
+                'model_name': contaminant['uniprot_id'],
+                'nb_homologous': 1 if contaminant['exact_model'] else 3
+            }
+        )
+        if contaminant['alpha_fold']:
+            models.append(
+                {
+                    'model_name': "AF_" + contaminant['uniprot_id'],
+                    'nb_homologous': 1,
+                    'pdb_model': "AF_model.pdb"
+                }
+            )
+    LOG.debug("Found %s models.", len(models))
+
+    current_model = models[rank]
+    destination = os.path.join(
+        config.CONTABASE_DIR,
+        current_model['model_name'])
+    fasta_path = os.path.join(destination, "sequence.fasta")
+
+    LOG.info("Running morda_prep for model %s.", current_model['model_name'])
+    if "pdb_model" in current_model:
+        pdb_path = os.path.join(destination, current_model['pdb_model'])
+        morda_prep = MordaPrep(
+            fasta_path,
+            destination,
+            current_model['nb_homologous'],
+            pdb_path)
+        morda_prep.run()
+    else:
+        morda_prep = MordaPrep(
+            fasta_path,
+            destination,
+            current_model['nb_homologous'])
+        morda_prep.run()
+
+    # Save number of packs
+    nbpacks = morda_prep.get_nbpacks()
+    LOG.debug("nbpacks: %s", nbpacks)
+    nbpacks_path = os.path.join(destination, "nbpacks")
+    LOG.debug("nbpacks path: %s", nbpacks_path)
+    with open(nbpacks_path, 'w') as nbpacks_file:
+        nbpacks_file.write("%s\n" % str(nbpacks))
+
+    # Remove temporary directories
+    morda_prep.cleanup()
 
 
 def prepare(diffraction_file, models):

@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 """Command line interface for ContaMiner."""
 
+import logging
+
 import argh
+
 from contaminer import contaminer
 
 
@@ -10,7 +13,16 @@ def init():
     Initialize the ContaBase.
 
     """
-    raise NotImplementedError("Implementation in progress.")
+    contaminer.init()
+
+
+@argh.arg('rank', type=int, help="Rank of the process to run.")
+def init_task(rank):
+    """
+    Run morda_prep for a given model.
+
+    """
+    contaminer.init_task(rank)
 
 
 @argh.arg('diffraction_file', help="MTZ or CIF file.")
@@ -60,8 +72,15 @@ def display(prep_dir):
 
 
 if __name__ == "__main__":
+    # Change console logging level to INFO.
+    CONSOLE = logging.StreamHandler()
+    CONSOLE.setLevel(logging.INFO)
+    logging.getLogger().addHandler(CONSOLE)
+    logging.getLogger().setLevel(logging.INFO)
+
     argh.dispatch_commands([
         init,
+        init_task,
         prepare,
         solve,
         submit,
