@@ -25,6 +25,14 @@ def init_task(rank):
     contaminer.init_task(rank)
 
 
+def init_status():
+    """
+    Shows the status of initialization of the ContaBase.
+
+    """
+    contaminer.init_status()
+
+
 @argh.arg('diffraction_file', help="MTZ or CIF file.")
 @argh.arg('models', nargs='*', help="List of contaminants to test.")
 def prepare(diffraction_file, models):
@@ -81,6 +89,7 @@ if __name__ == "__main__":
     argh.dispatch_commands([
         init,
         init_task,
+        init_status,
         prepare,
         solve,
         submit,

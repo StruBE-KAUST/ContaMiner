@@ -218,6 +218,58 @@ def init_task(rank):
     morda_prep.cleanup()
 
 
+def init_status():
+    """
+    Show the status of ContaBase initialization.
+
+    Init status can be:
+        * Absent: there is no sign of life of any local ContaBase
+        * Initializing: the ContaBase has been created, and the models are
+    being computed now.
+        * Ready: all preparation steps are complete, and you can run a
+    `contaminer solve`
+        * Corrupted: the folder is present, but the content does not seem
+    correct. It's probably a good idea to remove the ContaBase and re-create it.
+
+    """
+    contabase_dir = config.CONTABASE_DIR
+
+    if not os.path.isdir(contabase_dir):
+        print("ContaBase is: Absent.")
+        print("You can create it by running `contaminer init`.")
+        return
+
+    try:
+        contaminants = _get_all_contaminants()
+        for contaminant in contaminants:
+            nbpacks_path = os.path.join(
+                contabase_dir,
+                contaminant['uniprot_id'],
+                "nbpacks")
+            if not os.path.isfile(nbpacks_path):
+                print("ContaBase is: Initializing.")
+                print("Please wait for the initialization to complete.")
+                return
+
+            if contaminant['alpha_fold']:
+                nbpacks_path = os.path.join(
+                    contabase_dir,
+                    "AF_" + contaminant['uniprot_id'],
+                    "nbpacks")
+                if not os.path.isfile(nbpacks_path):
+                    print("Contabase is: Initializing")
+                    print("Please wait for the initialization to complete.")
+                    return
+
+    # A bit too large, but we need to capture all IO related errors.
+    except OSError:
+        print("ContaBase is: Corrupted.")
+        print("Please remove the directory, and run `contaminer init`.")
+        return
+
+    print("ContaBase is: Ready.")
+
+
 def prepare(diffraction_file, models):
     """
     Prepare the arguments file and give the number of processes needed.
