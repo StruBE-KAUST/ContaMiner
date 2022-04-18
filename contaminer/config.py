@@ -2,7 +2,10 @@
 
 import configparser
 import errno
+from importlib import resources
 import os
+
+from contaminer import data as contaminer_data
 
 
 class UserConfig():
@@ -77,8 +80,8 @@ class UserConfig():
         config['PATH']['ccp4'] = ''
         config['PATH']['morda'] = ''
         config['PATH']['args_filename'] = "tasks.json"
-        config['PATH']['template_path'] = os.path.expanduser(
-            "~/.contaminer/job_template.sh")
+        with resources.path(contaminer_data, "job_template.sh") as template:
+            config['PATH']['job_template_path'] = str(template)
         config['PATH']['scheduler_command'] = "sbatch"
         config['PATH']['contabase_dir'] = os.path.expanduser(
             "~/.contaminer/ContaBase")
@@ -90,8 +93,9 @@ class UserConfig():
 
 CONFIG = UserConfig().load()
 ARGS_FILENAME = CONFIG['PATH']['args_filename']
-TEMPLATE_PATH = CONFIG['PATH']['template_path']
+JOB_TEMPLATE_PATH = CONFIG['PATH']['job_template_path']
 SCHEDULER_COMMAND = CONFIG['PATH']['scheduler_command']
 CONTABASE_DIR = CONFIG['PATH']['contabase_dir']
+
 # No need to move that to user config, as it's only used internally
-JOB_SCRIPT = "solve.sbatch"
+JOB_SCRIPT = "job.sh"

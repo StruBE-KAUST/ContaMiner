@@ -84,7 +84,7 @@ def submit(prep_dir):
 
     nb_procs = _get_number_procs(prep_dir)
 
-    with open(config.TEMPLATE_PATH, 'r') as template_file:
+    with open(config.JOB_TEMPLATE_PATH, 'r') as template_file:
         script_content = template_file.read()
 
     replacement_patterns = {

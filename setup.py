@@ -16,7 +16,11 @@ setup(name='contaminer',
       packages=find_packages(),
       scripts=['contaminer/scripts/contaminer'],
       package_data={
-          "contaminer.data": ["contabase.yaml"]
+          "contaminer.data": [
+              "contabase.yaml",
+              "job_template.sh",
+              "job_template.sbatch"
+          ]
       },
       author="Arnaud Hungler",
       description=("Rapid automated large-scale detection of contaminant "
