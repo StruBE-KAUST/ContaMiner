@@ -142,6 +142,20 @@ class MordaPrep(Morda):
 
         super().__init__("prep", *args)
 
+    def get_nbpacks(self):
+        """Return the number of packs created by morda_prep."""
+        log_file_path = os.path.join(
+            self._temp_dir, "out_prep", "morda_prep.log")
+        nb_pack_regex = re.compile(r'\s*N_pack :\s+(\d+)')
+
+        with open(log_file_path, 'r') as log_file:
+            for line in log_file.readlines():
+                match = re.match(nb_pack_regex, line)
+                if match:
+                    return int(match.groups(1)[0])
+
+        raise RuntimeError("No nbpack found in %s." % log_file_path)
+
     def cleanup(self):
         """Remove temporary directory."""
         LOG.debug("Remove %s.", self._temp_dir)
