@@ -15,6 +15,9 @@ setup(name='contaminer',
       install_requires=REQUIREMENTS,
       packages=find_packages(),
       scripts=['contaminer/scripts/contaminer'],
+      package_data={
+          "contaminer.data": ["contabase.yaml"]
+      },
       author="Arnaud Hungler",
       description=("Rapid automated large-scale detection of contaminant "
                    "crystals"),
