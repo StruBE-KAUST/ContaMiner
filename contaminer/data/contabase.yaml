@@ -644,9 +644,9 @@ contabase:
           name: Christian Linke-Winnebeck
         reference:
           pubmed_id: '25849512'
-      - uniprot_id: S0AKJ8
-        short_name: S0AKJ8_SERPL
-        long_name: Glycerol dehydrogenase DhaD
+      - uniprot_id: A0A318P833
+        short_name: A0A318P833_SERPL
+        long_name: Glycerol dehydrogenase
         organism: Serratia plymuthica
         exact_model: True
         alpha_fold: False
