@@ -76,7 +76,7 @@ class Morda():
 
         LOG.debug("Return code: %s.", popen.returncode)
         if popen.returncode != 0:
-            print("Call to %s failed." % 'morda_' + self.tool,
+            print("Call to morda_%s failed." % self.tool,
                   file=sys.stderr)
             print("-" * 50,
                   file=sys.stderr)
