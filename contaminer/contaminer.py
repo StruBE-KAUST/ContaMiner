@@ -302,7 +302,7 @@ def init_status():
     print("ContaBase is: Ready.")
 
 
-def prepare(diffraction_file, models):
+def _prepare_solve(diffraction_file, models):
     """
     Prepare the arguments file and give the number of processes needed.
 
@@ -340,30 +340,11 @@ def prepare(diffraction_file, models):
     tasks_manager.create(file_name, models)
     tasks_manager.save(config.ARGS_FILENAME)
 
-    # Number of arguments
-    print("Need %s cores." % str(len(tasks_manager.get_arguments())))
+    # Return path of the generated directory
+    return os.getcwd()
 
 
-def solve(prep_dir, rank):
-    """
-    Run the morda_solve processes for the given arguments file.
-
-    Parameters
-    ----------
-    prep_dir: string
-        Path to the directory generated during the prepare step.
-
-    rank: integer
-        Rank of the process to run.
-
-    """
-
-    task_manager = TasksManager()
-    task_manager.load(os.path.join(prep_dir, config.ARGS_FILENAME))
-    task_manager.run(prep_dir, rank)
-
-
-def submit(prep_dir):
+def _submit(prep_dir):
     """
     Submit the job to a scheduler.
 
@@ -383,10 +364,10 @@ def submit(prep_dir):
 
     replacement_patterns = {
         "%NB_PROCS%": str(nb_procs),
-        "%PREP_DIR%": prep_dir,
         "%PREP_NAME%": prep_name,
         "%MIN_ARRAY%": str(0),
-        "%MAX_ARRAY%": str(nb_procs-1)
+        "%MAX_ARRAY%": str(nb_procs-1),
+        "%COMMAND%": "solve-task " + prep_dir,
     }
 
     for pattern, value in replacement_patterns.items():
@@ -401,10 +382,40 @@ def submit(prep_dir):
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
     stdout, stderr = popen.communicate()
-    print(stdout.decode('UTF-8'))
 
 
-def display(prep_dir):
+def solve(diffraction_file, models):
+    """
+    Try to find a contaminant matchgin the diffraction file.
+
+    Prepare the arguments file and all other files, generate the script from
+    a template, and submit the job script to a scheduler.
+
+    """
+    prep_dir = _prepare_solve(diffraction_file, models)
+    _submit(prep_dir)
+
+
+def solve_task(prep_dir, rank):
+    """
+    Run the morda_solve processes for the given arguments file.
+
+    Parameters
+    ----------
+    prep_dir: string
+        Path to the directory generated during the prepare step.
+
+    rank: integer
+        Rank of the process to run.
+
+    """
+
+    task_manager = TasksManager()
+    task_manager.load(os.path.join(prep_dir, config.ARGS_FILENAME))
+    task_manager.run(prep_dir, rank)
+
+
+def solve_status(prep_dir):
     """
     Compile all results of a job into a the tasks file.
 

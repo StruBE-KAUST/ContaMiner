@@ -35,40 +35,32 @@ def init_status():
 
 @argh.arg('diffraction_file', help="MTZ or CIF file.")
 @argh.arg('models', nargs='*', help="List of contaminants to test.")
-def prepare(diffraction_file, models):
+def solve(diffraction_file, models):
     """
-    Prepare a task.
+    Try to find a matching contaminant for the given diffraction file.
 
-    Generate arguments file and put all files in the right place.
+    This command is the combination of three steps:
+    * Generate arguments file and put all files in the right places.
+    * Fill in a template and submit the script to a scheduler.
+    * Each submitted job runs the solving task for a single combination of
+    contaminant, pack number, and space group.
 
     """
-    contaminer.prepare(diffraction_file, models)
+    contaminer.solve(diffraction_file, models)
 
 
-@argh.arg('prep_dir', help="Directory created by prepare step.")
+@argh.arg('prep_dir', help="Directory created by the prepare step.")
 @argh.arg('rank', type=int, help="Rank of the process to run.")
-def solve(prep_dir, rank):
+def solve_task(prep_dir, rank):
     """
     Run the solving task.
 
     """
-    contaminer.solve(prep_dir, rank)
+    contaminer.solve_task(prep_dir, rank)
 
 
 @argh.arg('prep_dir', help="Directory created by prepare step.")
-def submit(prep_dir):
-    """
-    Submit the job to a scheduler.
-
-    Fill in a template, and use the provided command to submit the script
-    to a job scheduler.
-
-    """
-    contaminer.submit(prep_dir)
-
-
-@argh.arg('prep_dir', help="Directory created by prepare step.")
-def display(prep_dir):
+def solve_status(prep_dir):
     """
     Compile all results of a job into the tasks file and print it.
 
@@ -76,7 +68,7 @@ def display(prep_dir):
     of them in the tasks.json file, then display the content of the file.
 
     """
-    contaminer.display(prep_dir)
+    contaminer.solve_status(prep_dir)
 
 
 if __name__ == "__main__":
@@ -90,8 +82,7 @@ if __name__ == "__main__":
         init,
         init_task,
         init_status,
-        prepare,
         solve,
-        submit,
-        display,
+        solve_task,
+        solve_status,
     ])
