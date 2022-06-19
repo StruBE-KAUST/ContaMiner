@@ -392,6 +392,9 @@ def solve(diffraction_file, models):
     a template, and submit the job script to a scheduler.
 
     """
+    if not _is_contabase_ready():
+        raise RuntimeError("ContaBase is not ready yet.")
+
     prep_dir = _prepare_solve(diffraction_file, models)
     _submit(prep_dir)
 
