@@ -13,11 +13,14 @@ import logging
 import os
 import pathlib
 import re
+import shlex
 import shutil
 import subprocess
 import sys
 import tempfile
 from xml.etree import ElementTree
+
+from contaminer.config import CONFIG
 
 LOG = logging.getLogger(__name__)
 
@@ -102,10 +105,14 @@ class Morda():
             The full command to give to the shell to run the tool.
 
         """
-        tool_path = os.path.join('morda_' + self.tool)
-        command_line = [tool_path]
-        command_line.extend(self.args)
-
+        args_string = '"' + '" "'.join(self.args) + '"'
+        command_line_string = "sh -c '. %s && . %s && morda_%s %s'" % (
+            CONFIG['PATH']['ccp4'],
+            CONFIG['PATH']['morda'],
+            self.tool,
+            args_string
+        )
+        command_line = shlex.split(command_line_string)
         LOG.debug("Command built: %s.", command_line)
         return command_line
 
@@ -279,7 +286,11 @@ class MtzDmp():
 
     def run(self):
         """Run mtzdmp on an MTZ file."""
-        command_line = ['mtzdmp', self.file_path]
+        command_line_string = "sh -c '. %s && mtzdmp \"%s\"'" % (
+            CONFIG['PATH']['ccp4'],
+            self.file_path,
+        )
+        command_line = shlex.split(command_line_string)
         LOG.debug("Run %s.", command_line)
 
         try:
@@ -359,20 +370,20 @@ class AltSgList():
 
     def run(self):
         """Run alt_sg_list."""
-        # Cannot rely on $PATH, because CCP4 and MoRDa both provide a
-        # binary named alt_sg_list
-        try:
-            morda_prog = os.environ['MRD_PROG']
-        except KeyError:
-            print("Please source morda_env_sh before using ContaMiner.",
-                  file=sys.stderr)
-            raise RuntimeError("MoRDa tools cannot be found.")
+        # Use alt_sg_list from MoRDa (CCP4 provides another version).
+        args = [
+            "-sg", self.space_group,
+            "-po", self._temp_dir,
+            "-ps", self._temp_dir
+        ]
+        args_string = '"' + '" "'.join(args) + '"'
 
-        binary_path = os.path.join(morda_prog, "alt_sg_list")
-        command_line = [binary_path,
-                        '-sg', self.space_group,
-                        '-po', self._temp_dir,
-                        '-ps', self._temp_dir]
+        command_line_string = \
+            "sh -c '. %s && alt_sg_list %s'" % (
+                CONFIG['PATH']['morda'],
+                args_string,
+            )
+        command_line = shlex.split(command_line_string)
         LOG.debug("Run %s.", command_line)
 
         try:
@@ -471,8 +482,17 @@ class Cif2Mtz():
             return
 
         self.output_file = filename + '.mtz'
-        command_line = ['cif2mtz', 'HKLIN', self.input_file,
-                        'HKLOUT', self.output_file]
+
+        args = [
+            "HKLIN", self.input_file,
+            "HKLOUT", self.output_file
+        ]
+        args_string = '"' + '" "'.join(args) + '"'
+        command_line_string = "sh -c '. %s && cif2mtz %s'" % (
+            CONFIG['PATH']['ccp4'],
+            args_string
+        )
+        command_line = shlex.split(command_line_string)
         LOG.debug("Run %s.", command_line)
 
         try:
@@ -549,7 +569,9 @@ class Mtz2Map():
         self.output_map_file = filename + '.map'
         self.output_diff_file = filename + '_diff.map'
 
-        command_line = ['sftools']
+        command_line_string = "sh -c '. %s && sftools'" % CONFIG['PATH']['ccp4']
+        command_line = shlex.split(command_line_string)
+
         input_command = "read %s\n" % (self.input_file)
         input_command += "fft col FWT PHWT\n"
         input_command += "mapout %s\n" % (self.output_map_file)
