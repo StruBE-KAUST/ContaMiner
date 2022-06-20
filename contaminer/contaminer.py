@@ -315,7 +315,6 @@ def _prepare_solve(diffraction_file, models):
         List of contaminants to test with diffraction file.
 
     """
-
     # Convert relative path to custom models in absolute
     for index in range(len(models)):
         if ".pdb" in models[index]:
@@ -352,7 +351,6 @@ def _submit(prep_dir):
     to a job scheduler.
 
     """
-
     prep_dir = os.path.abspath(prep_dir)
     prep_name = os.path.basename(prep_dir)
     os.chdir(prep_dir)
@@ -412,7 +410,6 @@ def solve_task(prep_dir, rank):
         Rank of the process to run.
 
     """
-
     task_manager = TasksManager()
     task_manager.load(os.path.join(prep_dir, config.ARGS_FILENAME))
     task_manager.run(prep_dir, rank)
