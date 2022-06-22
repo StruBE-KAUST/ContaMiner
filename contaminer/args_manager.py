@@ -141,32 +141,56 @@ class TasksManager():
             The path to the input file to give as is to morda_solve.
 
         models: list(string)
-            The list of contaminants to try to put in the mtz_file. If nothing
-            if given, use the default list of contaminants.
+            The list of contaminants to try to put in the mtz_file.
             If a model name finishes by .pdb, do not search the ContaBase, but
             use the model name as custom model path.
 
         """
         LOG.info("Create arguments for %s, %s.", input_file, models)
-        # Have an MTZ file to get the space group
+        # Have an MTZ file to get the space group. If the input_file is already
+        # in MTZ format, this step does nothing.
         cif2mtz_task = Cif2Mtz(input_file)
         cif2mtz_task.run()
         mtz_file = cif2mtz_task.get_output_file()
         LOG.debug("mtz_file: %s.", mtz_file)
 
-        # Get space group
+        # Get space group.
         mtz_dmp_task = MtzDmp(mtz_file)
         mtz_dmp_task.run()
         input_space_group = mtz_dmp_task.get_space_group()
         LOG.debug("Input space group: %s.", input_space_group)
 
-        # Get alternate space groups
+        # Get alternate space groups.
         alt_sg_task = AltSgList(input_space_group)
         alt_sg_task.run()
         alt_space_groups = alt_sg_task.get_alt_space_groups()
         LOG.debug("Alt space groups: %s.", alt_space_groups)
 
-        # Load ContaBase
+        self._generate_args(input_file, models, alt_space_groups)
+        self._results = [None for i in self._args]
+        self._status = ["new" for i in self._args]
+
+    def _generate_args(self, input_file, models, alt_space_groups):
+        """
+        Generate arguments for given parameters and store them in self._args.
+
+        This method does the same thing as TasksManager.create, but takes the
+        list of alternative space groups as additional argument.
+
+        input_file: string
+            The path to the input file to give as is to morda_solve.
+
+        models: list(string)
+            The list of contaminants to try to put in the mtz_file.
+            If a model name finishes by .pdb, do not search the ContaBase, but
+            use the model name as custom model path.
+
+        alt_space_groups: list(sting)
+            The alternative space groups in the same class as the space group
+            from the input_file.
+
+        """
+        # Load ContaBase as flat list of contaminants.
         contabase_yaml = yaml.safe_load(
             resources.read_text(contaminer_data, "contabase.yaml")
         )['contabase']
@@ -174,57 +198,86 @@ class TasksManager():
         for category in contabase_yaml:
             contaminants.extend(category['contaminants'])
 
-        # Build arguments
+        # Build arguments list.
         self._args = []
         for model in models:
             if ".pdb" in model:
-                if not os.path.isfile(model):
-                    raise FileNotFoundError(model)
-
-                # Custom model
-                model_dir = self._prepare_custom_dir(os.getcwd(), model)
-                nb_packs = 1
-                for alt_sg in alt_space_groups:
-                    self._args.append({
-                        'input_file': input_file,
-                        'model_dir': model_dir,
-                        'pack_number': 1,
-                        'space_group': alt_sg
-                    })
-
+                self._generate_args_for_custom(
+                    input_file,
+                    model,
+                    alt_space_groups
+                )
             else:
-                # Contaminant from ContaBase
-                # Get number of packs
-                nb_packs = self._get_nb_packs(model)
-                for pack_number in range(1, nb_packs+1):
-                    for alt_sg in alt_space_groups:
-                        self._args.append({
-                            'input_file': input_file,
-                            'model_dir': os.path.join(
-                                config.CONTABASE_DIR, model, 'models'),
-                            'pack_number': pack_number,
-                            'space_group': alt_sg
-                        })
-                # If AlphaFold is available, add this as well.
-                # Get contaminant information:
+                # Get contaminant information from ContaBase.
                 contaminant = [
                     item
                     for item in contaminants
                     if item['uniprot_id'] == model
                 ][0]
-                if contaminant['alpha_fold']:
-                    LOG.debug("Add AlphaFold model for %s.", model)
-                    for alt_sg in alt_space_groups:
-                        self._args.append({
-                            'input_file': input_file,
-                            'model_dir': os.path.join(
-                                config.CONTABASE_DIR, "AF_" + model, 'models'),
-                            'pack_number': 1,
-                            'space_group': alt_sg
-                        })
 
-        self._results = [None for i in self._args]
-        self._status = ["new" for i in self._args]
+                self._generate_args_for_contaminant(
+                    input_file,
+                    contaminant,
+                    alt_space_groups,
+                )
+
+    def _generate_args_for_contaminant(
+            self, input_file, contaminant, alt_space_groups):
+        """
+        Generate arguments for a single contaminant.
+
+        This method does the same thing as TasksManager._generate_args, but
+        generates the arguments only for a single contaminant.
+
+        """
+        # Get number of packs
+        nb_packs = self._get_nb_packs(contaminant['uniprot_id'])
+        for pack_number in range(1, nb_packs+1):
+            for alt_sg in alt_space_groups:
+                self._args.append({
+                    'input_file': input_file,
+                    'model_dir': os.path.join(
+                        config.CONTABASE_DIR,
+                        contaminant['uniprot_id'],
+                        'models'),
+                    'pack_number': pack_number,
+                    'space_group': alt_sg
+                })
+
+        # If AlphaFold is available, add this as well.
+        if contaminant['alpha_fold']:
+            LOG.debug("Add AlphaFold model for %s.", contaminant['uniprot_id'])
+            for alt_sg in alt_space_groups:
+                self._args.append({
+                    'input_file': input_file,
+                    'model_dir': os.path.join(
+                        config.CONTABASE_DIR,
+                        "AF_" + contaminant['uniprot_id'],
+                        'models'),
+                    'pack_number': 1,
+                    'space_group': alt_sg
+                })
+
+    def _generate_args_for_custom(self, input_file, model, alt_space_groups):
+        """
+        Generate arguments for a single custom model.
+
+        This method does the same thing as TasksManager._generate_args, but
+        generates the arguments only for a single custom model.
+
+        """
+        if not os.path.isfile(model):
+            raise FileNotFoundError(model)
+
+        # Custom model
+        model_dir = self._prepare_custom_dir(os.getcwd(), model)
+        for alt_sg in alt_space_groups:
+            self._args.append({
+                'input_file': input_file,
+                'model_dir': model_dir,
+                'pack_number': 1,
+                'space_group': alt_sg
+            })
 
     def get_arguments(self, rank=None):
         """
