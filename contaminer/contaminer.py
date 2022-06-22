@@ -21,7 +21,7 @@ def _get_all_contaminants():
     """
     Return a flat list of contaminants in the ContaBase.
 
-    The contaminants are not sorted in catefories, but each item (contaminant)
+    The contaminants are not sorted in categories, but each item (contaminant)
     in the list contains details about the contaminant.
 
     """
