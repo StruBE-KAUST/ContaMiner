@@ -10,12 +10,15 @@ TasksManager
 """
 
 import copy
+from importlib import resources
 import json
 import logging
 import os
 import shutil
+import yaml
 
 from contaminer import config
+from contaminer import data as contaminer_data
 from contaminer.ccp4 import AltSgList
 from contaminer.ccp4 import Cif2Mtz
 from contaminer.ccp4 import MordaSolve
@@ -163,9 +166,16 @@ class TasksManager():
         alt_space_groups = alt_sg_task.get_alt_space_groups()
         LOG.debug("Alt space groups: %s.", alt_space_groups)
 
-        self._args = []
+        # Load ContaBase
+        contabase_yaml = yaml.safe_load(
+            resources.read_text(contaminer_data, "contabase.yaml")
+        )['contabase']
+        contaminants = []
+        for category in contabase_yaml:
+            contaminants.extend(category['contaminants'])
 
         # Build arguments
+        self._args = []
         for model in models:
             if ".pdb" in model:
                 if not os.path.isfile(model):
@@ -193,6 +203,23 @@ class TasksManager():
                             'model_dir': os.path.join(
                                 config.CONTABASE_DIR, model, 'models'),
                             'pack_number': pack_number,
+                            'space_group': alt_sg
+                        })
+                # If AlphaFold is available, add this as well.
+                # Get contaminant information:
+                contaminant = [
+                    item
+                    for item in contaminants
+                    if item['uniprot_id'] == model
+                ][0]
+                if contaminant['alpha_fold']:
+                    LOG.debug("Add AlphaFold model for %s.", model)
+                    for alt_sg in alt_space_groups:
+                        self._args.append({
+                            'input_file': input_file,
+                            'model_dir': os.path.join(
+                                config.CONTABASE_DIR, "AF_" + model, 'models'),
+                            'pack_number': 1,
                             'space_group': alt_sg
                         })
 
