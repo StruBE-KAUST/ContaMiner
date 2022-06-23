@@ -381,23 +381,24 @@ class TasksManager():
 
         """
         for index, arguments in enumerate(self._args):
-            self._mrds = MordaSolve(**arguments)
-            try:
-                results = self._mrds.get_results()
-            except FileNotFoundError:
-                self.update(index, status="running")
+            if not self._status[index] == "complete":
+                self._mrds = MordaSolve(**arguments)
+                try:
+                    results = self._mrds.get_results()
+                except FileNotFoundError:
+                    self.update(index, status="running")
+                    self._mrds.cleanup()
+                    continue
+
                 self._mrds.cleanup()
-                continue
+                results['available_final'] = False
+                final_mtz_path = os.path.join(self._mrds.res_dir, "final.mtz")
+                if os.path.exists(final_mtz_path):
+                    map_converter = Mtz2Map(final_mtz_path)
+                    map_converter.run()
+                    results['available_final'] = True
 
-            self._mrds.cleanup()
-            results['available_final'] = False
-            final_mtz_path = os.path.join(self._mrds.res_dir, "final.mtz")
-            if os.path.exists(final_mtz_path):
-                map_converter = Mtz2Map(final_mtz_path)
-                map_converter.run()
-                results['available_final'] = True
-
-            self.update(index, results=results, status="complete")
+                self.update(index, results=results, status="complete")
 
     def update(self, *ranks, results=None, status=None):
         """
