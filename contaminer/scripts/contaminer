@@ -2,6 +2,7 @@
 """Command line interface for ContaMiner."""
 
 import logging
+import os
 
 import argh
 
@@ -74,9 +75,12 @@ def solve_status(prep_dir):
 if __name__ == "__main__":
     # Change console logging level to INFO.
     CONSOLE = logging.StreamHandler()
-    CONSOLE.setLevel(logging.INFO)
+    if os.environ.get('DEBUG'):
+        CONSOLE.setLevel(logging.DEBUG)
+    else:
+        CONSOLE.setLevel(logging.WARNING)
     logging.getLogger().addHandler(CONSOLE)
-    logging.getLogger().setLevel(logging.INFO)
+    logging.getLogger().setLevel(logging.DEBUG)
 
     argh.dispatch_commands([
         init,
