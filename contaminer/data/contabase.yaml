@@ -1,0 +1,690 @@
+contabase:
+  - id: '1'
+    name: Proteins in E.coli
+    default: 'true'
+    contaminants:
+      - uniprot_id: P0ACJ8
+        short_name: CRP_ECOLI
+        long_name: cAMP-activated global transcriptional regulator CRP
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          - pubmed_id: '26660914'
+          - pubmed_id: '16814929'
+      - uniprot_id: P61517
+        short_name: CAN_ECOLI
+        long_name: Carbonic anhydrase 2
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          - pubmed_id: '26660914'
+          - pubmed_id: '16814929'
+      - uniprot_id: P0A7A9
+        short_name: IPYR_ECOLI
+        long_name: Inorganic pyrophosphatase
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '16814929'
+        suggestion:
+          name: Jonathan Cooper
+      - uniprot_id: P27302
+        short_name: TKT1_ECOLI
+        long_name: Transketolase 1
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '19887109'
+      - uniprot_id: P0A715
+        short_name: KDSA_ECOLI
+        long_name: 2-dehydro-3-deoxyphosphooctonate aldolase
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '19887109'
+      - uniprot_id: P0A9K9
+        short_name: SLYD_ECOLI
+        long_name: FKBP-type peptidyl-prolyl cis-trans isomerase SlyD
+        organism: Escherichia coli
+        exact_model: False
+        alpha_fold: True
+        reference:
+          pubmed_id: '16814929'
+      - uniprot_id: P69054
+        short_name: DHSC_ECOLI
+        long_name: Succinate dehydrogenase cytochrome b556 subunit
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '19162196'
+      - uniprot_id: P31224
+        short_name: ACRB_ECOLI
+        long_name: Multidrug efflux pump subunit AcrB
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          - pubmed_id: '19162196'
+          - pubmed_id: '18931428'
+      - uniprot_id: P0AD61
+        short_name: KPYK1_ECOLI
+        long_name: Pyruvate kinase I
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '19887109'
+      - uniprot_id: P0A8N5
+        short_name: SYK2_ECOLI
+        long_name: 'Lysine--tRNA ligase, heat inducible'
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '19887109'
+      - uniprot_id: P00957
+        short_name: SYA_ECOLI
+        long_name: Alanine--tRNA ligase
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '19887109'
+      - uniprot_id: P77398
+        short_name: ARNA_ECOLI
+        long_name: Bifunctional polymyxin resistance protein ArnA
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          - pubmed_id: '26660914'
+          - pubmed_id: '16814929'
+      - uniprot_id: P0AGD1
+        short_name: SODC_ECOLI
+        long_name: 'Superoxide dismutase [Cu-Zn]'
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          - pubmed_id: '26660914'
+          - pubmed_id: '16814929'
+      - uniprot_id: P0A6U8
+        short_name: GLGA_ECOLI
+        long_name: Glycogen synthase
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          - pubmed_id: '26660914'
+          - pubmed_id: '16814929'
+      - uniprot_id: P13029
+        short_name: KATG_ECOLI
+        long_name: Catalase-peroxidase
+        organism: Escherichia coli
+        exact_model: False
+        alpha_fold: True
+        reference:
+          pubmed_id: '19887109'
+      - uniprot_id: P76344
+        short_name: ZINT_ECOLI
+        long_name: Metal-binding protein ZinT
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          - pubmed_id: '26660914'
+          - pubmed_id: '16814929'
+      - uniprot_id: P0ABD3
+        short_name: BFR_ECOLI
+        long_name: Bacterioferritin
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        suggestion:
+          name: Jonathan Cooper
+      - uniprot_id: P0AEE3
+        short_name: DEGS_ECOLI
+        long_name: Serine endoprotease DegS
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        suggestion:
+          name: James Murray
+      - uniprot_id: P0AFG6
+        short_name: ODO2_ECOLI
+        long_name: >-
+          Dihydrolipoyllysine-residue succinyltransferase component of
+          2-oxoglutarate dehydrogenase complex
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          - pubmed_id: '26660914'
+          - pubmed_id: '16814929'
+      - uniprot_id: P0A6F5
+        short_name: CH60_ECOLI
+        long_name: 60 kDa chaperonin
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '16814929'
+      - uniprot_id: P0A858
+        short_name: TPIS_ECOLI
+        long_name: Triosephosphate isomerase
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '19887109'
+      - uniprot_id: P0A9S3
+        short_name: GATD_ECOLI
+        long_name: Galactitol-1-phosphate 5-dehydrogenase
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '19887109'
+      - uniprot_id: P17169
+        short_name: GLMS_ECOLI
+        long_name: 'Glutamine--fructose-6-phosphate aminotransferase [isomerizing]'
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          - pubmed_id: '26660914'
+          - pubmed_id: '16814929'
+      - uniprot_id: P0A6X3
+        short_name: HFQ_ECOLI
+        long_name: RNA-binding protein Hfq
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          - pubmed_id: '26660914'
+          - pubmed_id: '16814929'
+      - uniprot_id: P0A9Q1
+        short_name: ARCA_ECOLI
+        long_name: Aerobic respiration control protein ArcA
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '19887109'
+      - uniprot_id: P0AFG3
+        short_name: ODO1_ECOLI
+        long_name: 2-oxoglutarate dehydrogenase E1 component
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          - pubmed_id: '26660914'
+          - pubmed_id: '16814929'
+      - uniprot_id: P0A9A9
+        short_name: FUR_ECOLI
+        long_name: Ferric uptake regulation protein
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          - pubmed_id: '26660914'
+          - pubmed_id: '16814929'
+      - uniprot_id: P03023
+        short_name: LACI_ECOLI
+        long_name: Lactose operon repressor
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        suggestion:
+          name: Jonathan Cooper
+      - uniprot_id: P0ADZ4
+        short_name: RS15_ECOLI
+        long_name: 30S ribosomal protein S15
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '16814929'
+      - uniprot_id: P62577
+        short_name: CAT_ECOLX
+        long_name: Chloramphenicol acetyltransferase
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          - pubmed_id: '26660914'
+          - pubmed_id: '16814929'
+      - uniprot_id: P06720
+        short_name: AGAL_ECOLI
+        long_name: Alpha-galactosidase
+        organism: Escherichia coli
+        exact_model: False
+        alpha_fold: True
+        reference:
+          pubmed_id: '19887109'
+      - uniprot_id: P0AC53
+        short_name: G6PD_ECOLI
+        long_name: Glucose-6-phosphate 1-dehydrogenase
+        organism: Escherichia coli
+        exact_model: False
+        alpha_fold: True
+        reference:
+          pubmed_id: '16814929'
+      - uniprot_id: P23908
+        short_name: ARGE_ECOLI
+        long_name: Acetylornithine deacetylase
+        organism: Escherichia coli
+        exact_model: False
+        alpha_fold: True
+        reference:
+          pubmed_id: '16814929'
+      - uniprot_id: P21367
+        short_name: YCAC_ECOLI
+        long_name: Uncharacterized protein YcaC
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+      - uniprot_id: P02931
+        short_name: OMPF_ECOLI
+        long_name: Outer membrane protein F
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '25517996'
+        suggestion:
+          - name: Stephen MacMahon
+          - name: Bert Van-Den-Berg
+      - uniprot_id: P21179
+        short_name: CATE_ECOLI
+        long_name: Catalase HPII
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        suggestion:
+          name: Jonathan Cooper
+      - uniprot_id: P0A9B2
+        short_name: G3P1_ECOLI
+        long_name: Glyceraldehyde-3-phosphate dehydrogenase A
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        suggestion:
+          name: Rebekah Bjork
+      - uniprot_id: P08200
+        short_name: IDH_ECOLI
+        long_name: 'Isocitrate dehydrogenase [NADP]'
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        suggestion:
+          name: Jonathan Cooper
+      - uniprot_id: B1XB85
+        short_name: TPIS_ECODH
+        long_name: Triosephosphate isomerase
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '23695562'
+      - uniprot_id: P0A759
+        short_name: NAGB_ECOLI
+        long_name: Glucosamine-6-phosphate deaminase
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        suggestion:
+          name: Vincent Olieric
+      - uniprot_id: P0ABT2
+        short_name: DPS_ECOLI
+        long_name: DNA protection during starvation protein
+        organism: Escherichi coli
+        exact_model: True
+        alpha_fold: False
+        suggestion:
+          name: Zaineb Fourati
+      - uniprot_id: A0A140N6S1
+        short_name: A0A140N6S1_ECOBD
+        long_name: Protein CsiD
+        organism: Escherichi coli
+        exact_model: True
+        alpha_fold: False
+        suggestion:
+          name: Berhard Lohkamp
+        reference:
+          pubmed_id: '18391407'
+      - uniprot_id: P76116
+        short_name: YNCE_ECOLI
+        long_name: Uncharacterized protein YncE
+        organism: Escherichi coli
+        exact_model: True
+        alpha_fold: False
+        suggestion:
+          name: Qun Liu
+  - id: '2'
+    name: Proteins in yeast
+    default: 'false'
+    contaminants:
+      - uniprot_id: P00330
+        short_name: ADH1_YEAST
+        long_name: Alcohol dehydrogenase 1
+        organism: Saccharomyces cerevisiae
+        exact_model: True
+        alpha_fold: False
+        suggestion:
+          name: own data
+      - uniprot_id: P53184
+        short_name: PNC1_YEAST
+        long_name: Nicotinamidase
+        organism: Saccharomyces cerevisiae
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '16511075'
+  - id: '3'
+    name: Tags
+    default: 'false'
+    contaminants:
+      - uniprot_id: P0AA25
+        short_name: THIO_ECOLI
+        long_name: Thioredoxin-1
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '26660914'
+      - uniprot_id: P63165
+        short_name: SUMO1_HUMAN
+        long_name: Small ubiquitin-related modifier 1
+        organism: Homo sapiens
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '26660914'
+      - uniprot_id: P0ABD8
+        short_name: BCCP_ECOLI
+        long_name: Biotin carboxyl carrier protein of acetyl-CoA carboxylase
+        organism: Escherichia coli
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '24600443'
+      - uniprot_id: P0AFG0
+        short_name: NUSG_ECOLI
+        long_name: Transcription termination/antitermination protein NusG
+        organism: Escherichia coli
+        exact_model: False
+        alpha_fold: True
+        reference:
+          pubmed_id: '24600443'
+      - uniprot_id: P08515
+        short_name: GST26_SCHJA
+        long_name: Glutathione S-transferase class-mu 26 kDa isozyme
+        organism: Schistosoma japonicum
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '26660914'
+      - uniprot_id: P0AEY0
+        short_name: MALE_ECO57
+        long_name: Maltose-binding periplasmic protein
+        organism: Escherichia coli
+        sequence: |-
+          IEEGKLVIWINGDKGYNGLAEVGKKFEKDTGIKVTVEHPDKLEEKFPQVAATGDGPDIIF
+                          WAHDRFGGYAQSGLLAEITPDKAFQDKLYPFTWDAVRYNGKLIAYPIAVEALSLIYNKDL
+                          LPNPPKTWEEIPALDKELKAKGKSALMFNLQEPYFTWPLIAADGGYAFKYENGKYDIKDV
+                          GVDNAGAKAGLTFLVDLIKNKHMNADTDYSIAEAAFNKGETAMTINGPWAWSNIDTSKVN
+                          YGVTVLPTFKGQPSKPFVGVLSAGINAASPNKELAKEFLENYLLTDEGLEAVNKDKPLGA
+                          VALKSYEEELAKDPRIAATMENAQKGEIMPNIPQMSAFWYAVRTAVINAASGRQTVDEAL
+                          KDAQTRITK
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '26660914'
+      - uniprot_id: P0AFF6
+        short_name: NUSA_ECOLI
+        long_name: Transcription termination/antitermination protein NusA
+        organism: Escherichia coli
+        exact_model: False
+        alpha_fold: True
+        reference:
+          pubmed_id: '26660914'
+      - uniprot_id: P0A3G3
+        short_name: DHAA_RHOSO
+        long_name: Haloalkane dehalogenase
+        organism: Rhodococcus sp.
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '26660914'
+  - id: '4'
+    name: Proteins used during purification or crystallization
+    default: 'false'
+    contaminants:
+      - uniprot_id: P03303
+        short_name: POLG_HRV14
+        long_name: Genome polyprotein
+        organism: Human rhinovirus 14
+        sequence: |-
+          GPNTEFALSLLRKNIMTITTSKGEFTGLGIHDRVCVIPTHAQPGDDVLVNGQKIRVKDKY
+                          KLVDPENINLELTVLTLDRNEKFRDIRGFISEDLEGVDATLVVHSNNFTNTILEVGPVTM
+                          AGLINLSSTPTNRMIRYDYATKTGQCGGVLCATGKIFGIHVGGNGRQGFSAQLKKQYFVE
+                          KQ
+        exact_model: False
+        alpha_fold: False
+        reference:
+          pubmed_id: '26660914'
+      - uniprot_id: P00698
+        short_name: LYSC_CHICK
+        long_name: Lysozyme C
+        organism: Gallus gallus
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '26660914'
+      - uniprot_id: P04517
+        short_name: POLG_TEV
+        long_name: Genome polyprotein
+        organism: Tobacco etch virus
+        sequence: |-
+          GESLFKGPRDYNPISSTICHLTNESDGHTTSLYGIGFGPFIITNKHLFRRNNGTLLVQSL
+                          HGVFKVKNTTTLQQHLIDGRDMIIIRMPKDFPPFPQKLKFREPQREERICLVTTNFQTKS
+                          MSSMVSDTSCTFPSSDGIFWKHWIQTKDGQAGSPLVSTRDGFIVGIHSASNFTNTNNYFT
+                          SVPKNFMELLTNQEAQQWVSGWRLNADSVLWGGHKVFMSKPEEPFQPVKEATQLMNELVY
+                          SQ
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '26660914'
+      - uniprot_id: P00742
+        short_name: FA10_HUMAN
+        long_name: Coagulation factor X
+        organism: Homo sapiens
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '26660914'
+      - uniprot_id: Q02724
+        short_name: ULP1_YEAST
+        long_name: Ubiquitin-like-specific protease 1
+        organism: Saccharomyces cerevisiae
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '26660914'
+      - uniprot_id: P00735
+        short_name: THRB_BOVIN
+        long_name: Prothrombin
+        organism: Bos taurus
+        sequence: |-
+          TFGSGEADCGLRPLFEKKSLEDKTERELLESYIDGRIVEGSDAEIGMSPWQVMLFRKSPQ
+                          ELLCGASLISDRWVLTAAHCLLYPPWDKNFTENDLLVRIGKHSRTRYERNIEKISMLEKI
+                          YIHPRYNWRENLDRDIALMKLKKPVAFSDYIHPVCLPDRETAASLLQAGYKGRVTGWGNL
+                          KETWTANVGKGQPSVLQVVNLPIVERPVCKDSTRIRITDNMFCAGYKPDEGKRGDACEGD
+                          SGGPFVMKSPFNNRWYQMGIVSWGEGCDRDGKYGFYTHVFRLKKWIQKVIDQFGE
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '26660914'
+      - uniprot_id: P98072
+        short_name: ENTK_BOVIN
+        long_name: Enteropeptidase
+        organism: Bos taurus
+        exact_model: False
+        alpha_fold: True
+        reference:
+          pubmed_id: '26660914'
+      - uniprot_id: P00760
+        short_name: TRY1_BOVIN
+        long_name: Cationic trypsin
+        organism: Bos taurus
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '26660914'
+      - uniprot_id: P00766
+        short_name: CTRA_BOVIN
+        long_name: Chymotrypsinogen A
+        organism: Bos taurus
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '26660914'
+      - uniprot_id: P00800
+        short_name: THER_BACTH
+        long_name: Thermolysin
+        organism: Bacillus thermoproteolyticus
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '26660914'
+      - uniprot_id: P06873
+        short_name: PRTK_ENGAL
+        long_name: Proteinase K
+        organism: Engyodontium album
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '26660914'
+      - uniprot_id: P00791
+        short_name: PEPA_PIG
+        long_name: Pepsin A
+        organism: Sus scrofa
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '26660914'
+      - uniprot_id: P08246
+        short_name: ELNE_HUMAN
+        long_name: Neutrophil elastase
+        organism: Homo sapiens
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '26660914'
+      - uniprot_id: P81054
+        short_name: PLMP_GRIFR
+        long_name: Peptidyl-Lys metalloendopeptidase
+        organism: Grifola frondosa
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '26660914'
+      - uniprot_id: Q7M135
+        short_name: LYSC_LYSEN
+        long_name: Lysyl endopeptidase
+        organism: Lysobacter enzymogenes
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '26660914'
+      - uniprot_id: P00639
+        short_name: DNAS1_BOVIN
+        long_name: Deoxyribonuclease-1
+        organism: Bos taurus
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '26660914'
+  - id: '5'
+    name: Microbial contaminants of host cell and reagents
+    default: 'true'
+    contaminants:
+      - uniprot_id: B4SL31
+        short_name: B4SL31_STRM5
+        long_name: Alkaline phosphatase
+        organism: Stenotrophomonas maltophilia
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '27487824'
+      - uniprot_id: P85173
+        short_name: PHBP_UNKP
+        long_name: Phosphate-binding protein
+        organism: Unknown prokaryotic organism
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '24121327'
+        suggestion:
+          name: Marcin Wojdyr
+      - uniprot_id: A8GBZ7
+        short_name: CYNS_SERP5
+        long_name: Cyanate hydratase
+        organism: Serratia proteamaculans
+        exact_model: True
+        alpha_fold: False
+        suggestion:
+          name: Christian Linke-Winnebeck
+        reference:
+          pubmed_id: '25849512'
+      - uniprot_id: A0A318P833
+        short_name: A0A318P833_SERPL
+        long_name: Glycerol dehydrogenase
+        organism: Serratia plymuthica
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '24637749'
+  - id: '6'
+    name: From other expression systems
+    default: 'false'
+    contaminants:
+      - uniprot_id: P83696
+        short_name: P83696_ALCXX
+        long_name: Glyceraldehyde-3-phosphate dehydrogenase
+        organism: Alcaligenes xylosoxydans xylosoxydans
+        exact_model: True
+        alpha_fold: False
+        suggestion:
+          name: Marcin Wojdyr
+      - uniprot_id: Q9I4D6
+        short_name: Q9I4D6_PSEAE
+        long_name: Probable hydrolase
+        organism: Pseudomonas aeruginosa
+        exact_model: True
+        alpha_fold: False
+        reference:
+          pubmed_id: '26184183'
+        suggestion:
+          name: Marcin Wojdyr
+      - uniprot_id: Q9HNN4
+        short_name: Y2021_HALSA
+        long_name: Putative heme-binding protein VNG_2021C
+        organism: Halobacterium salinarum
+        exact_model: False
+        alpha_fold: True
+        suggestion:
+          name: Stefan W. Grötzinger
+      - uniprot_id: A0A5Q0TYV1
+        short_name: A0A5Q0TYV1_SPOFR
+        long_name: Glutathione S-transferase GST sigma
+        organism: Spodoptera frugiperda (Fall armyworm)
+        exact_model: False
+        alpha_fold: False

@@ -1,0 +1,59 @@
+Bootstrap: docker
+From: debian
+
+%help
+  Provides contaminer and its dependancies.
+  Available commands are
+  contaminer prepare
+  contaminer is_ready
+  contaminer submit <MTZ file> <list of contaminer as txt>
+  contaminer get_results <jobid>
+
+%files
+  contaminer /opt/
+  requirements.txt /
+  setup.py /
+
+%post
+  cd /opt
+  set -ex \
+    && DEPS="\
+    bzip2 \
+    libfontconfig1 \
+    libxext6 \
+    libxrender1 \
+    python3 \
+    python3-setuptools \
+    wget \
+    " \
+    && seq 1 8 | xargs -I{} mkdir -p /usr/share/man/man{} \
+    && apt-get update && apt-get install -y --no-install-recommends $DEPS \
+    && rm -rf /var/lib/apt/lists/*
+
+  # Install CCP4
+  wget --quiet http://devtools.fg.oisin.rc-harwell.ac.uk/nightly/7.0/ccp4-7.0-linux64-latest.tar.bz2 \
+    && tar -xf ccp4-*.tar.bz2 \
+    && rm ccp4-*.tar.bz2
+
+  # Agree to license
+  /opt/ccp4-*/BINARY.setup --run-from-script --minimal
+
+  # Add env sourcing
+  ln -sf /opt/ccp4-*/bin/ccp4.setup-sh /.singularity.d/env/11-ccp4.sh
+
+  # Install MoRDa (MoRDa_DB_small, see http://www.biomexsolutions.co.uk/morda)
+  wget --quiet http://www.ccp4.ac.uk/morda/MoRDa_DB.tar.gz \
+    && tar xf MoRDa_DB.tar.gz \
+    && rm MoRDa_DB.tar.gz \
+    && sh MoRDa_DB/setup_morda
+
+  # Add env sourcing
+  ln -sf /opt/MoRDa_DB/morda_env_sh /.singularity.d/env/12-morda.sh
+
+  # Add python deps
+  mkdir -p /etc/pki/tls/certs/
+  wget --no-check-certificate http://curl.haxx.se/ca/cacert.pem -O /etc/pki/tls/certs/ca-bundle.crt
+  mkdir -p ~/.config/pip/
+  printf "[global]\ntrusted-host = pypi.python.org\ntrusted-host = pypi.org\n" > ~/.config/pip/pip.conf
+  cat ~/.config/pip/pip.conf
+  python3 /setup.py install

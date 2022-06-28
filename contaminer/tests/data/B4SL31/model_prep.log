@@ -1,0 +1,79 @@
+
+  --- MODEL_PREP --- /Vers 2.3.03; 27.05.2017/
+
+ ==LIST: N
+ ==file_homo_list:out_prep/homologous_list.txt
+ ==file_seq:B4SL31.fasta
+  N1_seq:         397
+ ==nseq_max:       1
+ ==nsym    :       0
+  ---
+  --- model preparation ---
+  ---
+  N_domain_db       :       96911
+  N_input_sequences :    1
+
+  =========================================
+  ======== Sequence     1  ================
+  =========================================
+  ------
+    id   code      Nres  resol  ident  score   Q    f_dom f_mult Iclass
+  48734 5jk4A       372   1.10  100.0  0.832  0.829     2     0   5594
+  ------
+  -- monomers start ----
+ =====================================
+ ======  structure     1  ============
+ =====================================
+ ------ monomers ------
+ ==:5jk4A
+ --Correction Surf,Align:YY
+ --Nres,Ident:     372 100.00
+ ==Nmodels    :    0
+ ==Sim        :   1.000
+ ==Nresidues  :   372
+  --  ENS file was created
+ ------ domains. ------
+ --domain:       1
+ --Correction Surf,Align:YY
+ --Nres,Ident:     170 100.00
+ ==Nmodels    :    0
+ ==Sim        :   1.000
+ ==Nresidues  :   170
+  --  ENS file was created
+ --domain:       2
+ --Correction Surf,Align:YY
+ --Nres,Ident:     146 100.00
+ ==Nmodels    :    0
+ ==Sim        :   1.000
+ ==Nresidues  :   146
+  --  ENS file was created
+  -- monomers finish ----
+ =====================================
+ ======    structure     2  ==========
+ =====================================
+ ------ multi-domains ------
+ -------  Domain:    1 code: 5jk4A_1_  Ident,Q: 100.0  0.584
+ --Correction Surf,Align:YY
+ --Nres,Ident:     170 100.00
+ ==== Id Chain Dom : 100      A         1       ====
+ ==Nmodels    :    0
+ ==Sim        :   1.000
+ ==Nresidues  :   170
+  -- ENS file was created
+ -------  Domain:    2 code: 5jk4A_2_  Ident,Q: 100.0  0.714
+ --Correction Surf,Align:YY
+ --Nres,Ident:     146 100.00
+ ==== Id Chain Dom : 100      A         2       ====
+ ==Nmodels    :    0
+ ==Sim        :   1.000
+ ==Nresidues  :   146
+  -- ENS file was created
+ -------  Domain:    3 code: 2ipxA_1_  Ident,Q:  12.8  0.189
+ --Correction Surf,Align:YY
+ --Nres,Ident:      39  15.38
+ ==== Id Chain Dom : 100      A         3       ====
+ ==Nmodels    :    0
+ ==Sim        :   0.128
+ ==Nresidues  :    39
+  -- ENS file was created
+  -- OK --

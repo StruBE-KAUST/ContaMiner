@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ASCII" standalone="yes"?>
+<!--     morda_solve output   -->
+<morda_solve>
+error <err_level>      7 </err_level>
+message <message>  no solution</message>
+job <job>morda_solve</job>
+vers <vers> --- morda_solve --- /Vers 1.2.15; 27.05.2017/</vers>
+</morda_solve>

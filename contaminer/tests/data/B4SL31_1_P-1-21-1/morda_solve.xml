@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ASCII" standalone="yes"?>
+<!--     morda_solve output   -->
+<morda_solve>
+error <err_level>      0 </err_level>
+message <message> normal termination</message>
+job <job>morda_solve</job>
+vers <vers> --- morda_solve --- /Vers 1.2.15; 27.05.2017/</vers>
+    <result DIR="models_1_P-1-21-1/"/>
+q_factor <q_factor>  0.907 </q_factor>
+percent <percent>     99 </percent>
+Z_score <Z_score> 33.454 </Z_score>
+r_init <r_init>  0.548 </r_init>
+rf_init <rf_init>  0.552 </rf_init>
+r_fin <r_fin>  0.235 </r_fin>
+rf_fin <rf_fin>  0.250 </rf_fin>
+sg <sg>P 1 21 1 </sg>
+<line>
+  code_seq <code_seq> seq 1 </code_seq>
+  code_str <code_str> 5jk4A </code_str>
+  code_mod <code_mod> 5jk4A </code_mod>
+  nfound <nfound>     1</nfound>
+  icode <icode>  101011</icode>
+</line>
+</morda_solve>

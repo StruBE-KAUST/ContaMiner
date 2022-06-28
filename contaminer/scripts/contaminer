@@ -1,0 +1,92 @@
+#!/usr/bin/env python
+"""Command line interface for ContaMiner."""
+
+import logging
+import os
+
+import argh
+
+from contaminer import contaminer
+
+
+def init():
+    """
+    Initialize the ContaBase.
+
+    """
+    contaminer.init()
+
+
+@argh.arg('rank', type=int, help="Rank of the process to run.")
+def init_task(rank):
+    """
+    Run morda_prep for a given model.
+
+    """
+    contaminer.init_task(rank)
+
+
+def init_status():
+    """
+    Shows the status of initialization of the ContaBase.
+
+    """
+    contaminer.init_status()
+
+
+@argh.arg('diffraction_file', help="MTZ or CIF file.")
+@argh.arg('models', nargs='*', help="List of contaminants to test.")
+def solve(diffraction_file, models):
+    """
+    Try to find a matching contaminant for the given diffraction file.
+
+    This command is the combination of three steps:
+    * Generate arguments file and put all files in the right places.
+    * Fill in a template and submit the script to a scheduler.
+    * Each submitted job runs the solving task for a single combination of
+    contaminant, pack number, and space group.
+
+    """
+    contaminer.solve(diffraction_file, models)
+
+
+@argh.arg('prep_dir', help="Directory created by the prepare step.")
+@argh.arg('rank', type=int, help="Rank of the process to run.")
+def solve_task(prep_dir, rank):
+    """
+    Run the solving task.
+
+    """
+    contaminer.solve_task(prep_dir, rank)
+
+
+@argh.arg('prep_dir', help="Directory created by prepare step.")
+def solve_status(prep_dir):
+    """
+    Compile all results of a job into the tasks file and print it.
+
+    Consult each task, retrieve the results if available, and write all
+    of them in the tasks.json file, then display the content of the file.
+
+    """
+    contaminer.solve_status(prep_dir)
+
+
+if __name__ == "__main__":
+    # Change console logging level to INFO.
+    CONSOLE = logging.StreamHandler()
+    if os.environ.get('DEBUG'):
+        CONSOLE.setLevel(logging.DEBUG)
+    else:
+        CONSOLE.setLevel(logging.WARNING)
+    logging.getLogger().addHandler(CONSOLE)
+    logging.getLogger().setLevel(logging.DEBUG)
+
+    argh.dispatch_commands([
+        init,
+        init_task,
+        init_status,
+        solve,
+        solve_task,
+        solve_status,
+    ])
