@@ -14,7 +14,6 @@ from importlib import resources
 import json
 import logging
 import os
-import shutil
 import yaml
 
 from Bio import SeqIO
@@ -27,7 +26,6 @@ from contaminer.ccp4 import MordaPrep
 from contaminer.ccp4 import MordaSolve
 from contaminer.ccp4 import Mtz2Map
 from contaminer.ccp4 import MtzDmp
-from contaminer.data.custom_template import XML_TEMPLATE
 
 LOG = logging.getLogger(__name__)
 
