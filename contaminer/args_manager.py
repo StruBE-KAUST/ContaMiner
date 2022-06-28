@@ -17,10 +17,13 @@ import os
 import shutil
 import yaml
 
+from Bio import SeqIO
+
 from contaminer import config
 from contaminer import data as contaminer_data
 from contaminer.ccp4 import AltSgList
 from contaminer.ccp4 import Cif2Mtz
+from contaminer.ccp4 import MordaPrep
 from contaminer.ccp4 import MordaSolve
 from contaminer.ccp4 import Mtz2Map
 from contaminer.ccp4 import MtzDmp
@@ -112,24 +115,29 @@ class TasksManager():
             The absolute path to the created model directory.
 
         """
-        filename = os.path.basename(custom_file)
-        model_name, _ = os.path.splitext(filename)
-        model_dir = os.path.join(parent_dir, model_name)
+        custom_name = os.path.splitext(os.path.basename(custom_file))[0]
+        # Extract sequence
+        with open(custom_file, 'r') as pdb_file:
+            records = list(SeqIO.parse(pdb_file, 'pdb-atom'))
+
+        assert len(list(records)) == 1
+        custom_fasta = custom_name + ".fasta"
+        with open(custom_fasta, 'w') as fasta_file:
+            fasta_file.write(str(records[0].seq))
+
+        # Prepare morda_prep arguments
+        model_dir = os.path.join(parent_dir, custom_name)
         os.mkdir(model_dir)
 
-        # Write XML file
-        xml_content = XML_TEMPLATE.replace(
-            "%PDB_CODE%", model_name).replace(
-                "%FILE_NAME%", filename)
+        # Launch morda_prep
+        morda_prep = MordaPrep(
+            custom_fasta,
+            model_dir,
+            1,
+            custom_file)
+        morda_prep.run()
 
-        xml_path = os.path.join(model_dir, "model_prep.xml")
-        with open(xml_path, 'w') as xml_file:
-            xml_file.write(xml_content)
-
-        # Copy PDB file to proper location
-        shutil.copy(custom_file, model_dir)
-
-        return model_dir
+        return os.path.join(model_dir, "models")
 
     def create(self, input_file, models=None):
         """
