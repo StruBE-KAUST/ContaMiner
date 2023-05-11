@@ -463,3 +463,14 @@ def _get_number_procs(prep_dir):
     tasks_manager.load(config.ARGS_FILENAME)
     args_list = tasks_manager.get_arguments()
     return len(args_list)
+
+
+def show_contabase():
+    """
+    Return the current ContaBase in YAML format.
+
+    Does not return details about packs and models, but only categories
+    and contaminants.
+
+    """
+    print(resources.read_text(contaminer_data, "contabase.yaml"))

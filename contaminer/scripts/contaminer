@@ -72,6 +72,14 @@ def solve_status(prep_dir):
     contaminer.solve_status(prep_dir)
 
 
+def show_contabase():
+    """
+    Show the details of the ContaBase in YAML format.
+
+    """
+    contaminer.show_contabase()
+
+
 if __name__ == "__main__":
     # Change console logging level to INFO.
     CONSOLE = logging.StreamHandler()
@@ -89,4 +97,5 @@ if __name__ == "__main__":
         solve,
         solve_task,
         solve_status,
+        show_contabase,
     ])
