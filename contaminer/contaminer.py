@@ -140,6 +140,8 @@ def _create_prepare_job_script(contaminants):
         "%NB_PROCS%": str(nb_procs),
         "%MIN_ARRAY%": str(0),
         "%MAX_ARRAY%": str(nb_procs-1),
+        "%PREP_NAME%": "ContaBase_init",
+        "%PREP_DIR%": "",
         "%COMMAND%": "init-task",
     }
     for pattern, value in replacement_patterns.items():
