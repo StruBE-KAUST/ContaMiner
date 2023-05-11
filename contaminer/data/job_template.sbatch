@@ -14,13 +14,6 @@ set -e
 ls /ibex/scratch/cbrc-strube > /dev/null 2>&1 || sleep 5
 ls /ibex/scratch/cbrc-strube > /dev/null # Fail here if directory is not available.
 
-# Load environment
-# No need, as the job is submitted from an environment which already sources all of that.
-# module load anaconda3
-# source activate /ibex/scratch/cbrc-strube/conda-env
-source /ibex/scratch/cbrc-strube/ccp4-7.0/bin/ccp4.setup-sh
-source /ibex/scratch/cbrc-strube/MoRDa_DB/morda_env_sh
-
 # Heavy lifting
 printf "Starting ContaMiner...\n"
 contaminer %COMMAND% %PREP_DIR% $SLURM_ARRAY_TASK_ID
