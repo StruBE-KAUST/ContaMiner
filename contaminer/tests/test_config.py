@@ -34,6 +34,7 @@ class ConfigTest(unittest.TestCase):
         """Test if a given config path is properly loaded."""
         config_path = os.path.join(
             os.path.dirname(contaminer.__file__),
+            'tests',
             'test_config',
             'config1.ini')
         conf = config.UserConfig(config_path).load()
