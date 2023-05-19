@@ -39,24 +39,6 @@ class TasksManager():
     complete: boolean
         True if all tasks are all complete.
 
-    Methods
-    -------
-    create
-        Create the list, and add the list of tasks parameters.
-
-    save
-        Save the list of arguments in a file.
-
-    load
-        Load the list of arguments from a file.
-
-    get_arguments
-        Return the list of arguments as a list. Each item is a dictionary
-        of kwargs to give to morda_solve.
-
-    update
-        Update the status of one or more jobs and optionaly add results.
-
     Warning
     -------
     TasksManager.save is NOT thread-safe. It should be used only in the master
@@ -412,7 +394,7 @@ class TasksManager():
                 try:
                     results = mrds.get_results()
                 except FileNotFoundError:
-                    self.update(index, status="running")
+                    job['status'] = "running"
                     continue
                 finally:
                     mrds.cleanup()
@@ -424,32 +406,8 @@ class TasksManager():
                     map_converter.run()
                     results['available_final'] = True
 
-                self.update(index, results=results, status="complete")
-
-    def update(self, *ranks, results=None, status=None):
-        """
-        Update the status and results for some tasks.
-
-        If given, change the results and status of the selected tasks.
-
-        Parameters
-        ----------
-        ranks: pack
-            The rank of the tasks to update.
-
-        results: dictionary
-            The result to set for the given ranks. By default, do not change.
-
-        status: dictionary
-            The status to set for the given ranks. By default, do not change.
-
-        """
-
-        for rank in ranks:
-            if status:
-                self._jobs[rank]['status'] = status
-            if results:
-                self._jobs[rank]['results'] = results
+                job['results'] = results
+                job['status'] = "complete"
 
     @property
     def complete(self):
