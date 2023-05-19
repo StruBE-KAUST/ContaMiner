@@ -406,7 +406,7 @@ class TasksManager():
         This method is NOT thread-safe.
 
         """
-        for job in enumerate(self._jobs):
+        for job in self._jobs:
             if not job['status'] == "complete":
                 mrds = MordaSolve(**job['args'])
                 try:
