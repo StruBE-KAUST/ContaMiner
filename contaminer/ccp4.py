@@ -444,7 +444,7 @@ class AltSgList():
 
 class Cif2Mtz():
     """
-    Smart wrapper for cif2mtz.
+    Wrapper for cif2mtz.
 
     Attributes
     ----------
@@ -461,8 +461,9 @@ class Cif2Mtz():
 
     Warning
     -------
-    MoRDa does not give the same results when used with a CIF file or with
-    its corresponding converted MTZ file. Bug in MoRDa or in cif2mtz?
+    This wrapper does not use cif2mtz correctly, and the output file may not
+    contain the necessary information to successfully run MoRDa on it.
+    Use the output file only to get the space group with mtzdmp.
     Do not use the converted file to feed MoRDa, but the original CIF file
     instead.
 
@@ -507,14 +508,7 @@ class Cif2Mtz():
                   file=sys.stderr)
             raise RuntimeError("cif2mtz cannot be found.")
 
-        try:
-            popen.stdin.close()
-            popen.wait()
-            stdout = popen.stdout.read()
-            stderr = popen.stdout.read()
-        finally:
-            popen.stdout.close()
-            popen.stderr.close()
+        (stdout, stderr) = popen.communicate(input=b"END\n")
 
         LOG.debug("Return code: %s.", popen.returncode)
         if popen.returncode != 0:
