@@ -242,6 +242,8 @@ class TasksManager():
             for alt_sg in alt_space_groups:
                 self._args.append({
                     'input_file': input_file,
+                    'uniprot_id': contaminant['uniprot_id'],
+                    'is_AF_model': False,
                     'model_dir': os.path.join(
                         config.CONTABASE_DIR,
                         contaminant['uniprot_id'],
@@ -256,6 +258,8 @@ class TasksManager():
             for alt_sg in alt_space_groups:
                 self._args.append({
                     'input_file': input_file,
+                    'uniprot_id': contaminant['uniprot_id'],
+                    'is_AF_model': True,
                     'model_dir': os.path.join(
                         config.CONTABASE_DIR,
                         "AF_" + contaminant['uniprot_id'],
@@ -280,6 +284,7 @@ class TasksManager():
         for alt_sg in alt_space_groups:
             self._args.append({
                 'input_file': input_file,
+                'uniprot_id': model,
                 'model_dir': model_dir,
                 'pack_number': 1,
                 'space_group': alt_sg
