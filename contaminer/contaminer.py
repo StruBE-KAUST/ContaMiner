@@ -453,6 +453,7 @@ def show_job(prep_dir):
     task_manager.load(config.ARGS_FILENAME)
     task_manager.compile_results()
     task_manager.save(config.ARGS_FILENAME)
+
     with open(config.ARGS_FILENAME, 'r') as results:
         print(results.read())
 
@@ -484,8 +485,7 @@ def _get_number_procs(prep_dir):
 
     tasks_manager = TasksManager()
     tasks_manager.load(config.ARGS_FILENAME)
-    args_list = tasks_manager.get_arguments()
-    return len(args_list)
+    return tasks_manager.nb_jobs
 
 
 def show_contabase():

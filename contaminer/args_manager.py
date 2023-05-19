@@ -65,10 +65,15 @@ class TasksManager():
     """
 
     def __init__(self):
-        self._args = []
-        self._results = []
-        self._status = []
-        self._mrds = None
+        # Each job contains 4 keys:
+        # * infos: general data about the task:
+        #   * uniprot_id: uniprot ID of the contaminant
+        #   * is_AF_model: true if the task uses an AlphaFold model
+        # * args: arguments to give as is to MordaSolve
+        # * results: Dictionnary of results from MordaSolve (None is no result
+        # is available.
+        # * status: can be new, running or complete.
+        self._jobs = []
 
     @staticmethod
     def _get_nb_packs(model):
@@ -172,13 +177,11 @@ class TasksManager():
         alt_space_groups = alt_sg_task.get_alt_space_groups()
         LOG.debug("Alt space groups: %s.", alt_space_groups)
 
-        self._generate_args(input_file, models, alt_space_groups)
-        self._results = [None for i in self._args]
-        self._status = ["new" for i in self._args]
+        self._generate_jobs(input_file, models, alt_space_groups)
 
-    def _generate_args(self, input_file, models, alt_space_groups):
+    def _generate_jobs(self, input_file, models, alt_space_groups):
         """
-        Generate arguments for given parameters and store them in self._args.
+        Generate job items for given parameters and store them in self._jobs.
 
         This method does the same thing as TasksManager.create, but takes the
         list of alternative space groups as additional argument.
@@ -205,7 +208,7 @@ class TasksManager():
             contaminants.extend(category['contaminants'])
 
         # Build arguments list.
-        self._args = []
+        self._jobs = []
         for model in models:
             if ".pdb" in model:
                 self._generate_args_for_custom(
@@ -221,51 +224,65 @@ class TasksManager():
                     if item['uniprot_id'] == model
                 ][0]
 
-                self._generate_args_for_contaminant(
+                self._generate_jobs_for_contaminant(
                     input_file,
                     contaminant,
                     alt_space_groups,
                 )
 
-    def _generate_args_for_contaminant(
+    def _generate_jobs_for_contaminant(
             self, input_file, contaminant, alt_space_groups):
         """
-        Generate arguments for a single contaminant.
+        Generate job items for a single contaminant.
 
-        This method does the same thing as TasksManager._generate_args, but
-        generates the arguments only for a single contaminant.
+        This method does the same thing as TasksManager._generate_jobs, but
+        generates the items only for a single contaminant.
 
         """
         # Get number of packs
         nb_packs = self._get_nb_packs(contaminant['uniprot_id'])
         for pack_number in range(1, nb_packs+1):
             for alt_sg in alt_space_groups:
-                self._args.append({
-                    'input_file': input_file,
-                    'uniprot_id': contaminant['uniprot_id'],
-                    'is_AF_model': False,
-                    'model_dir': os.path.join(
-                        config.CONTABASE_DIR,
-                        contaminant['uniprot_id'],
-                        'models'),
-                    'pack_number': pack_number,
-                    'space_group': alt_sg
+                self._jobs.append({
+                    'infos': {
+                        'model_name': contaminant['uniprot_id'],
+                        'is_AF_model': False,
+                        'is_custom_model': False
+                    },
+                    'args': {
+                        'input_file': input_file,
+                        'model_dir': os.path.join(
+                            config.CONTABASE_DIR,
+                            contaminant['uniprot_id'],
+                            'models'),
+                        'pack_number': pack_number,
+                        'space_group': alt_sg
+                    },
+                    'results': None,
+                    'status': 'new'
                 })
 
         # If AlphaFold is available, add this as well.
         if contaminant['alpha_fold']:
             LOG.debug("Add AlphaFold model for %s.", contaminant['uniprot_id'])
             for alt_sg in alt_space_groups:
-                self._args.append({
-                    'input_file': input_file,
-                    'uniprot_id': contaminant['uniprot_id'],
-                    'is_AF_model': True,
-                    'model_dir': os.path.join(
-                        config.CONTABASE_DIR,
-                        "AF_" + contaminant['uniprot_id'],
-                        'models'),
-                    'pack_number': 1,
-                    'space_group': alt_sg
+                self._jobs.append({
+                    'infos': {
+                        'model_name': contaminant['uniprot_id'],
+                        'is_AF_model': True,
+                        'is_custom_model': False
+                    },
+                    'args': {
+                        'input_file': input_file,
+                        'model_dir': os.path.join(
+                            config.CONTABASE_DIR,
+                            "AF_" + contaminant['uniprot_id'],
+                            'models'),
+                        'pack_number': 1,
+                        'space_group': alt_sg
+                    },
+                    'results': None,
+                    'status': 'new'
                 })
 
     def _generate_args_for_custom(self, input_file, model, alt_space_groups):
@@ -282,36 +299,40 @@ class TasksManager():
         # Custom model
         model_dir = self._prepare_custom_dir(os.getcwd(), model)
         for alt_sg in alt_space_groups:
-            self._args.append({
-                'input_file': input_file,
-                'uniprot_id': model,
-                'model_dir': model_dir,
-                'pack_number': 1,
-                'space_group': alt_sg
+            self._jobs.append({
+                'infos': {
+                    'model_name': model,
+                    'is_AF_model': False,
+                    'is_custom_model': True
+                },
+                'args': {
+                    'input_file': input_file,
+                    'model_dir': model_dir,
+                    'pack_number': 1,
+                    'space_group': alt_sg
+                },
+                'results': None,
+                'status': 'new'
             })
 
-    def get_arguments(self, rank=None):
+    def get_arguments(self, rank):
         """
-        Return the list of arguments for some tasks.
+        Return the list of arguments for a task.
 
         Each item is a dictionary of kwargs to give to morda_solve.
 
         Parameters
         ----------
         rank: integer
-            The rank of the task to get the arguments for. By default, return
-            all arguments.
+            The rank of the task to get the arguments for.
 
         Return
         ------
-        list(dictionary)
+        dictionary
             The list of arguments for morda_solve.
 
         """
-        if isinstance(rank, int):
-            return copy.deepcopy(self._args[rank])
-
-        return copy.deepcopy(self._args)
+        return copy.deepcopy(self._jobs[rank]['args'])
 
     def save(self, save_filepath):
         """
@@ -332,11 +353,7 @@ class TasksManager():
         """
         LOG.debug("Save arguments to %s.", save_filepath)
 
-        data = {
-            'args': self._args,
-            'results': self._results,
-            'status': self._status
-        }
+        data = {'jobs': self._jobs}
         with open(save_filepath, 'w') as save_file:
             save_file.write(json.dumps(data))
 
@@ -354,9 +371,7 @@ class TasksManager():
         with open(save_filepath, 'r') as save_file:
             data = json.loads(save_file.read())
 
-        self._args = data['args']
-        self._results = data['results']
-        self._status = data['status']
+        self._jobs = data['jobs']
 
     def run(self, prep_dir, rank):
         """
@@ -379,8 +394,8 @@ class TasksManager():
 
         arguments = tasks_manager.get_arguments(rank)
 
-        self._mrds = MordaSolve(**arguments)
-        self._mrds.run()
+        mrds = MordaSolve(**arguments)
+        mrds.run()
 
     def compile_results(self):
         """
@@ -391,19 +406,19 @@ class TasksManager():
         This method is NOT thread-safe.
 
         """
-        for index, arguments in enumerate(self._args):
-            if not self._status[index] == "complete":
-                self._mrds = MordaSolve(**arguments)
+        for job in enumerate(self._jobs):
+            if not job['status'] == "complete":
+                mrds = MordaSolve(**job['args'])
                 try:
-                    results = self._mrds.get_results()
+                    results = mrds.get_results()
                 except FileNotFoundError:
                     self.update(index, status="running")
-                    self._mrds.cleanup()
                     continue
+                finally:
+                    mrds.cleanup()
 
-                self._mrds.cleanup()
                 results['available_final'] = False
-                final_mtz_path = os.path.join(self._mrds.res_dir, "final.mtz")
+                final_mtz_path = os.path.join(mrds.res_dir, "final.mtz")
                 if os.path.exists(final_mtz_path):
                     map_converter = Mtz2Map(final_mtz_path)
                     map_converter.run()
@@ -432,18 +447,23 @@ class TasksManager():
 
         for rank in ranks:
             if status:
-                self._status[rank] = status
+                self._jobs[rank]['status'] = status
             if results:
-                self._results[rank] = results
+                self._jobs[rank]['results'] = results
 
     @property
     def complete(self):
         """Return True if all Tasks are complete. False otherwise."""
-        return all([item == "complete" for item in self._status])
+        return all([item['status'] == "complete" for job in self._jobs])
 
     def display_progress(self):
         """Print the task progress."""
-        total = len(self._args)
-        done = len([status for status in self._status if status == "complete"])
+        total = len(self._jobs)
+        done = len([job for job in self._jobs if job['status'] == "complete"])
 
         print("%s/%s" % (done, total))
+
+    @property
+    def nb_jobs(self):
+        """Return the number of jobs."""
+        return len(self._jobs)
