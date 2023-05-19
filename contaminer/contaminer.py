@@ -417,9 +417,32 @@ def solve_task(prep_dir, rank):
     task_manager.run(prep_dir, rank)
 
 
+def solve_status(prep_dir):
+    """
+    Display the status of a job.
+
+    Compile the results into the tasks.json file (same as show_job), and
+    display the status of the job. Possible values are:
+    * running: if at least one result is missing
+    * complete: if all results are available for all combinations of pack/
+    space groups
+
+    """
+    task_manager = TasksManager()
+    os.chdir(prep_dir)
+    task_manager.load(config.ARGS_FILENAME)
+    task_manager.compile_results()
+    task_manager.save(config.ARGS_FILENAME)
+
+    if task_manager.complete:
+        print("Job in folder %s is complete." % prep_dir)
+    else:
+        print("Job in folder %s is running." % prep_dir)
+
+
 def show_job(prep_dir):
     """
-    Compile all results of a job into a the tasks file.
+    Compile all results of a job into the tasks file.
 
     Consult each task, retrieve the results if available, and write all
     of them in the tasks.json file, then display the content of the file.

@@ -60,7 +60,19 @@ def solve_task(prep_dir, rank):
     contaminer.solve_task(prep_dir, rank)
 
 
-@argh.arg('prep_dir', help="Directory create by prepare step.")
+@argh.arg('prep_dir', help="Directory created by contaminer solve.")
+def solve_status(prep_dir):
+    """
+    Compile all results of a job into a tasks file and display the job status.
+
+    Consult each tas, retrieve the results if available, and write all
+    of them in the tasks.json file, then display the status of the job.
+
+    """
+    contaminer.solve_status(prep_dir)
+
+
+@argh.arg('prep_dir', help="Directory created by contamienr solve.")
 def show_job(prep_dir):
     """
     Compile all results of a job into the tasks file and print it.
