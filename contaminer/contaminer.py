@@ -417,7 +417,7 @@ def solve_task(prep_dir, rank):
     task_manager.run(prep_dir, rank)
 
 
-def solve_status(prep_dir):
+def show_job(prep_dir):
     """
     Compile all results of a job into a the tasks file.
 
