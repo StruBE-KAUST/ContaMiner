@@ -412,7 +412,7 @@ class TasksManager():
     @property
     def complete(self):
         """Return True if all Tasks are complete. False otherwise."""
-        return all([item['status'] == "complete" for job in self._jobs])
+        return all([job['status'] == "complete" for job in self._jobs])
 
     def display_progress(self):
         """Print the task progress."""
