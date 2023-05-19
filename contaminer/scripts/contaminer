@@ -109,5 +109,6 @@ if __name__ == "__main__":
         solve,
         solve_task,
         solve_status,
+        show_job,
         show_contabase,
     ])
