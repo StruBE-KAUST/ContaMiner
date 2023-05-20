@@ -453,9 +453,18 @@ def _get_best_task(tasks):
     If no task is eligible, return None.
 
     """
+    # Make sure not to work on an emtpy list.
+    if not tasks:
+        return None
+
     best_task = None
     for task in tasks:
         if task['status'] == 'complete':
+            if not best_task:  # No other data to compare.
+                best_task = task
+                continue
+
+            # Otherwise, compare with current best task.
             results = task['results']
             best_results = best_task['results']
             if results['percent'] > best_results['percent']:
