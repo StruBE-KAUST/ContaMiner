@@ -511,7 +511,19 @@ def show_job(prep_dir, summary=False):
                 if task['infos']['model_name'] == model_name
             ]
             best_task = _get_best_task(tasks)
-            display['tasks'].append(best_task)
+            if best_task:
+                display['tasks'].append({
+                    'infos': best_task['infos'],
+                    'args_for_best': best_task['args'],
+                    'results': best_task['results']
+                })
+            else:
+                # No result found, still add the details about
+                display['tasks'].append({
+                    'infos': tasks[0]['infos'],
+                    'args_for_best': None,
+                    'results': None
+                })
 
         print(json.dumps(display))
 
