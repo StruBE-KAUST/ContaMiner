@@ -513,7 +513,7 @@ def show_job(prep_dir, summary=False):
             best_task = _get_best_task(tasks)
             display['tasks'].append(best_task)
 
-        print(json.dump(display))
+        print(json.dumps(display))
 
 
 def _get_all_models():
