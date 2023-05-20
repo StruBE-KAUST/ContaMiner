@@ -506,23 +506,34 @@ def show_job(prep_dir, summary=False):
             for task in task_manager.jobs
         ]))
         for model_name in model_names:
+            # Get all tasks for this model.
             tasks = [
                 task for task in task_manager.jobs
                 if task['infos']['model_name'] == model_name
             ]
+
+            # Decide status for the analysis of this model.
+            if all([task['status'] == 'complete' for task in tasks]):
+                status = 'complete'
+            else:
+                status = 'running'
+
+            # Try to get a best task for this model.
             best_task = _get_best_task(tasks)
             if best_task:
                 display['tasks'].append({
                     'infos': best_task['infos'],
                     'args_for_best': best_task['args'],
-                    'results': best_task['results']
+                    'results': best_task['results'],
+                    'status': status
                 })
             else:
                 # No result found, still add the details about
                 display['tasks'].append({
                     'infos': tasks[0]['infos'],
                     'args_for_best': None,
-                    'results': None
+                    'results': None,
+                    'status': status
                 })
 
         print(json.dumps(display))
