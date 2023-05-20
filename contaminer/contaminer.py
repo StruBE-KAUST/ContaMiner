@@ -1,6 +1,7 @@
 """Provide entry point commands for ContaMiner."""
 
 from importlib import resources
+import json
 import logging
 import os
 import shutil
@@ -440,12 +441,41 @@ def solve_status(prep_dir):
         print("Job in folder %s is running." % prep_dir)
 
 
-def show_job(prep_dir):
+def _get_best_task(tasks):
+    """
+    Return the task with the best results from the tasks list.
+
+    A task is considered best than another if the "percentage" in the results
+    is higher. If the percentage is equal, the task with highest Q factor is
+    considered best. If the Q factor is also equal, the first task of the list
+    with the highest percentage an Q factor is selected.
+    Tasks in running state are not eligible, since no result is available.
+    If no task is eligible, return None.
+
+    """
+    best_task = None
+    for task in tasks:
+        if task['status'] == 'complete':
+            results = task['results']
+            best_results = best_task['results']
+            if results['percent'] > best_results['percent']:
+                best_task = task
+            elif results['percent'] == best_results['percent']:
+                if results['q_factor'] > best_results['q_factor']:
+                    best_task = task
+
+    return best_task
+
+
+def show_job(prep_dir, summary=False):
     """
     Compile all results of a job into the tasks file.
 
     Consult each task, retrieve the results if available, and write all
     of them in the tasks.json file, then display the content of the file.
+
+    If summary is set to True, display only the best task per contaminant.
+    The best task is selected based on the results of MordaSolve.
 
     """
     task_manager = TasksManager()
@@ -454,8 +484,27 @@ def show_job(prep_dir):
     task_manager.compile_results()
     task_manager.save(config.ARGS_FILENAME)
 
-    with open(config.ARGS_FILENAME, 'r') as results:
-        print(results.read())
+    if not summary:
+        with open(config.ARGS_FILENAME, 'r') as results:
+            print(results.read())
+    else:
+        display = {
+            'tasks': []
+        }  # Dictionnary to display at the end.
+
+        tasks = task_manager.jobs
+        model_names = list(set(
+            [task['infos']['model_name'] for task in tasks]
+        ))
+        for model_name in model_names:
+            tasks = [
+                task for task in tasks
+                if task['infos']['model_name'] == model_name
+            ]
+            best_task = _get_best_task(tasks)
+            display['tasks'].append(best_task)
+
+        print(json.dump(display))
 
 
 def _get_all_models():

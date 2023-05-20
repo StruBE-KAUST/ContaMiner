@@ -73,7 +73,10 @@ def solve_status(prep_dir):
 
 
 @argh.arg('prep_dir', help="Directory created by contamienr solve.")
-def show_job(prep_dir):
+@argh.arg('-s', '--summary',
+          action='store_true',
+          help="Summarize the output to only the best task per contaminant.")
+def show_job(prep_dir, summary=False):
     """
     Compile all results of a job into the tasks file and print it.
 
@@ -81,7 +84,7 @@ def show_job(prep_dir):
     of them in the tasks.json file, then display the content of the file.
 
     """
-    contaminer.show_job(prep_dir)
+    contaminer.show_job(prep_dir, summary)
 
 
 def show_contabase():

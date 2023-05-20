@@ -55,7 +55,7 @@ class TasksManager():
         # * results: Dictionnary of results from MordaSolve (None is no result
         # is available.
         # * status: can be new, running or complete.
-        self._jobs = []
+        self.jobs = []
 
     @staticmethod
     def _get_nb_packs(model):
@@ -163,7 +163,7 @@ class TasksManager():
 
     def _generate_jobs(self, input_file, models, alt_space_groups):
         """
-        Generate job items for given parameters and store them in self._jobs.
+        Generate job items for given parameters and store them in self.jobs.
 
         This method does the same thing as TasksManager.create, but takes the
         list of alternative space groups as additional argument.
@@ -190,7 +190,7 @@ class TasksManager():
             contaminants.extend(category['contaminants'])
 
         # Build arguments list.
-        self._jobs = []
+        self.jobs = []
         for model in models:
             if ".pdb" in model:
                 self._generate_args_for_custom(
@@ -225,7 +225,7 @@ class TasksManager():
         nb_packs = self._get_nb_packs(contaminant['uniprot_id'])
         for pack_number in range(1, nb_packs+1):
             for alt_sg in alt_space_groups:
-                self._jobs.append({
+                self.jobs.append({
                     'infos': {
                         'model_name': contaminant['uniprot_id'],
                         'is_AF_model': False,
@@ -248,7 +248,7 @@ class TasksManager():
         if contaminant['alpha_fold']:
             LOG.debug("Add AlphaFold model for %s.", contaminant['uniprot_id'])
             for alt_sg in alt_space_groups:
-                self._jobs.append({
+                self.jobs.append({
                     'infos': {
                         'model_name': contaminant['uniprot_id'],
                         'is_AF_model': True,
@@ -281,7 +281,7 @@ class TasksManager():
         # Custom model
         model_dir = self._prepare_custom_dir(os.getcwd(), model)
         for alt_sg in alt_space_groups:
-            self._jobs.append({
+            self.jobs.append({
                 'infos': {
                     'model_name': model,
                     'is_AF_model': False,
@@ -314,7 +314,7 @@ class TasksManager():
             The list of arguments for morda_solve.
 
         """
-        return copy.deepcopy(self._jobs[rank]['args'])
+        return copy.deepcopy(self.jobs[rank]['args'])
 
     def save(self, save_filepath):
         """
@@ -335,7 +335,7 @@ class TasksManager():
         """
         LOG.debug("Save arguments to %s.", save_filepath)
 
-        data = {'jobs': self._jobs}
+        data = {'jobs': self.jobs}
         with open(save_filepath, 'w') as save_file:
             save_file.write(json.dumps(data))
 
@@ -353,7 +353,7 @@ class TasksManager():
         with open(save_filepath, 'r') as save_file:
             data = json.loads(save_file.read())
 
-        self._jobs = data['jobs']
+        self.jobs = data['jobs']
 
     def run(self, prep_dir, rank):
         """
@@ -388,7 +388,7 @@ class TasksManager():
         This method is NOT thread-safe.
 
         """
-        for job in self._jobs:
+        for job in self.jobs:
             if not job['status'] == "complete":
                 mrds = MordaSolve(**job['args'])
                 try:
@@ -412,16 +412,16 @@ class TasksManager():
     @property
     def complete(self):
         """Return True if all Tasks are complete. False otherwise."""
-        return all([job['status'] == "complete" for job in self._jobs])
+        return all([job['status'] == "complete" for job in self.jobs])
 
     def display_progress(self):
         """Print the task progress."""
-        total = len(self._jobs)
-        done = len([job for job in self._jobs if job['status'] == "complete"])
+        total = len(self.jobs)
+        done = len([job for job in self.jobs if job['status'] == "complete"])
 
         print("%s/%s" % (done, total))
 
     @property
     def nb_jobs(self):
         """Return the number of jobs."""
-        return len(self._jobs)
+        return len(self.jobs)
