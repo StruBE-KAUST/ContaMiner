@@ -501,13 +501,13 @@ def show_job(prep_dir, summary=False):
             'tasks': []
         }  # Dictionnary to display at the end.
 
-        tasks = task_manager.jobs
-        model_names = list(set(
-            [task['infos']['model_name'] for task in tasks]
-        ))
+        model_names = list(set([
+            task['infos']['model_name']
+            for task in task_manager.jobs
+        ]))
         for model_name in model_names:
             tasks = [
-                task for task in tasks
+                task for task in task_manager.jobs
                 if task['infos']['model_name'] == model_name
             ]
             best_task = _get_best_task(tasks)
