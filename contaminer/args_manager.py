@@ -405,7 +405,7 @@ class TasksManager():
                     map_converter = Mtz2Map(final_mtz_path)
                     map_converter.run()
                     results['available_final'] = True
-                    results['final_dir'] = mrds.res_dir
+                    results['final_dir'] = os.path.abspath(mrds.res_dir)
 
                 job['results'] = results
                 job['status'] = "complete"
