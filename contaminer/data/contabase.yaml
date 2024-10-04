@@ -367,6 +367,14 @@ contabase:
         alpha_fold: False
         suggestion:
           name: Qun Liu
+      - uniprot_id: P00490
+        short_name: PHSM_ECOLI
+        long_name: Maltodextrin phosphorylase
+        organism: Escherichi coli
+        exact_model: True
+        alpha_fold: False
+        sugestion:
+          name: Ariel Mechaly
   - id: '2'
     name: Proteins in yeast
     default: 'false'
