@@ -33,36 +33,25 @@ trust me!
 ## What specifications do I need?
 While ContaMiner can technically run on a Pentium III @600MHz with 256MB RAM,
 the mean case will take 6.8 years of intensive computation.
-We recommand using as many CPUs as possible with a maximum of 2512. More CPUs
+We recommand using as many cores as possible with a maximum of 2512. More cores
 are useful only if you want to run parallel sessions of ContaMiner.
-Number of cores does not matter, as ContaMiner tries to use one FPU per task. 
-The basic configuration is done to use 1 CPU per task. If you have less than 1 
-FPU per CPU, increase this option. For example, if you have one FPU per 2 CPUs, 
-you should set this option :
+The basic configuration is done to use 1 core per task. If you have any
+technical reason to change this setting (different number of FPUs than cores),
+use a custom job template. For example:
 `#SBATCH --nstasks 2`
 As molecular replacement is essentially computation of Fourier transform, the
-I/O is not a limiting resource.
+I/O is usually not a limiting resource.
 
 ## What dependancies do I need?
 ContaMiner is based on MoRDa. MoRDa is based on CCP4 tools. Therefore, you need
 CCP4 and MoRDa installed on your cluster / supercomputer / whatever with many
-CPUs. ContaMiner is designed to work on a cluster or a supercomputer. Currently,
-the only supported workload manager is SLURM. LSF and SGE could be supported
-later.
+CPUs. ContaMiner is designed to work on a cluster or a supercomputer. Job
+templates for xargs and SLURM come with ContaMiner, but you can easily adapt it
+to use any other scheduler.
 
-The set of scripts is written to be POSIX compliant. While many shells are
-not totally POSIX-compliant, the scripts are working, at least, with
--   Ash
--   Bash
--   Ksh
--   Pdksh
--   Zsh
-
-One last dependancy is lockfile. For most of the operating systems, this command
-is part of the procmail package. We need lockfile instead of flock, lockf, fcntl
-or any POSIX solution, because the file locking is just broken under Linux,
-especially through NFS. I am not lying : [On the brokenness of File
-lockin](http://0pointer.de/blog/projects/locking.html)
+ContaMiner is written in Python. Python3 is therefore another dependancy, as
+well as the packages listed in the file requirements.txt. Conda or virtualenv
+can be useful to install the dependancies.
 
 ## How to install it?
 ContaMiner needs CCP4 and MoRDa. You can find them here :
@@ -70,51 +59,68 @@ ContaMiner needs CCP4 and MoRDa. You can find them here :
 [Morda - Biomex Solutions](http://www.biomexsolutions.co.uk/morda/)
 
 Download and install them by following the given instructions on the two
-websites. It can take a time.
+websites. It can take some time.
+Warning! ContaMiner does not support MoRDa installed with the CCP4 setup tool.
+MoRDa must be installed as a standalone software as described in the link
+above.
 
-If you need to customise your database of contaminants or the SBATCH options,
-see the paragraph "How do I customise the installation" before continuing.
+Next, you need to install ContaMiner, possibly in a virtualenv or conda env.
+I let you create the environment as you wish. Make sure to use a Python3.
 
-To install ContaMiner and initialise the database of contaminants, just run the
-install.sh script. No need to have root permissions. Wait for all the SLURM jobs
-to complete. Then you can use contaminer.
+Then install ContaMiner itself. With pip, you can run:
+> pip install git+https://github.com/StruBE-KAUST/ContaMiner.git
+
+To generate a default configuration file, run any ContaMiner command. For
+example:
+>  contaminer --help
+This command should describe how to run ContaMiner. It has also written a
+default (and likely incomplete) configuration file in
+`~/.contaminer/config.ini`. Open this file and edit the missing variables.
+
+Also make sure to use an adequate job_template. The default value uses xargs
+and 12 cores, but it is very likely not what you want to do. The easiest way
+if to copy the file used by default somewhere else, edit it to match your
+requirements (keep the %% tags in place), and indicate the new template path
+in the config file.
+
+ContaMiner needs to run preparation steps before being taking your diffraction
+data. To "initialize the ContaBase" (meaning, to run morda_prep for each
+possible contaminant), simply run:
+> contaminer init
+
+The command can take a long time to return, depending on your job template and
+the computation resources you have. If you encounter an error at this stage,
+something must be missing from the installation. The error message should help
+you solve the issue. Possible things to check are:
+
+- make sure ccp4 and MoRDa are properly installed
+- check the validity of the configuration file
+- make sure the configured job_template matches your infrastructure (you
+do not want to use xargs on a cluster, and do not want to use sbatch on a
+personal laptop).
 
 ## How do I use ContaMiner?
-When the installation is complete, you can move the script named `contaminer`
-wherever you want on your machine, or even create a symlink. You can, for
-example, copy it in
-`/usr/local/bin` to make ContaMiner accessible from PATH. Or you can copy it
-somewhere else, then add the directory in your PATH.
-However, we do not recommand adding the root directory of ContaMiner in your
-PATH. Indeed, other scripts which are not directly usefull for the user are
-present in this directory.
+When the initialization is complete (`contaminer init-status` returns "Ready")
+run a task with:
+> contaminer solve my-diffraction-file.mtz
 
-Afterwards, you can use ContaMiner by giving a data diffraction file in a cif or
-mtz format.
-> contaminer file.mtz
+This command will create a directory in your current directory, with the same
+name as your MTZ or CIF file. It will also run the necessary steps to check your
+diffraction file against the most common contaminants.
+You can specify which contaminants you want to check by adding other arguments:
+> contaminer solve my-diffraction-file.mtz P0A9K9 P0ACJ8
 
-You can also give a list of contaminants to test (a selection of the
-prepared contaminants, __ie__ which are in the data/init/contaminants.xml file)
-by giving a txt file with a list of uniprot ID. This file must contain one ID
-per line, without blank line (be careful not to add a trailing blank line at
-the end of the file), and without comment. Give the name of this file as a
-second parameter. This list can also contain relative or absolute paths to
-PDB files which will be treated as custom contaminants.
-> contaminer file.mtz list.txt
+Any additional argument is a UniprotID of contaminants to check. Only
+contaminants present in the ContaBase (available with
+`contaminer show contabase`) are accepted.
 
-If no txt file is provided, a default selection of contaminants is tested.
+Check the progress of the job with:
+> contaminer solve-status
 
-ContaMiner will create a directory in your current directory (and not in the
-directory of your mtz or cif file), with the same name as your cif
-or mtz file. In this directory, you can find different files.
+To get the
+This command returns a large output in JSON format.
 
-- The data diffraction file you provided
-- The list of tested contaminants (the list you provided as second argument, if
-  you did)
-- One directory per model, per alternative space group containing different
-  files from morda\_solve. You basically do not need to explore this directory,
-  except if you want to see a specific final model
-- results.txt resuming the results of the job
+
 
 Each line of `results.txt` follows this pattern :
 > Contaminant,Pack number,Space group,Percent,Q factor,Status,Time
@@ -144,41 +150,4 @@ file with grep.
 
 gives you the lines with a probability higher or equal to 90%.
 
-## How do I customise the installation?
-If you have special needs for SBATCH options or if you want
-to customise your database, you can edit the files in data/init directory.
-The directory contains different files.
-
-### contaminants.xml
-A XML file containing the list of possible contaminants you want to use in your
-database, with more information. Each contaminant must fall into a category.
-You can add new categories. Each contaminant can have the following fields:
-- `uniprot_id` used to retrieve the sequence
-- `short_name` (opt) used for some interfaces like django-contaminer
-- `long_name` (opt) used for the same purpose
-- `organism` (opt) used for the same purpose
-- `exact_model` is a boolean used to decide if MoRDa must prepare the models
-  from 1 or 3 different templates. Set to true if your contaminant has know
-  structures available on the PDB, false otherwise.
-- `reference` (opt) contains a pubmed ID to a publication mentioning this
-  protein as a contaminant
-- `suggestion` (opt) contains the name of someone who suggested this protein as
-  a contaminant.
-
-### XXXXXX.fasta
-A custom fasta sequence for a contaminant can be provided if you do not want to 
-use the full sequence from Uniprot. The name must be XXXXXX.fasta where XXXXXX 
-is the uniprot ID of the contaminant listed in the contaminants.xml file.
-
-### prep\_options.slurm
-A file containing the SBATCH options ContaMiner will use when submitting the 
-preparation tasks to SLURM. You can add, for example,
-`#SBATCH --partition=default`
-to use a special partition on your cluster, or 
-`#SBATCH --mail=you@example.com`
-if you want to receive (many) emails to inform you about the state of your
-tasks.
-
-### run\_options.slurm
-A file containing the SBATCH options ContaMiner will use when submitting the 
-standard tasks to SLURM. As before, you can add custom options.
+### Edit job_template.sh
